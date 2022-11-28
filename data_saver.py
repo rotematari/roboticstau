@@ -54,7 +54,7 @@ for i in filesanddir:
             f.write("P1,P2,P3,P4,P5,")
             f.write("F1,F2,F3,F4,")
             f.write("B1,B2,B3,")
-            f.write("S1,S2,")
+            f.write("S1,S2,S3,S4")
             f.write("class\n")
             for j in range(250):
                 line = ser.readline()  # read a byte
