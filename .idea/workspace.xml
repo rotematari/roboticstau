@@ -2,6 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="31066527-d550-4a41-bfcd-43820b76ffc9" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/data/state_0/state_0_0.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/state_0/state_0_1.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/state_0/state_0_2.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/state_0/state_0_3.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/state_1/state_1_0.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/state_1/state_1_1.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/state_1/state_1_2.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/state_1/state_1_3.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/tests/state_0_4.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/tests/state_1_4.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_saver.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_saver.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plotCsv.py" beforeDir="false" afterPath="$PROJECT_DIR$/plotCsv.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -80,7 +91,7 @@
       <recent name="$PROJECT_DIR$/../FMG project/clasifiers" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.classify_test">
+  <component name="RunManager">
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <module name="tauFMG" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -292,7 +303,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669720622739</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="plotcsv">
+      <created>1669721842421</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1669721842421</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -324,7 +342,8 @@
     <MESSAGE value="test of 24.11.22" />
     <MESSAGE value="test of 28.11.22+ adding shoulder sensors" />
     <MESSAGE value="KNearestNeighbors" />
-    <option name="LAST_COMMIT_MESSAGE" value="KNearestNeighbors" />
+    <MESSAGE value="plotcsv" />
+    <option name="LAST_COMMIT_MESSAGE" value="plotcsv" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
