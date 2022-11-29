@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="31066527-d550-4a41-bfcd-43820b76ffc9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/data_saver.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_saver.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plotCsv.py" beforeDir="false" afterPath="$PROJECT_DIR$/plotCsv.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plot_serial.py" beforeDir="false" afterPath="$PROJECT_DIR$/plot_serial.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -323,7 +321,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669723016321</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="datasaver + plotserial +plotcsv fix">
+      <created>1669724949056</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1669724949056</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -359,7 +364,8 @@
     <MESSAGE value="name change + data delete" />
     <MESSAGE value="arcive" />
     <MESSAGE value="datasaver fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="datasaver fix" />
+    <MESSAGE value="datasaver + plotserial +plotcsv fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="datasaver + plotserial +plotcsv fix" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
