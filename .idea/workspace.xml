@@ -2,18 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="31066527-d550-4a41-bfcd-43820b76ffc9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/data/state_0/state_0_0.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/state_0/state_0_1.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/state_0/state_0_2.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/state_0/state_0_3.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/state_1/state_1_0.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/state_1/state_1_1.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/state_1/state_1_2.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/state_1/state_1_3.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/tests/state_0_4.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/tests/state_1_4.csv" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/data_saver.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_saver.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plotCsv.py" beforeDir="false" afterPath="$PROJECT_DIR$/plotCsv.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/last_HELL_31_08_22/last_HELL_31_08_22.ino" beforeDir="false" afterPath="$PROJECT_DIR$/last_HELL_31_08_22/last_HELL_31_08_22.ino" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,6 +76,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/arcive" />
       <recent name="$PROJECT_DIR$/../FMG project" />
       <recent name="$PROJECT_DIR$/../FMG project/data" />
       <recent name="$PROJECT_DIR$/../FMG project/clasifiers" />
@@ -310,7 +301,21 @@
       <option name="project" value="LOCAL" />
       <updated>1669721842421</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="name change + data delete">
+      <created>1669722542315</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1669722542315</updated>
+    </task>
+    <task id="LOCAL-00012" summary="arcive">
+      <created>1669722645934</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1669722645934</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -343,7 +348,9 @@
     <MESSAGE value="test of 28.11.22+ adding shoulder sensors" />
     <MESSAGE value="KNearestNeighbors" />
     <MESSAGE value="plotcsv" />
-    <option name="LAST_COMMIT_MESSAGE" value="plotcsv" />
+    <MESSAGE value="name change + data delete" />
+    <MESSAGE value="arcive" />
+    <option name="LAST_COMMIT_MESSAGE" value="arcive" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

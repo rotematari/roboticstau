@@ -174,10 +174,10 @@ void printMag() {
 void readset1() {
   //    Serial.println("AAAAAAA");
   //  Serial.print("P,");
-  Serial.print(analogRead(P1)); Serial.print(",");
-  Serial.print(analogRead(P2)); Serial.print(",");
-  Serial.print(analogRead(P3)); Serial.print(",");
-  Serial.print(analogRead(P4)); Serial.print(",");
+  //Serial.print(analogRead(P1)); Serial.print(",");
+  //Serial.print(analogRead(P2)); Serial.print(",");
+  //Serial.print(analogRead(P3)); Serial.print(",");
+  //Serial.print(analogRead(P4)); Serial.print(",");
   //Serial.print(analogRead(P5)); Serial.print(",");
   //  Serial.print("F,");
   Serial.print(analogRead(F1)); Serial.print(",");
