@@ -36,7 +36,7 @@ for i in filesanddir:
             f.write("B1,B2,")
             f.write("S1,S2,S3,S4,")
             f.write("class\n")
-            for j in range(50):
+            for j in range(500):
                 line = ser.readline()  # read a byte
                 string = line.decode('utf-8')  # ('latin-1')  # convert the byte string to a unicode string
                 string = string.strip()
@@ -56,7 +56,7 @@ for i in filesanddir:
             f.write("B1,B2,")
             f.write("S1,S2,S3,S4,")
             f.write("class\n")
-            for j in range(50):
+            for j in range(500):
                 line = ser.readline()  # read a byte
                 string = line.decode('utf-8')  # ('latin-1')  # convert the byte string to a unicode string
                 string = string.strip()
