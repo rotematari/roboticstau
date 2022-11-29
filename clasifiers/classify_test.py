@@ -52,14 +52,14 @@ for i in filesanddir:
     onlyfiles = [f for f in listdir(filepath) if isfile(join(filepath, f))]
     if i == 'tests':
         for j in onlyfiles:
-
             print(join(filepath, j))
             df = pd.read_csv(join(filepath, j))
-            # print(df['time'])
-
             df.drop(['time'], axis=1, inplace=True, errors="ignor")
             y_t.append(df['class'])
-            x_t.append(df.drop(['class'], axis=1, inplace=False))
+            x_t.append(df.filter(items=['S1', 'S2', 'S3', 'S4']))
+
+            # x_t.append(df.drop(['class'], axis=1, inplace=False))
+
             # print(x_t)
     else:
         for j in onlyfiles:
@@ -69,44 +69,44 @@ for i in filesanddir:
 
             df.drop(['time'], axis=1, inplace=True, errors="ignor")
             y.append(df['class'])
-            x.append(df.drop(['class'], axis=1, inplace=False))
+            x.append(df.filter(items=['S1', 'S2', 'S3', 'S4']))
+
             # print("x:\n", x)
             # print("y:\n", y)
 
+x_temp1 = pd.concat(x, ignore_index=True)
+y_temp1 = pd.concat(y, ignore_index=True)
+print("train\n", y_temp1)
+print("train\n", x_temp1)
+X_train = np.array(x_temp1)
+Y_train = np.array(y_temp1)
 
-x_temp = pd.concat(x, ignore_index=True)
-y_temp = pd.concat(y, ignore_index=True)
-# print(y_temp)
-# print(x_temp)
-X = np.array(x_temp)
-Y = np.array(y_temp)
-
-x_temp = pd.concat(x_t, ignore_index=True)
-y_temp = pd.concat(y_t, ignore_index=True)
-# print(y_temp)
-# print(x_temp)
-X_t = np.array(x_temp)
-Y_t = np.array(y_temp)
+x_temp2 = pd.concat(x_t, ignore_index=True)
+y_temp2 = pd.concat(y_t, ignore_index=True)
+print("test\n", y_temp2)
+print("test\n", x_temp2)
+X_test = np.array(x_temp2)
+Y_test = np.array(y_temp2)
 
 noRm = 1
 if noRm:
     # Normalize with mean and std
     scaler = StandardScaler()
-    scaler.fit(X)
-    X = scaler.transform(X)  # X = X*x_std + x_mean # Denormalize or use scaler.inverse_transform(X)
+    scaler.fit(X_train)
+    X = scaler.transform(X_train)  # X = X*x_std + x_mean # Denormalize or use scaler.inverse_transform(X)
     x_mean = scaler.mean_
     x_std = scaler.scale_
 else:
     # Normalize with min and max
-    x_max = np.max(X, 0)
-    x_min = np.min(X, 0)
-    X = (X - x_min) / (x_max - x_min)
+    x_max = np.max(X_train, 0)
+    x_min = np.min(X_train, 0)
+    X = (X_train - x_min) / (x_max - x_min)
 
-inputs, labels = shuffle_in_unison(X, Y)
-inputs_test, labels_test = shuffle_in_unison(X_t, Y_t)
+inputs, labels = shuffle_in_unison(X_train, Y_train)
+inputs_test, labels_test = shuffle_in_unison(X_test, Y_test)
 # print(inputs)
 # print(X)
-X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.0001, random_state=42)
+# X_train, X_test, y_train, y_test = train_test_split(inputs, labels, test_size=0.00001, random_state=42)
 
 # print(X_test)
 # print(X_train)
@@ -127,11 +127,9 @@ classifiers = [
 # iterate over classifiers
 scores = []
 for name, clf in zip(names, classifiers):
-    clf.fit(list(X_train), list(y_train))
+    clf.fit(list(inputs), list(labels))
 
     score = clf.score(inputs_test, labels_test)  # Evaluate on test data
     scores.append(score)
     print(name, score)
 scores = dict(zip(names, scores))
-
-
