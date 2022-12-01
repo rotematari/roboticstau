@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="31066527-d550-4a41-bfcd-43820b76ffc9" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/learn/XGbooststatquest.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/learn/pytorchtateqest.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clasifiers/classify_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/clasifiers/classify_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/learn/statquest_introduction_to_pytorch/statquest_introduction_to_pytorch.py" beforeDir="false" afterPath="$PROJECT_DIR$/learn/statquest_introduction_to_pytorch/statquest_introduction_to_pytorch.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -344,7 +343,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669731871093</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Xgbsoot+ learn pytorch +data">
+      <created>1669887468966</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1669887468966</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -382,7 +388,8 @@
     <MESSAGE value="datasaver fix" />
     <MESSAGE value="datasaver + plotserial +plotcsv fix" />
     <MESSAGE value="fix cllasifier" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix cllasifier" />
+    <MESSAGE value="Xgbsoot+ learn pytorch +data" />
+    <option name="LAST_COMMIT_MESSAGE" value="Xgbsoot+ learn pytorch +data" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

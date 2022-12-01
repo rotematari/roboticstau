@@ -76,15 +76,15 @@ for i in filesanddir:
 
 x_temp1 = pd.concat(x, ignore_index=True)
 y_temp1 = pd.concat(y, ignore_index=True)
-print("train\n", y_temp1)
-print("train\n", x_temp1)
+# print("train\n", y_temp1)
+# print("train\n", x_temp1)
 X_train = np.array(x_temp1)
 Y_train = np.array(y_temp1)
 
 x_temp2 = pd.concat(x_t, ignore_index=True)
 y_temp2 = pd.concat(y_t, ignore_index=True)
-print("test\n", y_temp2)
-print("test\n", x_temp2)
+# print("test\n", y_temp2)
+# print("test\n", x_temp2)
 X_test = np.array(x_temp2)
 Y_test = np.array(y_temp2)
 
@@ -103,7 +103,12 @@ else:
     X = (X_train - x_min) / (x_max - x_min)
 
 inputs, labels = shuffle_in_unison(X_train, Y_train)
+print("inputs", inputs, len(inputs))
+print("labels", labels, len(labels))
+
 inputs_test, labels_test = shuffle_in_unison(X_test, Y_test)
+print("inputs", inputs, len(inputs_test))
+print("labels", labels, len(labels_test))
 # print(inputs)
 # print(X)
 # X_train, X_test, y_train, y_test = train_test_split(inputs, labels, test_size=0.00001, random_state=42)
@@ -115,21 +120,23 @@ names = ['Nearest Neighbors', 'Linear SVM', 'RBF SVM',  # 'Gaussian Process',
          'Decision Tree', 'Random Forest', 'Neural Net', 'AdaBoost', 'xgboost']
 
 classifiers = [
-    KNeighborsClassifier(3),
+    # KNeighborsClassifier(3),
     SVC(kernel="linear", C=0.025, probability=True),
     SVC(gamma=2, C=1, probability=True),
     # GaussianProcessClassifier(1.0 * RBF(1.0)),
     DecisionTreeClassifier(max_depth=5),
     RandomForestClassifier(max_depth=5, n_estimators=10, max_features=20),
     MLPClassifier(alpha=1, max_iter=1000),
-    AdaBoostClassifier(),xgb.XGBClassifier(objective='binary:logistic', missing=None, seed=42)]
+    # AdaBoostClassifier(),xgb.XGBClassifier(objective='binary:logistic', missing=None, seed=42)
+    ]
 
 # iterate over classifiers
 scores = []
 for name, clf in zip(names, classifiers):
     if name == 'xgboost':
-        clf.fit(list(inputs), list(labels), verbose=True, early_stopping_rounds=10, eval_metric='aucpr',
-                eval_set=[(inputs_test, labels_test)])
+        clf.fit(list(inputs), list(labels), verbose=True, early_stopping_rounds=10, eval_metric='mlogloss',
+                eval_set=[(list(inputs_test), list(labels_test))])
+        print("worked")
     else:
         clf.fit(list(inputs), list(labels))
 
