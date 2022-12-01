@@ -17,7 +17,7 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.gaussian_process.kernels import RBF
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-
+import xgboost as xgb
 
 def shuffle_in_unison(a, b):
     assert len(a) == len(b)
@@ -112,7 +112,7 @@ inputs_test, labels_test = shuffle_in_unison(X_test, Y_test)
 # print(X_train)
 # print(y_test)
 names = ['Nearest Neighbors', 'Linear SVM', 'RBF SVM',  # 'Gaussian Process',
-         'Decision Tree', 'Random Forest', 'Neural Net', 'AdaBoost']
+         'Decision Tree', 'Random Forest', 'Neural Net', 'AdaBoost', 'xgboost']
 
 classifiers = [
     KNeighborsClassifier(3),
@@ -122,12 +122,16 @@ classifiers = [
     DecisionTreeClassifier(max_depth=5),
     RandomForestClassifier(max_depth=5, n_estimators=10, max_features=20),
     MLPClassifier(alpha=1, max_iter=1000),
-    AdaBoostClassifier()]
+    AdaBoostClassifier(),xgb.XGBClassifier(objective='binary:logistic', missing=None, seed=42)]
 
 # iterate over classifiers
 scores = []
 for name, clf in zip(names, classifiers):
-    clf.fit(list(inputs), list(labels))
+    if name == 'xgboost':
+        clf.fit(list(inputs), list(labels), verbose=True, early_stopping_rounds=10, eval_metric='aucpr',
+                eval_set=[(inputs_test, labels_test)])
+    else:
+        clf.fit(list(inputs), list(labels))
 
     score = clf.score(inputs_test, labels_test)  # Evaluate on test data
     scores.append(score)
