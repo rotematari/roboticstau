@@ -3,45 +3,62 @@ import torch.nn as nn
 import torchvision
 import torchvision.transforms as transforms
 import matplotlib.pyplot as plt
+from torch.utils.data import Dataset, DataLoader
+import data_loader
 
+dirpath = '/home/roblab15/Documents/FMG_project/data'
 # Device configuration
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # Hyper-parameters
-input_size = 784  # 28x28
-hidden_size = 500
-num_classes = 10
-num_epochs = 2
-batch_size = 100
-learning_rate = 0.001
+input_size = 4  # 28x28
+hidden_size = 40
+num_classes = 4
+num_epochs = 15
+batch_size = 30
+learning_rate = 0.0001
 
 # MNIST dataset
-train_dataset = torchvision.datasets.MNIST(root='./data',
-                                           train=True,
-                                           transform=transforms.ToTensor(),
-                                           download=True)
-
-test_dataset = torchvision.datasets.MNIST(root='./data',
-                                          train=False,
-                                          transform=transforms.ToTensor())
+# train_dataset = torchvision.datasets.MNIST(root='./data',
+#                                            train=True,
+#                                            transform=transforms.ToTensor(),
+#                                            download=True)
+#
+# test_dataset = torchvision.datasets.MNIST(root='./data',
+#                                           train=False,
+#                                           transform=transforms.ToTensor())
 # pointing dataset
-train_dataset =
+point_data_train = data_loader.Data(train=True, dirpath=dirpath)
+point_data_test = data_loader.Data(train=False, dirpath=dirpath)
+
+# point_data.X_train = torch.from_numpy(point_data.X_train)
+# point_data.X_test = torch.from_numpy(point_data.X_test)
+# point_data.Y_train = torch.from_numpy(point_data.Y_train)
+# point_data.Y_test = torch.from_numpy(point_data.Y_test)
+# print(point_data.X_train.shape)
+
 # Data loader
-train_loader = torch.utils.data.DataLoader(dataset=train_dataset,
+train_loader = torch.utils.data.DataLoader(dataset=point_data_train,
                                            batch_size=batch_size,
                                            shuffle=True)
-
-test_loader = torch.utils.data.DataLoader(dataset=test_dataset,
+# train_loader_y = torch.utils.data.DataLoader(dataset=point_data.Y_train,
+#                                            batch_size=batch_size,
+#                                            shuffle=False)
+test_loader = torch.utils.data.DataLoader(dataset=point_data_test,
                                           batch_size=batch_size,
-                                          shuffle=False)
+                                          shuffle=True)
 
-examples = iter(test_loader)
-example_data, example_targets = examples.next()
+# examples = iter(train_loader)
+# x, labels = next(examples)
+# print(x, labels)
 
 
-# for i in range(6):
-#     plt.subplot(2, 3, i + 1)
-#     plt.imshow(example_data[i][0], cmap='gray')
+# examples = iter(train_loader_x)
+# example_data2 = next(examples)
+#
+# for i, j in [example_data1, example_data2], range(1) :
+#     plt.subplot(1, 1, j + 1)
+#     plt.plot(i)
 # plt.show()
 
 
@@ -69,16 +86,23 @@ criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
 # Train the model
+# train_loader = [train_loader_x, train_loader_y]
+
 n_total_steps = len(train_loader)
+print(n_total_steps)
 for epoch in range(num_epochs):
-    for i, (images, labels) in enumerate(train_loader):
+    for i, (X, labels) in enumerate(train_loader):
         # origin shape: [100, 1, 28, 28]
         # resized: [100, 784]
-        images = images.reshape(-1, 28 * 28).to(device)
-        labels = labels.to(device)
+        # images = images.reshape(-1, 28 * 28).to(device)
+        # labels = labels.to(device)
 
+        X = X.to(device)
+        labels = labels.to(device)
+        # print(X.shape, labels.shape)
         # Forward pass
-        outputs = model(images)
+        outputs = model(X)
+        labels = labels.long()
         loss = criterion(outputs, labels)
 
         # Backward and optimize
@@ -94,10 +118,11 @@ for epoch in range(num_epochs):
 with torch.no_grad():
     n_correct = 0
     n_samples = 0
-    for images, labels in test_loader:
-        images = images.reshape(-1, 28 * 28).to(device)
+    for X, labels in test_loader:
+        # images = images.reshape(-1, 28 * 28).to(device)
         labels = labels.to(device)
-        outputs = model(images)
+        X = X.to(device)
+        outputs = model(X)
         # max returns (value ,index)
         _, predicted = torch.max(outputs.data, 1)
         n_samples += labels.size(0)
@@ -105,6 +130,3 @@ with torch.no_grad():
 
     acc = 100.0 * n_correct / n_samples
     print(f'Accuracy of the network on the 10000 test images: {acc} %')
-
-model = NeuralNet2(input_size=28 * 28, hidden_size=5, num_classes=3)
-criterion = nn.CrossEntropyLoss()  # (applies Softmax)
