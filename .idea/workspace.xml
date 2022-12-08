@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="31066527-d550-4a41-bfcd-43820b76ffc9" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/data_loader.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/learn/test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clasifiers/NN_softmax.py" beforeDir="false" afterPath="$PROJECT_DIR$/clasifiers/NN_softmax.py" afterDir="false" />
     </list>
@@ -361,7 +361,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669906308654</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="NN_softmax &#10;+ data loader">
+      <created>1670422021678</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1670422021678</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -400,7 +407,8 @@
     <MESSAGE value="datasaver + plotserial +plotcsv fix" />
     <MESSAGE value="fix cllasifier" />
     <MESSAGE value="Xgbsoot+ learn pytorch +data" />
-    <option name="LAST_COMMIT_MESSAGE" value="Xgbsoot+ learn pytorch +data" />
+    <MESSAGE value="NN_softmax &#10;+ data loader" />
+    <option name="LAST_COMMIT_MESSAGE" value="NN_softmax &#10;+ data loader" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
