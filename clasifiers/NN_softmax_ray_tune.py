@@ -204,7 +204,7 @@ def real_time(best_traind_model):
     X = real_time_data.Data()
     outputs = best_traind_model(X.x)
     print(outputs.data)
-    _, predicted = torch.max(outputs.data, 1)
+    _, predicted = torch.max(outputs.data, out=X)
     return predicted
 
 

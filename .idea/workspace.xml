@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="31066527-d550-4a41-bfcd-43820b76ffc9" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/clasifiers/NN_softmax_ray_tune.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/real_time_data.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clasifiers/NN_softmax.py" beforeDir="false" afterPath="$PROJECT_DIR$/clasifiers/NN_softmax.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_loader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clasifiers/NN_softmax_ray_tune.py" beforeDir="false" afterPath="$PROJECT_DIR$/clasifiers/NN_softmax_ray_tune.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,20 +85,18 @@
       <recent name="$PROJECT_DIR$/../FMG project/clasifiers" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.NN_softmax_ray_tune">
-    <configuration name="NN_softmax" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="FMG_project" />
+  <component name="RunManager">
+    <configuration name="NN_softmax_ray_tune" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="research" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
+      <option name="SDK_HOME" value="$USER_HOME$/miniconda3/envs/rotem/bin/python" />
+      <option name="SDK_NAME" value="Python 3.10 (rotem)" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/clasifiers" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/clasifiers/NN_softmax.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/clasifiers/NN_softmax_ray_tune.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -110,21 +105,19 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="NN_softmax_ray_tune" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="FMG_project" />
+    <configuration name="Unnamed" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="research" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/clasifiers" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="SDK_HOME" value="$USER_HOME$/miniconda3/envs/rotem/bin/python" />
+      <option name="SDK_NAME" value="Python 3.10 (rotem)" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/clasifiers/NN_softmax_ray_tune.py" />
+      <option name="SCRIPT_NAME" value="" />
       <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
       <option name="REDIRECT_INPUT" value="false" />
@@ -144,48 +137,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="classify_test" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
-      <module name="FMG_project" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/clasifiers" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/clasifiers/classify_test.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="true" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="data_saver" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
-      <module name="FMG_project" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/data_saver.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -270,17 +221,9 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.classify_test" />
-      <item itemvalue="Python.data_saver" />
       <item itemvalue="Python.NN_softmax_ray_tune" />
-      <item itemvalue="Python.NN_softmax" />
+      <item itemvalue="Python.Unnamed" />
     </list>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Python.NN_softmax_ray_tune" />
-        <item itemvalue="Python.NN_softmax" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -431,7 +374,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670496018347</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="real time">
+      <created>1670513969821</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1670513969821</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -471,7 +421,8 @@
     <MESSAGE value="fix cllasifier" />
     <MESSAGE value="Xgbsoot+ learn pytorch +data" />
     <MESSAGE value="NN_softmax &#10;+ data loader" />
-    <option name="LAST_COMMIT_MESSAGE" value="NN_softmax &#10;+ data loader" />
+    <MESSAGE value="real time" />
+    <option name="LAST_COMMIT_MESSAGE" value="real time" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
