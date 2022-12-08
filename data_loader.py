@@ -60,8 +60,8 @@ class Data(Dataset):
         y_temp1 = pd.concat(y, ignore_index=True)
         # print("train\n", y_temp1)
         # print("train\n", x_temp1)
-        self.X = torch.from_numpy(np.array(x_temp1,dtype=np.float32))
-        self.Y = torch.from_numpy(np.array(y_temp1,dtype=np.float32))
+        self.X = torch.from_numpy(np.array(x_temp1, dtype=np.float32))
+        self.Y = torch.from_numpy(np.array(y_temp1, dtype=np.float32))
         x_temp1 = np.array(x_temp1)
         # print(x_temp1.shape[0])
         self.n_samples = x_temp1.shape[0]
