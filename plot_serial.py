@@ -3,7 +3,7 @@ import time
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
-ser = serial.Serial('/dev/ttyACM0', 115200)
+ser = serial.Serial('/dev/ttyACM1', 115200)
 
 count = 0
 line = ser.readline()  # read a byte
@@ -62,12 +62,12 @@ def animate(i):
     plt.plot(x, y2, label='S3')
     plt.plot(x, y3, label='S2')
     plt.plot(x, y4, label='S1')
-    # plt.plot(x, y5, label='B2')
-    # plt.plot(x, y6, label='B1')
-    # plt.plot(x, y7, label='F4')
-    # plt.plot(x, y8, label='F3')
-    # plt.plot(x, y9, label='F2')
-    # plt.plot(x, y10, label='F1')
+    plt.plot(x, y5, label='B2')
+    plt.plot(x, y6, label='B1')
+    plt.plot(x, y7, label='F4')
+    plt.plot(x, y8, label='F3')
+    plt.plot(x, y9, label='F2')
+    plt.plot(x, y10, label='F1')
     plt.legend(loc='upper left')
     plt.tight_layout()
 

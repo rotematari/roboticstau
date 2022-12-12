@@ -3,7 +3,7 @@ import numpy as np
 from torch.utils.data import Dataset
 import torch
 
-ser = serial.Serial('/dev/ttyACM0', 115200)
+ser = serial.Serial('/dev/ttyACM1', 115200)
 
 
 class Data(Dataset):
@@ -16,12 +16,16 @@ class Data(Dataset):
         string.replace("]", '')
         np_arr = np.fromstring(string, dtype=np.float32, sep=',')
         np_arr = np_arr[16:]
+        print(np_arr)
+        np_arr = np.array([np_arr])
+        print(np_arr)
         self.x = torch.from_numpy(np_arr)
         self.n_samples = np_arr.shape
-        print(self.n_samples)
+        self.y = torch.from_numpy(np.array([1], dtype=np.float32))
+
 
     def __getitem__(self):
-        return self.x
+        return self.x, self.y
 
     def __len__(self):
         return self.n_samples

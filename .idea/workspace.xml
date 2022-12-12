@@ -1,9 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="31066527-d550-4a41-bfcd-43820b76ffc9" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/research.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/research.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clasifiers/NN_softmax.py" beforeDir="false" afterPath="$PROJECT_DIR$/clasifiers/NN_softmax.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clasifiers/NN_softmax_ray_tune.py" beforeDir="false" afterPath="$PROJECT_DIR$/clasifiers/NN_softmax_ray_tune.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/1point/1point_0.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/1point/1point_1.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/1point/1point_2.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/1point/1point_3.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/1point/1point_4.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/1point/1point_5.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/2point/2point_0.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/2point/2point_1.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/3point/3point_0.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/3point/3point_1.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/nopoint/nopoint_0.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/nopoint/nopoint_1.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/nopoint/nopoint_2.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/nopoint/nopoint_3.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/nopoint/nopoint_4.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/nopoint/nopoint_5.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/plot_serial.py" beforeDir="false" afterPath="$PROJECT_DIR$/plot_serial.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/real_time_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/real_time_data.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,6 +78,19 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="c84dc577-3ae2-460a-a242-81b08a2dee67" />
+        <option name="url" value="https://github.com/rotematari/roboticstau.git" />
+      </UrlAndAccount>
+    </option>
+  </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/learn/Euclidean Distance.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$USER_HOME$/miniconda3/envs/asaff project/lib/python3.9/site-packages/pandas/core/reshape/concat.py" root0="FORCE_HIGHLIGHTING" />
@@ -73,8 +109,8 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/roblab15/Documents/learn/pytorchTutorial-master&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+    &quot;last_opened_file_path&quot;: &quot;/home/roblab15/Documents/FMG_project&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PythonContentEntriesConfigurable&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -109,6 +145,9 @@
       <module name="research" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="$USER_HOME$/miniconda3/envs/rotem/bin/python" />
       <option name="SDK_NAME" value="Python 3.10 (rotem)" />
       <option name="WORKING_DIRECTORY" value="" />
@@ -381,7 +420,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670513969821</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="real time">
+      <created>1670514253417</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1670514253417</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

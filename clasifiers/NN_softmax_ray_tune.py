@@ -50,9 +50,7 @@ class NeuralNet(nn.Module):
 # ray tune example
 def train_cifar(config, checkpoint_dir=None, data_dir=None):
     net = NeuralNet(input_size, config["hidden_size"], num_classes)
-
     net.to(device)
-
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(net.parameters(), lr=config["learning_rate"])
 
@@ -149,9 +147,8 @@ def test_accuracy(net, device="cpu", best_batch_size=10):
     return correct / total
 
 
-def main(num_samples=10, max_num_epochs=100, gpus_per_trial=0):
+def main(num_samples=10, max_num_epochs=10, gpus_per_trial=0):
     config = {
-        # "input_size": tune.sample_from(lambda _: 2**np.random.randint(2, 9)),
         "hidden_size": tune.sample_from(lambda _: 2 ** np.random.randint(2, 9)),
         "learning_rate": tune.loguniform(1e-4, 1e-1),
         "batch_size": tune.choice([10, 20, 30, 40, 50]) \
@@ -195,17 +192,19 @@ def main(num_samples=10, max_num_epochs=100, gpus_per_trial=0):
     print("real time test \n")
     run = input("press 1 to run ")
     while run == '1':
-        pred= real_time(best_trained_model)
+        pred = real_time(best_trained_model)
         print(pred)
         input("press 1 to keep testing 0 to stop ")
 
 
 def real_time(best_traind_model):
     X = real_time_data.Data()
+    X.x = X.x.to(device)
     outputs = best_traind_model(X.x)
+    _, predicted = torch.max(outputs.data, 1)
     print(outputs.data)
-    _, predicted = torch.max(outputs.data, out=X)
-    return predicted
+
+    return outputs.data
 
 
 if __name__ == "__main__":
