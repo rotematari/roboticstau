@@ -42,7 +42,7 @@ class Data(Dataset):
 
                     df.drop(['time'], axis=1, inplace=True, errors="ignor")
                     y.append(df['class'])
-                    x.append(df.filter(items=['S1', 'S2', 'S3', 'S4']))
+                    x.append(df.filter(items=['S1', 'S2', 'S3', 'S4', 'S5']))
             else:
                 if i == 'tests':
                     for j in onlyfiles:
@@ -50,7 +50,7 @@ class Data(Dataset):
                         df = pd.read_csv(join(filepath, j))
                         df.drop(['time'], axis=1, inplace=True, errors="ignor")
                         y.append(df['class'])
-                        x.append(df.filter(items=['S1', 'S2', 'S3', 'S4']))
+                        x.append(df.filter(items=['S1', 'S2', 'S3', 'S4', 'S5']))
                         # train.append(df.filter(items=['S1', 'S2', 'S3', 'S4', 'class']))
                         # x_t.append(df.drop(['class'], axis=1, inplace=False))
 

@@ -32,9 +32,9 @@ for i in filesanddir:
             f.write("time,")
             f.write("Gx,Gy,Gz,Ax,Ay,Az,Mx,My,Mz,")
             # f.write("P1,P2,P3,P4,P5,")
-            f.write("F1,F2,F3,F4,")
+            f.write("F1,F2,")
             f.write("B1,B2,")
-            f.write("S1,S2,S3,S4,")
+            f.write("S1,S2,S3,S4,S5")
             f.write("class\n")
             for j in range(500):
                 line = ser.readline()  # read a byte
@@ -52,9 +52,9 @@ for i in filesanddir:
             f.write("time,")
             f.write("Gx,Gy,Gz,Ax,Ay,Az,Mx,My,Mz,")
             # f.write("P1,P2,P3,P4,P5,")
-            f.write("F1,F2,F3,F4,")
+            f.write("F1,F2,")
             f.write("B1,B2,")
-            f.write("S1,S2,S3,S4,")
+            f.write("S1,S2,S3,S4,S5")
             f.write("class\n")
             for j in range(500):
                 line = ser.readline()  # read a byte

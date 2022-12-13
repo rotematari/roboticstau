@@ -6,22 +6,21 @@
 #include <XBee.h>
 
 //Palm Sensors
-#define P1 A7   //pin 21
-#define P2 A6   //pin 20
-#define P3 A17  //pin 41
-#define P4 A16  //pin 40
+//#define P1 A7   //pin 21
+//#define P2 A6   //pin 20
+//
+//#define P4 A16  //pin 40
 //#define P5 A3   //pin 17
 
 //Forearem Sensors
-#define F0 A16   //pin 40
-#define F1 A2   //pin 16
+#define F1 A16   //pin 40
 #define F2 A1   //pin 15
 #define F3 A15  //pin 39
 #define F4 A14  //pin 38
+#define F5 A2   //pin 16
 
 //Biceps Sensors
 #define B1 A13  //pin 27
-
 #define B2 A12  //pin 26
 //#define B3 A11  //pin 25
 
@@ -30,6 +29,7 @@
 #define S2 A9   //pin 23
 #define S3 A3   //pin 17
 #define S4 A11  //pin 25
+#define P3 A17  //pin 41
 
 //SET XBEE3_PRO COMMUNICTION
 const byte rxPin = 0;
@@ -101,7 +101,7 @@ void loop()
     if ( imu.magAvailable() ) {
       imu.readMag(); //measure with the magnetometer
     }
-    // print format: t,G,A,M,P1,P2,P3,P4,P5,F1,F2,F3,F4,B1,B2,B3,S1,S2
+    // print format: t,G,A,M,,F1,F2,F3,F4,B1,B2,B3,S1,S2
     myTime = millis();
     //    Serial.print("t,");
     Serial.print(String(float((myTime - myTime0)/1000.0)) + String(","));
@@ -182,11 +182,11 @@ void readset1() {
   //Serial.print(analogRead(P4)); Serial.print(",");
   //Serial.print(analogRead(P5)); Serial.print(",");
   //  Serial.print("F,");
-  Serial.print(analogRead(F0)); Serial.print(",");
   Serial.print(analogRead(F1)); Serial.print(",");
   Serial.print(analogRead(F2)); Serial.print(",");
   Serial.print(analogRead(F3)); Serial.print(",");
   Serial.print(analogRead(F4)); Serial.print(",");
+//  Serial.print(analogRead(F5)); Serial.print(",");
   //  Serial.print("B,");
   Serial.print(analogRead(B1)); Serial.print(",");
   Serial.print(analogRead(B2)); Serial.print(",");
@@ -194,7 +194,7 @@ void readset1() {
   //  Serial.print("S,");
   Serial.print(analogRead(S1)); Serial.print(",");
   Serial.print(analogRead(S2)); Serial.print(",");
-  Serial.print(analogRead(S3)); Serial.print(",");
+//  Serial.print(analogRead(S3)); Serial.print(",");
   Serial.print(analogRead(S4)); Serial.println(",");
   //}
 }
