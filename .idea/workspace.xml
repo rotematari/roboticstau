@@ -5,26 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="31066527-d550-4a41-bfcd-43820b76ffc9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/research.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/research.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clasifiers/NN_softmax.py" beforeDir="false" afterPath="$PROJECT_DIR$/clasifiers/NN_softmax.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clasifiers/NN_softmax_ray_tune.py" beforeDir="false" afterPath="$PROJECT_DIR$/clasifiers/NN_softmax_ray_tune.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/1point/1point_0.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/1point/1point_1.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/1point/1point_2.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/1point/1point_3.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/1point/1point_4.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/1point/1point_5.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/2point/2point_0.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/2point/2point_1.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/3point/3point_0.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/3point/3point_1.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/nopoint/nopoint_0.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/nopoint/nopoint_1.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/nopoint/nopoint_2.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/nopoint/nopoint_3.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/nopoint/nopoint_4.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/nopoint/nopoint_5.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/relaxed/nopoint_0.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/relaxed/nopoint_1.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/relaxed/nopoint_2.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/relaxed/nopoint_3.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/relaxed/nopoint_4.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/relaxed/nopoint_5.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/tests/1point_6.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/tests/2point_2.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/tests/3point_2.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/tests/nopoint_2.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/tests/nopoint_4.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/tests/nopoint_6.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/tests/point_2.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/tests/point_4.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_loader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_saver.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_saver.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plotCsv.py" beforeDir="false" afterPath="$PROJECT_DIR$/plotCsv.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plot_serial.py" beforeDir="false" afterPath="$PROJECT_DIR$/plot_serial.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/real_time_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/real_time_data.py" afterDir="false" />
     </list>
@@ -427,7 +427,21 @@
       <option name="project" value="LOCAL" />
       <updated>1670514253417</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="real time">
+      <created>1670864046569</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1670864046569</updated>
+    </task>
+    <task id="LOCAL-00024" summary="fix for new system design">
+      <created>1670924093558</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1670924093558</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -468,10 +482,28 @@
     <MESSAGE value="Xgbsoot+ learn pytorch +data" />
     <MESSAGE value="NN_softmax &#10;+ data loader" />
     <MESSAGE value="real time" />
-    <option name="LAST_COMMIT_MESSAGE" value="real time" />
+    <MESSAGE value="fix for new system design" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix for new system design" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/clasifiers/NN_softmax.py</url>
+          <line>143</line>
+          <option name="timeStamp" value="25" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/clasifiers/NN_softmax.py</url>
+          <line>140</line>
+          <option name="timeStamp" value="27" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/clasifiers/NN_softmax.py</url>
+          <line>141</line>
+          <option name="timeStamp" value="29" />
+        </line-breakpoint>
+      </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">

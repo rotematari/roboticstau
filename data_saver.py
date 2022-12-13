@@ -7,7 +7,7 @@ dirpath = '/home/roblab15/Documents/FMG_project/data'
 
 filesanddir = [f for f in listdir(dirpath)]
 # make sure the 'COM#' is set according the Windows Device Manager
-ser = serial.Serial('/dev/ttyACM0', 115200)
+ser = serial.Serial('/dev/ttyACM1', 115200)
 # print format: t,Gx,Gy,Gz,Ax,Ay,Az,Mx,My,Mz,F1,F2,F3,F4,B1,B2,S1,S2,S3,S4,class
 # make new file names and locate them in the correct directory
 for i in filesanddir:
@@ -34,7 +34,7 @@ for i in filesanddir:
             # f.write("P1,P2,P3,P4,P5,")
             f.write("F1,F2,")
             f.write("B1,B2,")
-            f.write("S1,S2,S3,S4,S5")
+            f.write("S1,S2,S3,S4,S5,")
             f.write("class\n")
             for j in range(500):
                 line = ser.readline()  # read a byte
@@ -54,7 +54,7 @@ for i in filesanddir:
             # f.write("P1,P2,P3,P4,P5,")
             f.write("F1,F2,")
             f.write("B1,B2,")
-            f.write("S1,S2,S3,S4,S5")
+            f.write("S1,S2,S3,S4,S5,")
             f.write("class\n")
             for j in range(500):
                 line = ser.readline()  # read a byte

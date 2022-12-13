@@ -63,14 +63,17 @@ def animate(i):
     plt.plot(x, y3, label='S3')
     plt.plot(x, y4, label='S2')
     plt.plot(x, y5, label='S1')
-    plt.plot(x, y6, label='B2')
-    plt.plot(x, y7, label='B1')
-    plt.plot(x, y8, label='F2')
-    plt.plot(x, y9, label='F1')
+    # plt.plot(x, y6, label='B2')
+    # plt.plot(x, y7, label='B1')
+    # plt.plot(x, y8, label='F2')
+    # plt.plot(x, y9, label='F1')
     # plt.plot(x, y10, label='F1')
     plt.legend(loc='upper left')
     plt.tight_layout()
 
+
+
+time1 = time.time()
 
 ani = animation.FuncAnimation(plt.gcf(), animate, interval=1)
 plt.tight_layout()

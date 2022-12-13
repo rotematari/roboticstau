@@ -1,3 +1,4 @@
+import numpy as np
 import torch
 import torch.nn as nn
 import torchvision
@@ -131,20 +132,20 @@ def test_model(test_loader):
 
 def real_time():
     X = real_time_data.Data()
+
     # X = X.to(device)
     outputs = model(X.x)
     # print(outputs.data)
     # max returns (value ,index)
     _, predicted = torch.max(outputs.data, 1)
 
-
     return predicted
 
 
 train_model(train_loader)
-# test_model(test_loader)
-real_t = input("enter 1 to start real time \n")
-while real_t == '1':
+test_model(test_loader)
+real_t = 1
+while real_t == 1:
     pred = real_time()
     print(pred)
-    real_t = input("enter 1 to cont real time \n")
+

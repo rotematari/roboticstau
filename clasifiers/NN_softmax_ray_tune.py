@@ -33,15 +33,14 @@ class NeuralNet(nn.Module):
         super(NeuralNet, self).__init__()
         self.input_size = input_size
         self.l1 = nn.Linear(input_size, hidden_size)
-
         self.relu = nn.ReLU()
         self.l2 = nn.Linear(hidden_size, num_classes)
 
     def forward(self, x):
         out = self.l1(x)
         out = self.relu(out)
-        out = self.relu(out)
-        out = self.relu(out)
+        # out = self.relu(out)
+        # out = self.relu(out)
         out = self.l2(out)
         # no activation and no softmax at the end
         return out
@@ -52,7 +51,7 @@ def train_cifar(config, checkpoint_dir=None, data_dir=None):
     net = NeuralNet(input_size, config["hidden_size"], num_classes)
     net.to(device)
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(net.parameters(), lr=config["learning_rate"])
+    optimizer = optim.SGD(net.parameters(), lr=config["learning_rate"], weight_decay=config["weight_decay"])
 
     if checkpoint_dir:
         model_state, optimizer_state = torch.load(
@@ -76,7 +75,7 @@ def train_cifar(config, checkpoint_dir=None, data_dir=None):
                                             batch_size=int(config["batch_size"]),
                                             shuffle=True)
 
-    for epoch in range(15):  # loop over the dataset multiple times
+    for epoch in range(int(config["epoch"])):  # loop over the dataset multiple times
         running_loss = 0.0
         epoch_steps = 0
         for i, data in enumerate(trainloader, 0):
@@ -149,9 +148,11 @@ def test_accuracy(net, device="cpu", best_batch_size=10):
 
 def main(num_samples=10, max_num_epochs=10, gpus_per_trial=0):
     config = {
+        "weight_decay": tune.loguniform(1e-6, 1e-1),
+        "epoch": tune.loguniform(10, 200),
         "hidden_size": tune.sample_from(lambda _: 2 ** np.random.randint(2, 9)),
-        "learning_rate": tune.loguniform(1e-4, 1e-1),
-        "batch_size": tune.choice([10, 20, 30, 40, 50]) \
+        "learning_rate": tune.loguniform(1e-5, 1e-1),
+        "batch_size": tune.choice([10, 20, 30, 40, 50, 60]) \
         }
 
     scheduler = ASHAScheduler(
@@ -194,19 +195,19 @@ def main(num_samples=10, max_num_epochs=10, gpus_per_trial=0):
     while run == '1':
         pred = real_time(best_trained_model)
         print(pred)
-        input("press 1 to keep testing 0 to stop ")
+
 
 
 def real_time(best_traind_model):
     X = real_time_data.Data()
     X.x = X.x.to(device)
     outputs = best_traind_model(X.x)
-    _, predicted = torch.max(outputs.data, 1)
-    print(outputs.data)
-
-    return outputs.data
+    score, predicted = torch.min(outputs.data, 1)
+    # _, predicted = torch.min(score, 1)
+    # print(score)
+    return predicted
 
 
 if __name__ == "__main__":
     # You can change the number of GPUs per trial here:
-    main(num_samples=1, max_num_epochs=1, gpus_per_trial=1)
+    main(num_samples=1, max_num_epochs=200, gpus_per_trial=1)
