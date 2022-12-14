@@ -3,7 +3,7 @@ import time
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
-ser = serial.Serial('/dev/ttyACM0', 115200)
+ser = serial.Serial('/dev/ttyACM1', 115200)
 
 count = 0
 line = ser.readline()  # read a byte
@@ -54,23 +54,26 @@ def animate(i):
     y7.append(data[data_len - 7])
     y8.append(data[data_len - 8])
     y9.append(data[data_len - 9])
-    y10.append(data[data_len - 10])
+    # y10.append(data[data_len - 10])
 
     plt.cla()
 
-    plt.plot(x, y1, label='S4')
-    plt.plot(x, y2, label='S3')
-    plt.plot(x, y3, label='S2')
-    plt.plot(x, y4, label='S1')
-    # plt.plot(x, y5, label='B2')
-    # plt.plot(x, y6, label='B1')
-    # plt.plot(x, y7, label='F4')
-    # plt.plot(x, y8, label='F3')
-    # plt.plot(x, y9, label='F2')
+    plt.plot(x, y1, label='S5')
+    plt.plot(x, y2, label='S4')
+    plt.plot(x, y3, label='S3')
+    plt.plot(x, y4, label='S2')
+    plt.plot(x, y5, label='S1')
+    # plt.plot(x, y6, label='B2')
+    # plt.plot(x, y7, label='B1')
+    # plt.plot(x, y8, label='F2')
+    # plt.plot(x, y9, label='F1')
     # plt.plot(x, y10, label='F1')
     plt.legend(loc='upper left')
     plt.tight_layout()
 
+
+
+time1 = time.time()
 
 ani = animation.FuncAnimation(plt.gcf(), animate, interval=1)
 plt.tight_layout()
