@@ -13,7 +13,7 @@ dirpath = '/home/roblab15/Documents/FMG_project/data'
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # Hyper-parameters
-input_size = 4  # 28x28
+input_size = 6  # 28x28
 hidden_size = 40
 num_classes = 4
 num_epochs = 15
