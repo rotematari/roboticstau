@@ -10,7 +10,7 @@ dirpath = '/home/roblab15/Documents/FMG_project/data'
 items = data_loader.items
 
 sample_rate = 10
-x = data_loader.Data(train=True, dirpath=dirpath)
+x = data_loader.Data(train=True, dirpath=dirpath, items=items)
 
 y1 = x.X[:, 0].numpy()
 y2 = x.X[:, 1].numpy()
@@ -28,7 +28,7 @@ plt.plot(list(y3))
 plt.plot(list(y4))
 plt.plot(list(y5))
 plt.plot(list(y6))
-plt.plot(list(lables*100))
+plt.plot(list(lables))
 plt.legend(items)
 plt.show()
 # print(y)

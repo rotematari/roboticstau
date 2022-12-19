@@ -20,10 +20,10 @@ import real_time_data
 dirpath = '/home/roblab15/Documents/FMG_project/data'
 
 # Hyper-parameters
-input_size = 4
+input_size = 6
 num_classes = 4
 num_epochs = 15
-
+items = ['B1', 'B2', 'S1', 'S2', 'S3', 'S4']
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
@@ -60,7 +60,7 @@ def train_cifar(config, checkpoint_dir=None, data_dir=None):
         optimizer.load_state_dict(optimizer_state)
 
     # pointing dataset
-    trainset = data_loader.Data(train=True, dirpath=data_dir)
+    trainset = data_loader.Data(train=True, dirpath=data_dir,items=items)
 
     # split train
     test_abs = int(len(trainset) * 0.8)
@@ -128,7 +128,7 @@ def train_cifar(config, checkpoint_dir=None, data_dir=None):
 
 
 def test_accuracy(net, device="cpu", best_batch_size=10):
-    testset = data_loader.Data(train=False, dirpath=dirpath)
+    testset = data_loader.Data(train=False, dirpath=dirpath, items=items)
     testloader = torch.utils.data.DataLoader(
         testset, batch_size=best_batch_size, shuffle=False)
 

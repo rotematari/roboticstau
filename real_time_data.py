@@ -2,8 +2,9 @@ import serial
 import numpy as np
 from torch.utils.data import Dataset
 import torch
-
-ser = serial.Serial('/dev/ttyACM1', 115200)
+import data_agmuntation
+import data_loader
+ser = serial.Serial('/dev/ttyACM0', 115200)
 # s = (4, 10)
 # np_arr = np.zeros(s)
 # print(np_arr)
@@ -27,6 +28,8 @@ class Data(Dataset):
             # print(np_arr)
         # np_arr = np.array([np_arr])
         # print(np_arr)
+
+
         self.x = torch.from_numpy(np.array(np_arr, dtype=np.float32))
         # print(self.x)
         self.n_samples = np_arr.shape
