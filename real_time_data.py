@@ -9,7 +9,7 @@ ser = serial.Serial('/dev/ttyACM1', 115200)
 # print(np_arr)
 class Data(Dataset):
     def __init__(self):
-        s = (10, 4)
+        s = (10, 6)
         np_arr = np.zeros(s)
         for i in range(10):
 
@@ -21,7 +21,7 @@ class Data(Dataset):
             string.replace("]", '')
             np_arr1 = np.fromstring(string, dtype=np.float32, sep=',')
 
-            np_arr[i] = np_arr1[14:18]
+            np_arr[i] = np_arr1[12:18]
             # print(np_arr)
             # np_arr = np.array([np_arr])
             # print(np_arr)

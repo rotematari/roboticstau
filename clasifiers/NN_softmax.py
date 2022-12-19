@@ -6,14 +6,14 @@ import torchvision.transforms as transforms
 import matplotlib.pyplot as plt
 from torch.utils.data import Dataset, DataLoader
 import data_loader
-import real_time_data
+# import real_time_data
 
 dirpath = '/home/roblab15/Documents/FMG_project/data'
 # Device configuration
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # Hyper-parameters
-input_size = 4  # 28x28
+input_size = 6  # 28x28
 hidden_size = 40
 num_classes = 4
 num_epochs = 15
@@ -66,11 +66,6 @@ class NeuralNet(nn.Module):
         # out = self.relu(out)
         out = self.l2(out)
         return out
-
-
-model = NeuralNet(input_size, hidden_size, num_classes).to(device)
-criterion = nn.CrossEntropyLoss()
-optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
 
 
 def train_model(train_loader):
@@ -142,10 +137,12 @@ def real_time():
     return predicted
 
 
+model = NeuralNet(input_size, hidden_size, num_classes).to(device)
+criterion = nn.CrossEntropyLoss()
+optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
 train_model(train_loader)
 test_model(test_loader)
-real_t = 1
-while real_t == 1:
-    pred = real_time()
-    print(pred)
-
+# real_t = 1
+# while real_t == 1:
+#     pred = real_time()
+#     print(pred)
