@@ -1,3 +1,6 @@
+from os.path import join
+from time import strftime, gmtime
+
 import torch
 import torch.nn as nn
 import torchvision
@@ -15,10 +18,10 @@ from ray import tune
 from ray.tune import CLIReporter
 from ray.tune.schedulers import ASHAScheduler
 from ray.air import session
-import real_time_data
+# import real_time_data
 
 dirpath = '/home/roblab15/Documents/FMG_project/data'
-
+model_dir_path = r'/home/roblab15/Documents/FMG_project/models'
 # Hyper-parameters
 input_size = 6
 num_classes = 4
@@ -130,7 +133,7 @@ def train_cifar(config, checkpoint_dir=None, data_dir=None):
 def test_accuracy(net, device="cpu", best_batch_size=10):
     testset = data_loader.Data(train=False, dirpath=dirpath, items=items)
     testloader = torch.utils.data.DataLoader(
-        testset, batch_size=best_batch_size, shuffle=False)
+        testset, batch_size=best_batch_size, shuffle=True)
 
     correct = 0
     total = 0
@@ -189,12 +192,17 @@ def main(num_samples=10, max_num_epochs=10, gpus_per_trial=0):
 
     test_acc = test_accuracy(best_trained_model, device, best_trial.config["batch_size"])
     print("Best trial test set accuracy: {}".format(test_acc))
+    save = 0
+    save = input("to save model press 1 \n")
+    if save == '1':
+        model_name = 'model_' + strftime("%d%b%Y%_H:%M", gmtime()) + '.pt'
+        torch.save(best_trained_model.state_dict(), join(model_dir_path, model_name))
 
-    print("real time test \n")
-    run = input("press 1 to run ")
-    while run == '1':
-        pred = real_time(best_trained_model)
-        print(pred)
+    # print("real time test \n")
+    # run = input("press 1 to run ")
+    # while run == '1':
+    #     pred = real_time(best_trained_model)
+    #     print(pred)
 
 
 

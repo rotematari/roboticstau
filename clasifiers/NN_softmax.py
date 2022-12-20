@@ -1,3 +1,5 @@
+import os
+from os.path import join
 import numpy as np
 import torch
 import torch.nn as nn
@@ -6,9 +8,10 @@ import torchvision.transforms as transforms
 import matplotlib.pyplot as plt
 from torch.utils.data import Dataset, DataLoader
 import data_loader
-import real_time_data
-
+# import real_time_data
+from time import gmtime, strftime
 dirpath = '/home/roblab15/Documents/FMG_project/data'
+model_dir_path = r'/home/roblab15/Documents/FMG_project/models'
 # Device configuration
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 items = ['B1', 'B2', 'S1', 'S2', 'S3', 'S4']
@@ -16,9 +19,9 @@ items = ['B1', 'B2', 'S1', 'S2', 'S3', 'S4']
 input_size = 6  # 28x28
 hidden_size = 40
 num_classes = 4
-num_epochs = 15
+num_epochs = 100
 batch_size = 30
-learning_rate = 0.001
+learning_rate = 0.0009
 
 # pointing dataset
 point_data_train = data_loader.Data(train=True, dirpath=dirpath, items=items)
@@ -96,9 +99,9 @@ def train_model(train_loader):
             loss.backward()
             optimizer.step()
 
-            if (i + 1) % 80 == 0:
+            if (i + 1) % 50 == 0:
                 print(f'Epoch [{epoch + 1}/{num_epochs}], Step [{i + 1}/{n_total_steps}], Loss: {loss.item():.4f}')
-            if loss <= 0.05:
+            if loss <= 0.09:
                 # print("loss small ")
                 break
 
@@ -125,6 +128,7 @@ def test_model(test_loader):
     return acc
 
 
+
 def real_time():
     X = real_time_data.Data()
 
@@ -142,7 +146,23 @@ criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate, weight_decay=0.0001)
 train_model(train_loader)
 test_model(test_loader)
-real_t = 1
-while real_t == 1:
-    pred = real_time()
-    print(pred)
+
+
+save = 0
+save = input("to save model press 1 \n")
+if save == '1':
+    model_name = 'model_' + strftime("%d%b%Y%_H:%M", gmtime()) + '.pt'
+    torch.save(model.state_dict(), join(model_dir_path, model_name))
+    # Print model's state_dict
+    print("Model's state_dict:")
+    for param_tensor in model.state_dict():
+        print(param_tensor, "\t", model.state_dict()[param_tensor].size())
+
+    # Print optimizer's state_dict
+    print("Optimizer's state_dict:")
+    for var_name in optimizer.state_dict():
+        print(var_name, "\t", optimizer.state_dict()[var_name])
+# real_t = 1
+# while real_t == 1:
+#     pred = real_time()
+#     print(pred)

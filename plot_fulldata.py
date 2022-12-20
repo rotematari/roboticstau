@@ -10,7 +10,7 @@ dirpath = '/home/roblab15/Documents/FMG_project/data'
 items = data_loader.items
 
 sample_rate = 10
-x = data_loader.Data(train=True, dirpath=dirpath, items=items)
+x = data_loader.Data(train=False, dirpath=dirpath, items=items)
 
 y1 = x.X[:, 0].numpy()
 y2 = x.X[:, 1].numpy()
