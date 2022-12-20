@@ -18,6 +18,7 @@ from ray import tune
 from ray.tune import CLIReporter
 from ray.tune.schedulers import ASHAScheduler
 from ray.air import session
+
 # import real_time_data
 
 dirpath = '/home/roblab15/Documents/FMG_project/data'
@@ -25,7 +26,7 @@ model_dir_path = r'/home/roblab15/Documents/FMG_project/models'
 # Hyper-parameters
 input_size = 6
 num_classes = 4
-num_epochs = 15
+# num_epochs = 15
 items = ['B1', 'B2', 'S1', 'S2', 'S3', 'S4']
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -63,10 +64,10 @@ def train_cifar(config, checkpoint_dir=None, data_dir=None):
         optimizer.load_state_dict(optimizer_state)
 
     # pointing dataset
-    trainset = data_loader.Data(train=True, dirpath=data_dir,items=items)
+    trainset = data_loader.Data(train=True, dirpath=data_dir, items=items)
 
     # split train
-    test_abs = int(len(trainset) * 0.8)
+    test_abs = int(len(trainset) * 0.)
     train_subset, val_subset = random_split(
         trainset, [test_abs, len(trainset) - test_abs])
     # Data loader
@@ -203,7 +204,6 @@ def main(num_samples=10, max_num_epochs=10, gpus_per_trial=0):
     # while run == '1':
     #     pred = real_time(best_trained_model)
     #     print(pred)
-
 
 
 def real_time(best_traind_model):

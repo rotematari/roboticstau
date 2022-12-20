@@ -6,12 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="31066527-d550-4a41-bfcd-43820b76ffc9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clasifiers/NN_softmax.py" beforeDir="false" afterPath="$PROJECT_DIR$/clasifiers/NN_softmax.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clasifiers/NN_softmax_ray_tune.py" beforeDir="false" afterPath="$PROJECT_DIR$/clasifiers/NN_softmax_ray_tune.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_agmuntation.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_agmuntation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_loader.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plot_fulldata.py" beforeDir="false" afterPath="$PROJECT_DIR$/plot_fulldata.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/real_time_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/real_time_data.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,13 +88,13 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "/home/roblab15/Documents/מאמרים/Optimization of Forcemyography Sensor Placement_code/IROS22-FMG-Sensor-Optimization-main",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PythonContentEntriesConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/roblab15/Documents/מאמרים/Optimization of Forcemyography Sensor Placement_code/IROS22-FMG-Sensor-Optimization-main&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PythonContentEntriesConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/arcive" />
@@ -107,7 +103,7 @@
       <recent name="$PROJECT_DIR$/../FMG project/clasifiers" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.NN_softmax_ray_tune">
     <configuration name="NN_softmax_ray_tune" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="research" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -455,7 +451,14 @@
       <option name="project" value="LOCAL" />
       <updated>1671464738141</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="20/12">
+      <created>1671546137453</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1671546137453</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -500,22 +503,11 @@
     <MESSAGE value="fix for new system design+ real time" />
     <MESSAGE value="new data design" />
     <MESSAGE value="19/12" />
-    <option name="LAST_COMMIT_MESSAGE" value="19/12" />
+    <MESSAGE value="20/12" />
+    <option name="LAST_COMMIT_MESSAGE" value="20/12" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/data_loader.py</url>
-          <line>85</line>
-          <option name="timeStamp" value="123" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/data_loader.py</url>
-          <line>97</line>
-          <option name="timeStamp" value="126" />
-        </line-breakpoint>
-      </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">
