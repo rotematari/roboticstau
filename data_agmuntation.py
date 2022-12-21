@@ -43,10 +43,21 @@ def min_max_norm(feature_df):
 
 # standardization
 
-def stdnorm(feaure_df):
+def stdnorm(feature_df):
     scaler = StandardScaler()
-    scaler.fit(feaure_df)
-    X = scaler.transform(feaure_df)  # X = X*x_std + x_mean # Denormalize or use scaler.inverse_transform(X)
+    scaler.fit(feature_df)
+    X = scaler.transform(feature_df)  # X = X*x_std + x_mean # Denormalize or use scaler.inverse_transform(X)
     x_mean = scaler.mean_
     x_std = scaler.scale_
     return X
+
+
+# agmuntations
+
+## scaling
+def scaling(feature_df, scale=1):
+    return feature_df*scale
+
+
+##jittering
+def jittering(feature_df,)
