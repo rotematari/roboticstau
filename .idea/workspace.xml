@@ -8,23 +8,10 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clasifiers/NN_softmax.py" beforeDir="false" afterPath="$PROJECT_DIR$/clasifiers/NN_softmax.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clasifiers/NN_softmax_ray_tune.py" beforeDir="false" afterPath="$PROJECT_DIR$/clasifiers/NN_softmax_ray_tune.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/relaxed/nopoint_0.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/relaxed/nopoint_1.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/relaxed/nopoint_2.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/relaxed/nopoint_3.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/relaxed/nopoint_4.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/relaxed/nopoint_5.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/tests/1point_6.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/tests/2point_2.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/tests/3point_2.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/tests/nopoint_2.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/tests/nopoint_4.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/tests/nopoint_6.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/tests/point_2.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/tests/point_4.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_agmuntation.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_agmuntation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_loader.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data_saver.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_saver.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plotCsv.py" beforeDir="false" afterPath="$PROJECT_DIR$/plotCsv.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plot_fulldata.py" beforeDir="false" afterPath="$PROJECT_DIR$/plot_fulldata.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plot_serial.py" beforeDir="false" afterPath="$PROJECT_DIR$/plot_serial.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/real_time_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/real_time_data.py" afterDir="false" />
     </list>
@@ -51,6 +38,7 @@
           <entry type="LOCAL">
             <value>
               <list>
+                <branch-info repo="$PROJECT_DIR$" source="EMD" />
                 <branch-info repo="$PROJECT_DIR$" source="main" />
               </list>
             </value>
@@ -73,7 +61,7 @@
     </option>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -106,13 +94,13 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/roblab15/Documents/FMG_project&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PythonContentEntriesConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "last_opened_file_path": "/home/roblab15/Documents/מאמרים/Optimization of Forcemyography Sensor Placement_code/IROS22-FMG-Sensor-Optimization-main",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PythonContentEntriesConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/arcive" />
@@ -441,7 +429,21 @@
       <option name="project" value="LOCAL" />
       <updated>1670924093558</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="fix for new system design+ real time">
+      <created>1670944014580</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1670944014580</updated>
+    </task>
+    <task id="LOCAL-00026" summary="new data design">
+      <created>1671119004678</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1671119004678</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -483,25 +485,17 @@
     <MESSAGE value="NN_softmax &#10;+ data loader" />
     <MESSAGE value="real time" />
     <MESSAGE value="fix for new system design" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix for new system design" />
+    <MESSAGE value="fix for new system design+ real time" />
+    <MESSAGE value="new data design" />
+    <option name="LAST_COMMIT_MESSAGE" value="new data design" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/clasifiers/NN_softmax.py</url>
-          <line>143</line>
-          <option name="timeStamp" value="25" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/clasifiers/NN_softmax.py</url>
-          <line>140</line>
-          <option name="timeStamp" value="27" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/clasifiers/NN_softmax.py</url>
-          <line>141</line>
-          <option name="timeStamp" value="29" />
+          <url>file://$PROJECT_DIR$/data_loader.py</url>
+          <line>81</line>
+          <option name="timeStamp" value="74" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

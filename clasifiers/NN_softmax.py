@@ -11,9 +11,9 @@ import real_time_data
 dirpath = '/home/roblab15/Documents/FMG_project/data'
 # Device configuration
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
+items = ['B1', 'B2', 'S1', 'S2', 'S3', 'S4']
 # Hyper-parameters
-input_size = 4  # 28x28
+input_size = 6  # 28x28
 hidden_size = 40
 num_classes = 4
 num_epochs = 15
@@ -21,8 +21,8 @@ batch_size = 30
 learning_rate = 0.001
 
 # pointing dataset
-point_data_train = data_loader.Data(train=True, dirpath=dirpath)
-point_data_test = data_loader.Data(train=False, dirpath=dirpath)
+point_data_train = data_loader.Data(train=True, dirpath=dirpath, items=items)
+point_data_test = data_loader.Data(train=False, dirpath=dirpath, items=items)
 
 # Data loader
 train_loader = torch.utils.data.DataLoader(dataset=point_data_train,
@@ -66,11 +66,6 @@ class NeuralNet(nn.Module):
         # out = self.relu(out)
         out = self.l2(out)
         return out
-
-
-model = NeuralNet(input_size, hidden_size, num_classes).to(device)
-criterion = nn.CrossEntropyLoss()
-optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
 
 
 def train_model(train_loader):
@@ -142,10 +137,12 @@ def real_time():
     return predicted
 
 
+model = NeuralNet(input_size, hidden_size, num_classes).to(device)
+criterion = nn.CrossEntropyLoss()
+optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate, weight_decay=0.0001)
 train_model(train_loader)
 test_model(test_loader)
 real_t = 1
 while real_t == 1:
     pred = real_time()
     print(pred)
-
