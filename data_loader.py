@@ -8,8 +8,8 @@ import torch.nn as nn
 import torchvision
 import torchvision.transforms as transforms
 import data_agmuntation
-
-dirpath = '/home/roblab15/Documents/FMG_project/data'
+import paramaters
+dirpath = paramaters.parameters.dirpath
 
 x_train = []
 x_test = []
@@ -24,7 +24,7 @@ y_real_train = []
 x_real_train = []
 count = 0
 sample_rate = 10
-items = ['B1', 'B2', 'S1', 'S2', 'S3', 'S4']
+items = paramaters.parameters.items
 
 
 class Data(Dataset):
@@ -89,14 +89,25 @@ class Data(Dataset):
         # full_data = pd.concat([full_data, mean_filter_df], ignore_index=True)
 
         # print(full_data)
-        featurs = mean_filter_df[items]
-        labels = mean_filter_df['class']
+        true_featurs = mean_filter_df[items]
+        true_labels = mean_filter_df['class']
+        corrent_labels = true_labels
 
+
+        # normalization
         # featurs = data_agmuntation.min_max_norm(featurs)
-        featurs = data_agmuntation.stdnorm(featurs)
-        self.X = torch.from_numpy(np.array(featurs, dtype=np.float32))
-        self.Y = torch.from_numpy(np.array(labels, dtype=np.float32))
-        x_temp1 = np.array(featurs)
+        true_featurs = data_agmuntation.stdnorm(true_featurs)
+        corrent_featurs = true_featurs
+        # data_agmuntation
+        # corrent_featurs, corrent_labels = data_agmuntation.scaling(true_featurs, corrent_featurs, corrent_labels, true_labels)
+        #corrent_featurs, corrent_labels = data_agmuntation.flip(true_featurs, corrent_featurs, corrent_labels, true_labels)
+        # corrent_featurs, labels = data_agmuntation.permutation(featurs, corrent_labels, true_labels)
+
+
+        self.X = torch.from_numpy(np.array(corrent_featurs, dtype=np.float32))
+        self.Y = torch.from_numpy(np.array(corrent_labels, dtype=np.float32))
+
+        x_temp1 = np.array(corrent_featurs)
         self.n_samples = x_temp1.shape[0]
 
     def __getitem__(self, index):
@@ -107,6 +118,6 @@ class Data(Dataset):
 
 
 #
-# data = Data(train=False, dirpath=dirpath, items=items)
+# data = Data(train=True, dirpath=dirpath, items=items)
 # x, y = data[0]
 # print(x, y)

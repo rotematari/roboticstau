@@ -67,7 +67,7 @@ def train_cifar(config, checkpoint_dir=None, data_dir=None):
     trainset = data_loader.Data(train=True, dirpath=data_dir, items=items)
 
     # split train
-    test_abs = int(len(trainset) * 0.)
+    test_abs = int(len(trainset) * 0.8)
     train_subset, val_subset = random_split(
         trainset, [test_abs, len(trainset) - test_abs])
     # Data loader
@@ -218,4 +218,4 @@ def real_time(best_traind_model):
 
 if __name__ == "__main__":
     # You can change the number of GPUs per trial here:
-    main(num_samples=1, max_num_epochs=200, gpus_per_trial=1)
+    main(num_samples=15, max_num_epochs=200, gpus_per_trial=1)

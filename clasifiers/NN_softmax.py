@@ -14,13 +14,13 @@ dirpath = '/home/roblab15/Documents/FMG_project/data'
 model_dir_path = r'/home/roblab15/Documents/FMG_project/models'
 # Device configuration
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-items = ['B1', 'B2', 'S1', 'S2', 'S3', 'S4']
+items = data_loader.items
 # Hyper-parameters
-input_size = 6  # 28x28
+input_size = 6
 hidden_size = 40
 num_classes = 4
-num_epochs = 100
-batch_size = 30
+num_epochs = 30
+batch_size = 80
 learning_rate = 0.0009
 
 # pointing dataset

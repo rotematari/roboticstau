@@ -5,12 +5,15 @@ import numpy as np
 import emd
 import torch
 import data_loader
-
-dirpath = '/home/roblab15/Documents/FMG_project/data'
-items = data_loader.items
+import data_agmuntation
+import paramaters
+dirpath = paramaters.parameters.dirpath
+items = paramaters.parameters.items
 
 sample_rate = 10
 x = data_loader.Data(train=True, dirpath=dirpath, items=items)
+
+
 
 y1 = x.X[:, 0].numpy()
 y2 = x.X[:, 1].numpy()
