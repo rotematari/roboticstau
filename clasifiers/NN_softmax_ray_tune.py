@@ -33,29 +33,65 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # Fully connected neural network with one hidden layer
 class NeuralNet(nn.Module):
-    def __init__(self, input_size, hidden_size, num_classes):
+    def __init__(self, input_size, hidden_size_1,hidden_size_2 , num_classes, dropout):
         super(NeuralNet, self).__init__()
-        self.input_size = input_size
-        self.l1 = nn.Linear(input_size, hidden_size)
-        self.relu = nn.ReLU()
-        self.l2 = nn.Linear(hidden_size, num_classes)
+        self.my_network = torch.nn.Sequential(
+            # first
+            torch.nn.Linear(input_size, hidden_size_1),
+
+            torch.nn.ReLU(),
+            torch.nn.BatchNorm1d(hidden_size_1),
+            torch.nn.Dropout1d(dropout),
+
+            #second
+            torch.nn.Linear(hidden_size_1, hidden_size_2),
+            torch.nn.ReLU(),
+            torch.nn.BatchNorm1d(hidden_size_2),
+            torch.nn.Dropout1d(dropout),
+
+            #output layer
+            torch.nn.Linear(hidden_size_2, num_classes)
+        )
+        # self.input_size = input_size
+        # self.dropout1 = nn.Dropout1d(dropout)
+        # self.dropout2 = nn.Dropout1d(dropout)
+        # self.batchnorm = nn.BatchNorm1d(num_features=hidden_size)
+        # self.l1 = nn.Linear(input_size, hidden_size)
+        # self.relu1 = nn.ReLU()
+        # self.relu2 = nn.ReLU()
+        # self.relu3 = nn.ReLU()
+        # self.l2 = nn.Linear(hidden_size, hidden_size)
+        # self.l3 = nn.Linear(hidden_size, num_classes)
+
+        # dropout, batchnorm
 
     def forward(self, x):
-        out = self.l1(x)
-        out = self.relu(out)
-        # out = self.relu(out)
-        # out = self.relu(out)
-        out = self.l2(out)
-        # no activation and no softmax at the end
-        return out
+        logits = self.my_network(x)
+        # # out = self.dropout1(x)
+        # out = self.l1(x)
+        # out = self.batchnorm(out)
+        # out = self.relu1(out)
+        # out = self.dropout2(out)
+        # # out = self.l2(out)
+        # # out = self.batchnorm(out)
+        # # out = self.relu2(out)
+        # # out = self.relu3(out)
+        # # out = self.dropout(out)
+        # # out = self.relu(out)
+        # # out = self.relu(out)
+        # out = self.l3(out)
+        return logits
 
 
-# ray tune example
+# train
+
+
 def train_cifar(config, checkpoint_dir=None, data_dir=None):
-    net = NeuralNet(input_size, config["hidden_size"], num_classes)
+    net = NeuralNet(input_size, config["hidden_size_1"], config["hidden_size_2"],num_classes, config["dropout"])
     net.to(device)
-    criterion = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(net.parameters(), lr=config["learning_rate"], weight_decay=config["weight_decay"])
+    net.train()
+    criterion = nn.CrossEntropyLoss(size_average=True)
+    optimizer = optim.ASGD(net.parameters(), lr=config["learning_rate"], weight_decay=config["weight_decay"])
 
     if checkpoint_dir:
         model_state, optimizer_state = torch.load(
@@ -73,11 +109,12 @@ def train_cifar(config, checkpoint_dir=None, data_dir=None):
     # Data loader
     trainloader = torch.utils.data.DataLoader(dataset=train_subset,
                                               batch_size=int(config["batch_size"]),
-                                              shuffle=True)
+                                              shuffle=True, drop_last=True)
 
     valloader = torch.utils.data.DataLoader(dataset=val_subset,
                                             batch_size=int(config["batch_size"]),
-                                            shuffle=True)
+                                            shuffle=True,
+                                            drop_last=True)
 
     for epoch in range(int(config["epoch"])):  # loop over the dataset multiple times
         running_loss = 0.0
@@ -152,9 +189,11 @@ def test_accuracy(net, device="cpu", best_batch_size=10):
 
 def main(num_samples=10, max_num_epochs=10, gpus_per_trial=0):
     config = {
+        "dropout": tune.loguniform(0.01, 0.5),
         "weight_decay": tune.loguniform(1e-6, 1e-1),
         "epoch": tune.loguniform(10, 200),
-        "hidden_size": tune.sample_from(lambda _: 2 ** np.random.randint(2, 9)),
+        "hidden_size_1": tune.sample_from(lambda _: 2 ** np.random.randint(2, 9)),
+        "hidden_size_2": tune.sample_from(lambda _: 2 ** np.random.randint(2, 9)),
         "learning_rate": tune.loguniform(1e-5, 1e-1),
         "batch_size": tune.choice([10, 20, 30, 40, 50, 60]) \
         }
@@ -170,7 +209,7 @@ def main(num_samples=10, max_num_epochs=10, gpus_per_trial=0):
         metric_columns=["loss", "accuracy", "training_iteration"])
     result = tune.run(
         partial(train_cifar, data_dir=dirpath),
-        resources_per_trial={"cpu": 2, "gpu": gpus_per_trial},
+        resources_per_trial={"cpu": 16, "gpu": gpus_per_trial},
         config=config,
         num_samples=num_samples,
         scheduler=scheduler,
@@ -184,7 +223,8 @@ def main(num_samples=10, max_num_epochs=10, gpus_per_trial=0):
     print("Best trial final validation accuracy: {}".format(
         best_trial.last_result["accuracy"]))
 
-    best_trained_model = NeuralNet(input_size, best_trial.config["hidden_size"], num_classes)
+    best_trained_model = NeuralNet(input_size, best_trial.config["hidden_size_1"],best_trial.config["hidden_size_2"], num_classes, best_trial.config["dropout"])
+
     # print(best_trial.checkpoint)
     best_checkpoint_dir = best_trial.checkpoint.dir_or_data
     model_state, optimizer_state = torch.load(os.path.join(
@@ -218,4 +258,4 @@ def real_time(best_traind_model):
 
 if __name__ == "__main__":
     # You can change the number of GPUs per trial here:
-    main(num_samples=15, max_num_epochs=200, gpus_per_trial=1)
+    main(num_samples=1, max_num_epochs=100, gpus_per_trial=1)

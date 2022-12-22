@@ -94,14 +94,16 @@ def flip(true_featurs, corrent_featurs, corrent_labels, true_label):
     true_featurs = pd.DataFrame(true_featurs, columns=items)
     corrent_featurs = pd.DataFrame(corrent_featurs, columns=items)
 
-    for i in range((corrent_featurs.shape[0])/(true_featurs.shape[0])):
-        temp_df = true_featurs.iloc[i:i+1, :]
-        temp_df = temp_df.iloc[::-1, :]
-        temp_df1 = temp_df1.a
+    true_featurs = true_featurs.rolling(window=9901).flip()
 
-    new_feature_df = true_featurs.iloc[::-1, :].reset_index(drop=True)
-
-    corrent_featurs = corrent_featurs.append(new_feature_df, ignore_index=True)
+    # for i in range((corrent_featurs.shape[0])/(true_featurs.shape[0])):
+    #     temp_df = true_featurs.iloc[i:i+1, :]
+    #     temp_df = temp_df.iloc[::-1, :]
+    #     temp_df1 = temp_df1.a
+    #
+    # new_feature_df = true_featurs.iloc[::-1, :].reset_index(drop=True)
+    #
+    corrent_featurs = corrent_featurs.append(true_featurs, ignore_index=True)
 
     return corrent_featurs, corrent_labels
 ##Permutation

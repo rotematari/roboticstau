@@ -19,9 +19,12 @@ items = data_loader.items
 input_size = 6
 hidden_size = 40
 num_classes = 4
-num_epochs = 30
+num_epochs = 45
+
 batch_size = 80
 learning_rate = 0.0009
+dropout = 0.1
+
 
 # pointing dataset
 point_data_train = data_loader.Data(train=True, dirpath=dirpath, items=items)
@@ -53,21 +56,33 @@ test_loader = torch.utils.data.DataLoader(dataset=point_data_test,
 
 # Fully connected neural network with one hidden layer
 class NeuralNet(nn.Module):
-    def __init__(self, input_size, hidden_size, num_classes):
+    def __init__(self, input_size, hidden_size, num_classes, dropout):
         super(NeuralNet, self).__init__()
         self.input_size = input_size
+        self.dropout = nn.Dropout1d(dropout)
+        self.batchnorm = nn.BatchNorm1d(hidden_size)
         self.l1 = nn.Linear(input_size, hidden_size)
-        self.relu = nn.ReLU()
-        self.l2 = nn.Linear(hidden_size, num_classes)
+        self.relu1 = nn.ReLU()
+        self.relu2 = nn.ReLU()
+        self.relu3 = nn.ReLU()
+        self.l2 = nn.Linear(hidden_size, hidden_size)
+        self.l3 = nn.Linear(hidden_size, num_classes)
 
         # dropout, batchnorm
 
     def forward(self, x):
+        # out = self.dropout(x)
         out = self.l1(x)
-        out = self.relu(out)
-        # out = self.relu(out)
-        # out = self.relu(out)
+        out = self.batchnorm(out)
+        out = self.relu1(out)
         out = self.l2(out)
+        out = self.batchnorm(out)
+        out = self.relu2(out)
+        # out = self.relu3(out)
+        # out = self.dropout(out)
+        # out = self.relu(out)
+        # out = self.relu(out)
+        out = self.l3(out)
         return out
 
 
@@ -99,12 +114,14 @@ def train_model(train_loader):
             loss.backward()
             optimizer.step()
 
+
+
+
             if (i + 1) % 50 == 0:
                 print(f'Epoch [{epoch + 1}/{num_epochs}], Step [{i + 1}/{n_total_steps}], Loss: {loss.item():.4f}')
             if loss <= 0.09:
                 # print("loss small ")
                 break
-
 
 # Test the model
 # In test phase, we don't need to compute gradients (for memory efficiency)
@@ -128,7 +145,9 @@ def test_model(test_loader):
     return acc
 
 
-
+# def predict(NeuralNet, inputs):
+#     logits = NeuralNet.forward(inputs)
+#     return logits.numpy().argmax(axis=1)
 def real_time():
     X = real_time_data.Data()
 
@@ -140,8 +159,9 @@ def real_time():
 
     return predicted
 
+# def plot_cost(loss, num_epouch):
 
-model = NeuralNet(input_size, hidden_size, num_classes).to(device)
+model = NeuralNet(input_size, hidden_size, num_classes, dropout).to(device)
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate, weight_decay=0.0001)
 train_model(train_loader)

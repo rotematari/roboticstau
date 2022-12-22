@@ -5,13 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="31066527-d550-4a41-bfcd-43820b76ffc9" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/paramaters.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clasifiers/NN_softmax.py" beforeDir="false" afterPath="$PROJECT_DIR$/clasifiers/NN_softmax.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clasifiers/NN_softmax_ray_tune.py" beforeDir="false" afterPath="$PROJECT_DIR$/clasifiers/NN_softmax_ray_tune.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data_agmuntation.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_agmuntation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_loader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plot_fulldata.py" beforeDir="false" afterPath="$PROJECT_DIR$/plot_fulldata.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -475,7 +473,14 @@
       <option name="project" value="LOCAL" />
       <updated>1671548214224</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="20/12">
+      <created>1671701627533</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1671701627533</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
