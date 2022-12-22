@@ -41,13 +41,13 @@ class NeuralNet(nn.Module):
 
             torch.nn.ReLU(),
             torch.nn.BatchNorm1d(hidden_size_1),
-            torch.nn.Dropout1d(dropout),
+            # torch.nn.Dropout1d(dropout),
 
             #second
             torch.nn.Linear(hidden_size_1, hidden_size_2),
             torch.nn.ReLU(),
             torch.nn.BatchNorm1d(hidden_size_2),
-            torch.nn.Dropout1d(dropout),
+            # torch.nn.Dropout1d(dropout),
 
             #output layer
             torch.nn.Linear(hidden_size_2, num_classes)

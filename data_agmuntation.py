@@ -69,7 +69,7 @@ def stdnorm(feaure_df):
 # agmuntations
 
 ## scaling
-def scaling(true_featurs, corrent_featurs, corrent_labels,true_label, scale=2):
+def scaling(true_featurs, corrent_featurs, corrent_labels,true_label, scale=5):
     # duplicate labels
     corrent_labels = pd.DataFrame(corrent_labels, columns=['class'])
     true_label = pd.DataFrame(true_label, columns=['class'])
@@ -93,17 +93,17 @@ def flip(true_featurs, corrent_featurs, corrent_labels, true_label):
 
     true_featurs = pd.DataFrame(true_featurs, columns=items)
     corrent_featurs = pd.DataFrame(corrent_featurs, columns=items)
+    new_feature_df = pd.DataFrame(columns=items)
+    # true_featurs = true_featurs.rolling(window=9901).flip()
 
-    true_featurs = true_featurs.rolling(window=9901).flip()
+    for i in range(4):
+        temp_df = true_featurs.loc[int(i*9901/4):int((i+1)*9901/4-1), :]
+        temp_df = temp_df.iloc[::-1, :]
+        new_feature_df = new_feature_df.append(temp_df, ignore_index=True)
 
-    # for i in range((corrent_featurs.shape[0])/(true_featurs.shape[0])):
-    #     temp_df = true_featurs.iloc[i:i+1, :]
-    #     temp_df = temp_df.iloc[::-1, :]
-    #     temp_df1 = temp_df1.a
-    #
     # new_feature_df = true_featurs.iloc[::-1, :].reset_index(drop=True)
-    #
-    corrent_featurs = corrent_featurs.append(true_featurs, ignore_index=True)
+
+    corrent_featurs = corrent_featurs.append(new_feature_df, ignore_index=True)
 
     return corrent_featurs, corrent_labels
 ##Permutation

@@ -19,7 +19,7 @@ items = data_loader.items
 input_size = 6
 hidden_size = 40
 num_classes = 4
-num_epochs = 45
+num_epochs = 150
 
 batch_size = 80
 learning_rate = 0.0009
@@ -30,6 +30,7 @@ dropout = 0.1
 point_data_train = data_loader.Data(train=True, dirpath=dirpath, items=items)
 point_data_test = data_loader.Data(train=False, dirpath=dirpath, items=items)
 
+input_size = point_data_train.n_featurs
 # Data loader
 train_loader = torch.utils.data.DataLoader(dataset=point_data_train,
                                            batch_size=batch_size,
@@ -73,10 +74,10 @@ class NeuralNet(nn.Module):
     def forward(self, x):
         # out = self.dropout(x)
         out = self.l1(x)
-        out = self.batchnorm(out)
+        # out = self.batchnorm(out)
         out = self.relu1(out)
         out = self.l2(out)
-        out = self.batchnorm(out)
+        # out = self.batchnorm(out)
         out = self.relu2(out)
         # out = self.relu3(out)
         # out = self.dropout(out)
@@ -119,8 +120,8 @@ def train_model(train_loader):
 
             if (i + 1) % 50 == 0:
                 print(f'Epoch [{epoch + 1}/{num_epochs}], Step [{i + 1}/{n_total_steps}], Loss: {loss.item():.4f}')
-            if loss <= 0.09:
-                # print("loss small ")
+            if loss <= 0.05:
+                print("loss small ")
                 break
 
 # Test the model
