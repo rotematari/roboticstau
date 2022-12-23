@@ -99,16 +99,21 @@ class Data(Dataset):
         # featurs = data_agmuntation.min_max_norm(featurs)
         true_featurs = data_agmuntation.stdnorm(true_featurs)
         corrent_featurs = true_featurs
-        # data_agmuntation
-        # corrent_featurs, corrent_labels = data_agmuntation.scaling(true_featurs, corrent_featurs, corrent_labels, true_labels)
-        # corrent_featurs, corrent_labels = data_agmuntation.flip(true_featurs, corrent_featurs, corrent_labels, true_labels)
-        # corrent_featurs, labels = data_agmuntation.permutation(featurs, corrent_labels, true_labels)
 
-        corrent_featurs = LDA.lda_transform(corrent_featurs,corrent_labels)
+        if train:
+        # data_agmuntation
+            corrent_featurs, corrent_labels = data_agmuntation.scaling(true_featurs, corrent_featurs, corrent_labels, true_labels)
+            corrent_featurs, corrent_labels = data_agmuntation.flip(true_featurs, corrent_featurs, corrent_labels, true_labels)
+            # corrent_featurs, labels = data_agmuntation.permutation(featurs, corrent_labels, true_labels)
+
+            corrent_featurs = LDA.lda_transform(corrent_featurs,corrent_labels)
 
 
         self.X = torch.from_numpy(np.array(corrent_featurs, dtype=np.float32))
-        self.Y = torch.from_numpy(np.array(corrent_labels, dtype=np.float32))
+        if train:
+            self.Y = torch.from_numpy(np.array(corrent_labels['class'], dtype=np.float32))
+        else:
+            self.Y = torch.from_numpy(np.array(corrent_labels, dtype=np.float32))
 
         x_temp1 = np.array(corrent_featurs)
         self.n_samples = x_temp1.shape[0]
