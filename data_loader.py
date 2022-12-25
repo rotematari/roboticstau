@@ -9,7 +9,7 @@ import torchvision
 import torchvision.transforms as transforms
 import data_agmuntation
 import paramaters
-from clasifiers import LDA
+from clasifiers import transforms
 dirpath = paramaters.parameters.dirpath
 
 x_train = []
@@ -106,7 +106,8 @@ class Data(Dataset):
             corrent_featurs, corrent_labels = data_agmuntation.flip(true_featurs, corrent_featurs, corrent_labels, true_labels)
             # corrent_featurs, labels = data_agmuntation.permutation(featurs, corrent_labels, true_labels)
 
-            corrent_featurs = LDA.lda_transform(corrent_featurs,corrent_labels)
+        corrent_featurs = transforms.lda_transform(corrent_featurs,corrent_labels)
+        # corrent_featurs = transforms.PCA_transform(corrent_featurs, corrent_labels)
 
 
         self.X = torch.from_numpy(np.array(corrent_featurs, dtype=np.float32))

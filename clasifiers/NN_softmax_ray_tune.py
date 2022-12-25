@@ -18,16 +18,16 @@ from ray import tune
 from ray.tune import CLIReporter
 from ray.tune.schedulers import ASHAScheduler
 from ray.air import session
-
+import paramaters
 # import real_time_data
 
-dirpath = '/home/roblab15/Documents/FMG_project/data'
+dirpath = paramaters.parameters.dirpath
 model_dir_path = r'/home/roblab15/Documents/FMG_project/models'
 # Hyper-parameters
-input_size = 6
+input_size = 3
 num_classes = 4
 # num_epochs = 15
-items = ['B1', 'B2', 'S1', 'S2', 'S3', 'S4']
+items = paramaters.parameters.items
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
@@ -38,19 +38,18 @@ class NeuralNet(nn.Module):
         self.my_network = torch.nn.Sequential(
             # first
             torch.nn.Linear(input_size, hidden_size_1),
-
             torch.nn.ReLU(),
-            torch.nn.BatchNorm1d(hidden_size_1),
+            # torch.nn.BatchNorm1d(hidden_size_1),
             # torch.nn.Dropout1d(dropout),
 
             #second
-            torch.nn.Linear(hidden_size_1, hidden_size_2),
-            torch.nn.ReLU(),
-            torch.nn.BatchNorm1d(hidden_size_2),
+            # torch.nn.Linear(hidden_size_1, hidden_size_2),
+            # torch.nn.ReLU(),
+            # torch.nn.BatchNorm1d(hidden_size_2),
             # torch.nn.Dropout1d(dropout),
 
             #output layer
-            torch.nn.Linear(hidden_size_2, num_classes)
+            torch.nn.Linear(hidden_size_1, num_classes)
         )
         # self.input_size = input_size
         # self.dropout1 = nn.Dropout1d(dropout)
@@ -91,7 +90,7 @@ def train_cifar(config, checkpoint_dir=None, data_dir=None):
     net.to(device)
     net.train()
     criterion = nn.CrossEntropyLoss(size_average=True)
-    optimizer = optim.ASGD(net.parameters(), lr=config["learning_rate"], weight_decay=config["weight_decay"])
+    optimizer = optim.SGD(net.parameters(), lr=config["learning_rate"], weight_decay=config["weight_decay"])
 
     if checkpoint_dir:
         model_state, optimizer_state = torch.load(
@@ -171,7 +170,7 @@ def train_cifar(config, checkpoint_dir=None, data_dir=None):
 def test_accuracy(net, device="cpu", best_batch_size=10):
     testset = data_loader.Data(train=False, dirpath=dirpath, items=items)
     testloader = torch.utils.data.DataLoader(
-        testset, batch_size=best_batch_size, shuffle=True)
+        testset, batch_size=best_batch_size, shuffle=True, drop_last=True)
 
     correct = 0
     total = 0
@@ -182,6 +181,9 @@ def test_accuracy(net, device="cpu", best_batch_size=10):
             outputs = net(X)
             _, predicted = torch.max(outputs.data, 1)
             total += labels.size(0)
+            # if predicted == labels:
+            #     correct += 1
+
             correct += (predicted == labels).sum().item()
 
     return correct / total
@@ -199,8 +201,8 @@ def main(num_samples=10, max_num_epochs=10, gpus_per_trial=0):
         }
 
     scheduler = ASHAScheduler(
-        metric="loss",
-        mode="min",
+        metric="accuracy",
+        mode="max",
         max_t=max_num_epochs,
         grace_period=1,
         reduction_factor=2)
@@ -209,7 +211,7 @@ def main(num_samples=10, max_num_epochs=10, gpus_per_trial=0):
         metric_columns=["loss", "accuracy", "training_iteration"])
     result = tune.run(
         partial(train_cifar, data_dir=dirpath),
-        resources_per_trial={"cpu": 16, "gpu": gpus_per_trial},
+        resources_per_trial={"cpu": 10, "gpu": gpus_per_trial},
         config=config,
         num_samples=num_samples,
         scheduler=scheduler,
@@ -258,4 +260,4 @@ def real_time(best_traind_model):
 
 if __name__ == "__main__":
     # You can change the number of GPUs per trial here:
-    main(num_samples=1, max_num_epochs=100, gpus_per_trial=1)
+    main(num_samples=1, max_num_epochs=200, gpus_per_trial=1)

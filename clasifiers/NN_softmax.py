@@ -10,19 +10,25 @@ from torch.utils.data import Dataset, DataLoader
 import data_loader
 # import real_time_data
 from time import gmtime, strftime
-dirpath = '/home/roblab15/Documents/FMG_project/data'
+import paramaters
+
+import matplotlib.pyplot as plt
+
+dirpath = paramaters.parameters.dirpath
 model_dir_path = r'/home/roblab15/Documents/FMG_project/models'
 # Device configuration
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-items = data_loader.items
+items = paramaters.parameters.items
 # Hyper-parameters
-input_size = 6
-hidden_size = 40
+# input_size = 6
+hidden_size = 100
 num_classes = 4
-num_epochs = 150
+num_epochs = 20
 
-batch_size = 80
-learning_rate = 0.0009
+
+batch_size = 30
+learning_rate = 0.0001
+weight_decay = 0.000001
 dropout = 0.1
 
 
@@ -34,11 +40,11 @@ input_size = point_data_train.n_featurs
 # Data loader
 train_loader = torch.utils.data.DataLoader(dataset=point_data_train,
                                            batch_size=batch_size,
-                                           shuffle=True)
+                                           shuffle=True, drop_last=True)
 
 test_loader = torch.utils.data.DataLoader(dataset=point_data_test,
                                           batch_size=batch_size,
-                                          shuffle=True)
+                                          shuffle=True, drop_last=True)
 
 
 # examples = iter(train_loader)
@@ -74,11 +80,13 @@ class NeuralNet(nn.Module):
     def forward(self, x):
         # out = self.dropout(x)
         out = self.l1(x)
-        # out = self.batchnorm(out)
         out = self.relu1(out)
+        out = self.batchnorm(out)
+
         out = self.l2(out)
-        # out = self.batchnorm(out)
         out = self.relu2(out)
+        out = self.batchnorm(out)
+
         # out = self.relu3(out)
         # out = self.dropout(out)
         # out = self.relu(out)
@@ -118,11 +126,16 @@ def train_model(train_loader):
 
 
 
-            if (i + 1) % 50 == 0:
+            if (i + 1) % 590 == 0:
                 print(f'Epoch [{epoch + 1}/{num_epochs}], Step [{i + 1}/{n_total_steps}], Loss: {loss.item():.4f}')
-            if loss <= 0.05:
-                print("loss small ")
-                break
+                # plt.plot(loss.item())
+            # if loss <= 0.1:
+            #     print("loss small ")
+            #     break
+        # if loss <= 0.1:
+        #     print("loss small ")
+        #     break
+    plt.show()
 
 # Test the model
 # In test phase, we don't need to compute gradients (for memory efficiency)
@@ -149,22 +162,24 @@ def test_model(test_loader):
 # def predict(NeuralNet, inputs):
 #     logits = NeuralNet.forward(inputs)
 #     return logits.numpy().argmax(axis=1)
-def real_time():
-    X = real_time_data.Data()
 
-    # X = X.to(device)
-    outputs = model(X.x)
-    # print(outputs.data)
-    # max returns (value ,index)
-    _, predicted = torch.max(outputs.data, 1)
 
-    return predicted
+# def real_time():
+#     X = real_time_data.Data()
+#
+#     # X = X.to(device)
+#     outputs = model(X.x)
+#     # print(outputs.data)
+#     # max returns (value ,index)
+#     _, predicted = torch.max(outputs.data, 1)
+#
+#     return predicted
 
 # def plot_cost(loss, num_epouch):
 
 model = NeuralNet(input_size, hidden_size, num_classes, dropout).to(device)
 criterion = nn.CrossEntropyLoss()
-optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate, weight_decay=0.0001)
+optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
 train_model(train_loader)
 test_model(test_loader)
 

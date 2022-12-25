@@ -1,4 +1,6 @@
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.decomposition import PCA
+
 import data_loader
 import paramaters
 import numpy as np
@@ -29,3 +31,15 @@ def lda_transform(train_featurs, train_labels ):
     #
     # print(score)
 
+def PCA_transform(train_featurs, train_labels):
+
+    clf = PCA()
+
+    train_featurs = np.array(train_featurs, dtype=np.float32)
+    train_labels = np.array(train_labels, dtype=np.int)
+
+    clf.fit(list(train_featurs), list(train_labels))
+
+    transformed = clf.transform(train_featurs)
+
+    return transformed
