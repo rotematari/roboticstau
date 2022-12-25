@@ -1,24 +1,21 @@
+import os
+from functools import partial
 from os.path import join
 from time import strftime, gmtime
 
+import numpy as np
 import torch
 import torch.nn as nn
-import torchvision
-import torchvision.transforms as transforms
-import matplotlib.pyplot as plt
-from torch.utils.data import Dataset, DataLoader
-import data_loader
-from functools import partial
-import numpy as np
-import os
-import torch.nn.functional as F
 import torch.optim as optim
-from torch.utils.data import random_split
 from ray import tune
 from ray.tune import CLIReporter
 from ray.tune.schedulers import ASHAScheduler
-from ray.air import session
+from torch.utils.data import Dataset
+from torch.utils.data import random_split
+
+import data_loader
 import paramaters
+
 # import real_time_data
 
 dirpath = paramaters.parameters.dirpath
@@ -33,23 +30,23 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # Fully connected neural network with one hidden layer
 class NeuralNet(nn.Module):
-    def __init__(self, input_size, hidden_size_1,hidden_size_2 , num_classes, dropout):
+    def __init__(self, input_size, hidden_size_1, hidden_size_2, num_classes, dropout1, dropout2):
         super(NeuralNet, self).__init__()
         self.my_network = torch.nn.Sequential(
             # first
             torch.nn.Linear(input_size, hidden_size_1),
             torch.nn.ReLU(),
-            # torch.nn.BatchNorm1d(hidden_size_1),
-            # torch.nn.Dropout1d(dropout),
+            torch.nn.BatchNorm1d(hidden_size_1),
+            torch.nn.Dropout1d(dropout1),
 
-            #second
-            # torch.nn.Linear(hidden_size_1, hidden_size_2),
-            # torch.nn.ReLU(),
-            # torch.nn.BatchNorm1d(hidden_size_2),
-            # torch.nn.Dropout1d(dropout),
+            # second
+            torch.nn.Linear(hidden_size_1, hidden_size_2),
+            torch.nn.ReLU(),
+            torch.nn.BatchNorm1d(hidden_size_2),
+            torch.nn.Dropout1d(dropout2),
 
-            #output layer
-            torch.nn.Linear(hidden_size_1, num_classes)
+            # output layer
+            torch.nn.Linear(hidden_size_2, num_classes)
         )
         # self.input_size = input_size
         # self.dropout1 = nn.Dropout1d(dropout)
@@ -86,11 +83,11 @@ class NeuralNet(nn.Module):
 
 
 def train_cifar(config, checkpoint_dir=None, data_dir=None):
-    net = NeuralNet(input_size, config["hidden_size_1"], config["hidden_size_2"],num_classes, config["dropout"])
+    net = NeuralNet(input_size, config["hidden_size_1"], config["hidden_size_2"], num_classes, config["dropout1"], config["dropout2"])
     net.to(device)
     net.train()
     criterion = nn.CrossEntropyLoss(size_average=True)
-    optimizer = optim.SGD(net.parameters(), lr=config["learning_rate"], weight_decay=config["weight_decay"])
+    optimizer = optim.Adam(net.parameters(), lr=config["learning_rate"], weight_decay=config["weight_decay"])
 
     if checkpoint_dir:
         model_state, optimizer_state = torch.load(
@@ -153,6 +150,7 @@ def train_cifar(config, checkpoint_dir=None, data_dir=None):
                 outputs = net(inputs)
                 _, predicted = torch.max(outputs.data, 1)
                 total += labels.size(0)
+
                 correct += (predicted == labels).sum().item()
 
                 loss = criterion(outputs, labels)
@@ -192,22 +190,24 @@ def test_accuracy(net, device="cpu", best_batch_size=10):
 def main(num_samples=10, max_num_epochs=10, gpus_per_trial=0):
     config = {
         "dropout": tune.loguniform(0.01, 0.5),
-        "weight_decay": tune.loguniform(1e-6, 1e-1),
-        "epoch": tune.loguniform(10, 200),
-        "hidden_size_1": tune.sample_from(lambda _: 2 ** np.random.randint(2, 9)),
-        "hidden_size_2": tune.sample_from(lambda _: 2 ** np.random.randint(2, 9)),
-        "learning_rate": tune.loguniform(1e-5, 1e-1),
-        "batch_size": tune.choice([10, 20, 30, 40, 50, 60]) \
+        "weight_decay": tune.loguniform(1e-6, 1e-4),
+        "epoch": tune.loguniform(10, 50),
+        "hidden_size_1": tune.sample_from(lambda _: 2 ** np.random.randint(2, 7)),
+        "hidden_size_2": tune.sample_from(lambda _: 2 ** np.random.randint(2, 7)),
+        "learning_rate": tune.loguniform(1e-3, 1e-1),
+        "batch_size": tune.choice([20, 30, 40, 50, 60]),
+        "dropout1": tune.loguniform(0.01, 0.4),
+        "dropout2": tune.loguniform(0.01, 0.4), \
         }
 
     scheduler = ASHAScheduler(
-        metric="accuracy",
-        mode="max",
+        metric="loss",
+        mode="min",
         max_t=max_num_epochs,
         grace_period=1,
         reduction_factor=2)
     reporter = CLIReporter(
-        parameter_columns=["hidden_size", "learning_rate", "batch_size"],
+        parameter_columns=["hidden_size_1", "hidden_size_2", "learning_rate", "batch_size", "weight_decay", "epoch"],
         metric_columns=["loss", "accuracy", "training_iteration"])
     result = tune.run(
         partial(train_cifar, data_dir=dirpath),
@@ -225,7 +225,8 @@ def main(num_samples=10, max_num_epochs=10, gpus_per_trial=0):
     print("Best trial final validation accuracy: {}".format(
         best_trial.last_result["accuracy"]))
 
-    best_trained_model = NeuralNet(input_size, best_trial.config["hidden_size_1"],best_trial.config["hidden_size_2"], num_classes, best_trial.config["dropout"])
+    best_trained_model = NeuralNet(input_size, best_trial.config["hidden_size_1"], best_trial.config["hidden_size_2"],
+                                   num_classes, best_trial.config["dropout1"], best_trial.config["dropout2"])
 
     # print(best_trial.checkpoint)
     best_checkpoint_dir = best_trial.checkpoint.dir_or_data
@@ -260,4 +261,4 @@ def real_time(best_traind_model):
 
 if __name__ == "__main__":
     # You can change the number of GPUs per trial here:
-    main(num_samples=1, max_num_epochs=200, gpus_per_trial=1)
+    main(num_samples=5, max_num_epochs=50, gpus_per_trial=1)

@@ -1,18 +1,14 @@
-
 from os.path import join
-import numpy as np
-import torch
-import torch.nn as nn
-import torchvision
-import torchvision.transforms as transforms
-import matplotlib.pyplot as plt
-from torch.utils.data import Dataset, DataLoader
-import data_loader
 # import real_time_data
 from time import gmtime, strftime
-import paramaters
 
 import matplotlib.pyplot as plt
+import torch
+import torch.nn as nn
+from torch.utils.data import Dataset
+
+import data_loader
+import paramaters
 
 dirpath = paramaters.parameters.dirpath
 model_dir_path = r'/home/roblab15/Documents/FMG_project/models'
@@ -21,16 +17,15 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 items = paramaters.parameters.items
 # Hyper-parameters
 # input_size = 6
-hidden_size = 100
+hidden_size_1 = 100
+hidden_size_2 = 50
 num_classes = 4
-num_epochs = 20
+num_epochs = 25
 
-
-batch_size = 30
+batch_size = 80
 learning_rate = 0.0001
-weight_decay = 0.000001
+weight_decay = 0.00001
 dropout = 0.1
-
 
 # pointing dataset
 point_data_train = data_loader.Data(train=True, dirpath=dirpath, items=items)
@@ -47,33 +42,24 @@ test_loader = torch.utils.data.DataLoader(dataset=point_data_test,
                                           shuffle=True, drop_last=True)
 
 
-# examples = iter(train_loader)
-# x, labels = next(examples)
-# print(x, labels)
 
-
-# examples = iter(train_loader_x)
-# example_data2 = next(examples)
-#
-# for i, j in [example_data1, example_data2], range(1) :
-#     plt.subplot(1, 1, j + 1)
-#     plt.plot(i)
-# plt.show()
 
 
 # Fully connected neural network with one hidden layer
 class NeuralNet(nn.Module):
-    def __init__(self, input_size, hidden_size, num_classes, dropout):
+    def __init__(self, input_size, hidden_size_1, hidden_size_2, num_classes, dropout):
         super(NeuralNet, self).__init__()
         self.input_size = input_size
-        self.dropout = nn.Dropout1d(dropout)
-        self.batchnorm = nn.BatchNorm1d(hidden_size)
-        self.l1 = nn.Linear(input_size, hidden_size)
+        self.dropout1 = nn.Dropout1d(0.1)
+        self.dropout2 = nn.Dropout1d(0.4)
+        self.batchnorm_1 = nn.BatchNorm1d(hidden_size_1)
+        self.batchnorm_2 = nn.BatchNorm1d(hidden_size_2)
+        self.l1 = nn.Linear(input_size, hidden_size_1)
         self.relu1 = nn.ReLU()
         self.relu2 = nn.ReLU()
         self.relu3 = nn.ReLU()
-        self.l2 = nn.Linear(hidden_size, hidden_size)
-        self.l3 = nn.Linear(hidden_size, num_classes)
+        self.l2 = nn.Linear(hidden_size_1, hidden_size_2)
+        self.l3 = nn.Linear(hidden_size_2, num_classes)
 
         # dropout, batchnorm
 
@@ -81,16 +67,14 @@ class NeuralNet(nn.Module):
         # out = self.dropout(x)
         out = self.l1(x)
         out = self.relu1(out)
-        out = self.batchnorm(out)
+        out = self.batchnorm_1(out)
+        out = self.dropout1(out)
 
         out = self.l2(out)
         out = self.relu2(out)
-        out = self.batchnorm(out)
+        out = self.batchnorm_2(out)
+        out = self.dropout2(out)
 
-        # out = self.relu3(out)
-        # out = self.dropout(out)
-        # out = self.relu(out)
-        # out = self.relu(out)
         out = self.l3(out)
         return out
 
@@ -99,8 +83,6 @@ def train_model(train_loader):
     # Loss and optimizer
 
     # Train the model
-    # train_loader = [train_loader_x, train_loader_y]
-
     n_total_steps = len(train_loader)
     print(n_total_steps)
     for epoch in range(num_epochs):
@@ -123,10 +105,7 @@ def train_model(train_loader):
             loss.backward()
             optimizer.step()
 
-
-
-
-            if (i + 1) % 590 == 0:
+            if (i + 1) % n_total_steps == 0:
                 print(f'Epoch [{epoch + 1}/{num_epochs}], Step [{i + 1}/{n_total_steps}], Loss: {loss.item():.4f}')
                 # plt.plot(loss.item())
             # if loss <= 0.1:
@@ -136,6 +115,7 @@ def train_model(train_loader):
         #     print("loss small ")
         #     break
     plt.show()
+
 
 # Test the model
 # In test phase, we don't need to compute gradients (for memory efficiency)
@@ -177,12 +157,11 @@ def test_model(test_loader):
 
 # def plot_cost(loss, num_epouch):
 
-model = NeuralNet(input_size, hidden_size, num_classes, dropout).to(device)
+model = NeuralNet(input_size, hidden_size_1, hidden_size_2, num_classes, dropout).to(device)
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
 train_model(train_loader)
 test_model(test_loader)
-
 
 save = 0
 save = input("to save model press 1 \n")

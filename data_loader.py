@@ -75,10 +75,21 @@ class Data(Dataset):
         if train:
             featurs_train = pd.concat(x_train, ignore_index=True)
             labels_train = pd.concat(y_train, ignore_index=True)
+
+
+            # for i in range(labels_train.shape[0]):
+            #     if not labels_train[i] == 0 :
+            #         labels_train[i] = 1
+
             full_data = pd.merge(featurs_train, labels_train, left_index=True, right_index=True)
         else:
             featurs_test = pd.concat(x_test, ignore_index=True)
             labels_test = pd.concat(y_test, ignore_index=True)
+            # for i in range(labels_test.shape[0]):
+            #     if not labels_test[i] == 0 :
+            #         labels_test[i] = 1
+
+
             full_data = pd.merge(featurs_test, labels_test, left_index=True, right_index=True)
         # print(full_data)
 
