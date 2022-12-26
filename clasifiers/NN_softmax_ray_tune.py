@@ -26,7 +26,7 @@ num_classes = 4
 # num_epochs = 15
 items = paramaters.parameters.items
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
+classes = ['0', '1', '2', '3']
 
 # Fully connected neural network with one hidden layer
 class NeuralNet(nn.Module):
@@ -87,7 +87,7 @@ def train_cifar(config, checkpoint_dir=None, data_dir=None):
     net.to(device)
     net.train()
     criterion = nn.CrossEntropyLoss(size_average=True)
-    optimizer = optim.Adam(net.parameters(), lr=config["learning_rate"], weight_decay=config["weight_decay"])
+    optimizer = optim.Adam(net.parameters(), lr=config["learning_rate"], weight_decay=config["weight_decay"], )
 
     if checkpoint_dir:
         model_state, optimizer_state = torch.load(
@@ -99,7 +99,7 @@ def train_cifar(config, checkpoint_dir=None, data_dir=None):
     trainset = data_loader.Data(train=True, dirpath=data_dir, items=items)
 
     # split train
-    test_abs = int(len(trainset) * 0.8)
+    test_abs = int(len(trainset) * 0.7)
     train_subset, val_subset = random_split(
         trainset, [test_abs, len(trainset) - test_abs])
     # Data loader
@@ -172,6 +172,8 @@ def test_accuracy(net, device="cpu", best_batch_size=10):
 
     correct = 0
     total = 0
+    n_class_correct = [0 for i in range(4)]
+    n_class_samples = [0 for i in range(4)]
     with torch.no_grad():
         for data in testloader:
             X, labels = data
@@ -183,26 +185,40 @@ def test_accuracy(net, device="cpu", best_batch_size=10):
             #     correct += 1
 
             correct += (predicted == labels).sum().item()
+        acc = 100.0 * correct / total
+        print(f'Accuracy of the network: {acc} %')
+        for i in range(best_batch_size):
+            label = labels[i]
+            pred = predicted[i]
+            if (label == pred):
+                n_class_correct[int(label)] += 1
+            n_class_samples[int(label)] += 1
 
-    return correct / total
+
+
+    for i in range(4):
+        acc = 100.0 * n_class_correct[i] / n_class_samples[i]
+        print(f'Accuracy of {classes[i]}: {acc} %')
+
+    return acc
 
 
 def main(num_samples=10, max_num_epochs=10, gpus_per_trial=0):
     config = {
-        "dropout": tune.loguniform(0.01, 0.5),
+
         "weight_decay": tune.loguniform(1e-6, 1e-4),
         "epoch": tune.loguniform(10, 50),
-        "hidden_size_1": tune.sample_from(lambda _: 2 ** np.random.randint(2, 7)),
-        "hidden_size_2": tune.sample_from(lambda _: 2 ** np.random.randint(2, 7)),
-        "learning_rate": tune.loguniform(1e-3, 1e-1),
+        "hidden_size_1": tune.sample_from(lambda _: 2 ** np.random.randint(2, 8)),
+        "hidden_size_2": tune.sample_from(lambda _: 2 ** np.random.randint(2, 8)),
+        "learning_rate": tune.loguniform(1e-4, 1e-1),
         "batch_size": tune.choice([20, 30, 40, 50, 60]),
         "dropout1": tune.loguniform(0.01, 0.4),
         "dropout2": tune.loguniform(0.01, 0.4), \
         }
 
     scheduler = ASHAScheduler(
-        metric="loss",
-        mode="min",
+        metric="accuracy",
+        mode="max",
         max_t=max_num_epochs,
         grace_period=1,
         reduction_factor=2)

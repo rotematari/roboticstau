@@ -115,7 +115,10 @@ class Data(Dataset):
         # data_agmuntation
             corrent_featurs, corrent_labels = data_agmuntation.scaling(true_featurs, corrent_featurs, corrent_labels, true_labels)
             corrent_featurs, corrent_labels = data_agmuntation.flip(true_featurs, corrent_featurs, corrent_labels, true_labels)
-            # corrent_featurs, labels = data_agmuntation.permutation(featurs, corrent_labels, true_labels)
+            corrent_featurs, corrent_labels = data_agmuntation.rotation(true_featurs, corrent_featurs, corrent_labels,  true_labels)
+            corrent_featurs, corrent_labels = data_agmuntation.permutation(true_featurs, corrent_featurs , corrent_labels,  true_labels)
+        # corrent_featurs, corrent_labels = data_agmuntation.magnitude_wrap(true_featurs, corrent_featurs, corrent_labels,true_labels)
+        #
 
         corrent_featurs = transforms.lda_transform(corrent_featurs,corrent_labels)
         # corrent_featurs = transforms.PCA_transform(corrent_featurs, corrent_labels)

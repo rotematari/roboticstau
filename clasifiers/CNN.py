@@ -17,15 +17,15 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 items = paramaters.parameters.items
 # Hyper-parameters
 # input_size = 6
-hidden_size_1 = 128
-hidden_size_2 = 16
-hidden_size_3 = 8
+hidden_size_1 = 100
+hidden_size_2 = 50
+hidden_size_3 = 10
 num_classes = 4
 num_epochs = 5
 
-batch_size = 30
-learning_rate = 0.008
-weight_decay = 0.0001
+batch_size = 80
+learning_rate = 0.0001
+weight_decay = 0.00001
 dropout = 0.1
 
 classes = ['0', '1', '2', '3']
@@ -45,49 +45,42 @@ test_loader = torch.utils.data.DataLoader(dataset=point_data_test,
 
 
 # Fully connected neural network with one hidden layer
-class NeuralNet(nn.Module):
+class CNN(nn.Module):
     def __init__(self, input_size, hidden_size_1, hidden_size_2, hidden_size_3, num_classes, dropout):
-        super(NeuralNet, self).__init__()
-        self.input_size = input_size
-        self.dropout1 = nn.Dropout1d(0.1)
-        self.dropout2 = nn.Dropout1d(0.3)
-        self.dropout3 = nn.Dropout1d(0.2)
+        super(CNN, self).__init__()
 
-        self.batchnorm_1 = nn.BatchNorm1d(hidden_size_1)
-        self.batchnorm_2 = nn.BatchNorm1d(hidden_size_2)
-        self.batchnorm_3 = nn.BatchNorm1d(hidden_size_3)
-
+        self.conv1 = nn.Conv1d(1, 80, 3, stride=2, padding= 2)
+        self.pool = nn.MaxPool1d(3 , 2)
+        self.conv2 = nn.Conv1d(1, 9, 3)
+        self.lin1 = nn.Linear(400, 120)
+        self.lin2 = nn.Linear(120, 60)
+        self.lin3 = nn.Linear(60, 4)
         self.relu1 = nn.ReLU()
         self.relu2 = nn.ReLU()
         self.relu3 = nn.ReLU()
-
-        self.l1 = nn.Linear(input_size, hidden_size_1)
-        self.l2 = nn.Linear(hidden_size_1, hidden_size_2)
-        self.l3 = nn.Linear(hidden_size_2, hidden_size_3)
-        self.l4 = nn.Linear(hidden_size_3, num_classes)
-
+        self.relu4 = nn.ReLU()
         # self.conv1 = nn.Conv1d()
 
         # dropout, batchnorm
 
     def forward(self, x):
-        # out = self.dropout(x)
-        out = self.l1(x)
+        out = self.conv1(x)
         out = self.relu1(out)
-        out = self.batchnorm_1(out)
-        out = self.dropout1(out)
+        out = self.pool(out)
 
-        out = self.l2(out)
+        out = self.conv1(out)
         out = self.relu2(out)
-        out = self.batchnorm_2(out)
-        out = self.dropout2(out)
+        out = self.pool(out)
 
-        out = self.l3(out)
+        out = self.lin1(out)
         out = self.relu3(out)
-        out = self.batchnorm_3(out)
-        out = self.dropout3(out)
 
-        out = self.l4(out)
+        out = self.lin2(out)
+        out = self.relu4(out)
+
+        out = self.lin3(out)
+
+
         return out
 
 
@@ -185,7 +178,7 @@ def test_model(test_loader):
 
 # def plot_cost(loss, num_epouch):
 
-model = NeuralNet(input_size, hidden_size_1, hidden_size_2, hidden_size_3, num_classes, dropout).to(device)
+model = CNN(input_size, hidden_size_1, hidden_size_2, hidden_size_3, num_classes, dropout).to(device)
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
 train_model(train_loader)

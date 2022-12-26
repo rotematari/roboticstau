@@ -4,14 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="31066527-d550-4a41-bfcd-43820b76ffc9" name="Changes" comment="22/12 home change">
+    <list default="true" id="31066527-d550-4a41-bfcd-43820b76ffc9" name="Changes" comment="25/12 home change">
+      <change afterPath="$PROJECT_DIR$/clasifiers/CNN.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/learn/agmontation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/NN_softmax.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/runConfigurations/CNN.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clasifiers/NN_softmax.py" beforeDir="false" afterPath="$PROJECT_DIR$/clasifiers/NN_softmax.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clasifiers/NN_softmax_ray_tune.py" beforeDir="false" afterPath="$PROJECT_DIR$/clasifiers/NN_softmax_ray_tune.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data_agmuntation.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_agmuntation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_loader.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/paramaters.py" beforeDir="false" afterPath="$PROJECT_DIR$/paramaters.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plot_fulldata.py" beforeDir="false" afterPath="$PROJECT_DIR$/plot_fulldata.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,7 +89,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/plot_fulldata.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/clasifiers/CNN.py" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
@@ -103,9 +105,6 @@
       <module name="research" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="C:\Users\rotem\anaconda3\envs\rotem\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/clasifiers" />
       <option name="IS_MODULE_SDK" value="false" />
@@ -260,6 +259,7 @@
     </configuration>
     <list>
       <item itemvalue="Python.NN_softmax" />
+      <item itemvalue="Python.CNN" />
       <item itemvalue="Python.plot_fulldata" />
       <item itemvalue="Python.NN_softmax_ray_tune" />
     </list>
@@ -509,7 +509,13 @@
       <option name="presentableId" value="LOCAL‎00034" />
       <updated>1671955770256</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL‎00035" summary="25/12 home change">
+      <created>1671966212409</created>
+      <option name="number" value="LOCAL‎00035" />
+      <option name="presentableId" value="LOCAL‎00035" />
+      <updated>1671966212409</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -558,7 +564,8 @@
     <MESSAGE value="20/12" />
     <MESSAGE value="21/12" />
     <MESSAGE value="22/12 home change" />
-    <option name="LAST_COMMIT_MESSAGE" value="22/12 home change" />
+    <MESSAGE value="25/12 home change" />
+    <option name="LAST_COMMIT_MESSAGE" value="25/12 home change" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
