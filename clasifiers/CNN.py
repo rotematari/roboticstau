@@ -3,6 +3,7 @@ from os.path import join
 from time import gmtime, strftime
 
 import matplotlib.pyplot as plt
+import numpy as np
 import torch
 import torch.nn as nn
 from torch.utils.data import Dataset
@@ -23,9 +24,9 @@ hidden_size_3 = 10
 num_classes = 4
 num_epochs = 5
 
-batch_size = 80
-learning_rate = 0.0001
-weight_decay = 0.00001
+batch_size = 50
+learning_rate = 0.001
+weight_decay = 0.0001
 dropout = 0.1
 
 classes = ['0', '1', '2', '3']
@@ -46,19 +47,24 @@ test_loader = torch.utils.data.DataLoader(dataset=point_data_test,
 
 # Fully connected neural network with one hidden layer
 class CNN(nn.Module):
-    def __init__(self, input_size, hidden_size_1, hidden_size_2, hidden_size_3, num_classes, dropout):
+    def __init__(self):
         super(CNN, self).__init__()
 
-        self.conv1 = nn.Conv1d(1, 80, 3, stride=2, padding= 2)
-        self.pool = nn.MaxPool1d(3 , 2)
-        self.conv2 = nn.Conv1d(1, 9, 3)
-        self.lin1 = nn.Linear(400, 120)
-        self.lin2 = nn.Linear(120, 60)
+        self.conv1 = nn.Conv1d(3, 3, (1,))
+        self.pool = nn.MaxPool1d(2 ,padding=1)
+        self.conv2 = nn.Conv1d(3, 1, 1)
+        self.lin1 = nn.Linear(1, 80)
+        self.lin2 = nn.Linear(80, 60)
         self.lin3 = nn.Linear(60, 4)
         self.relu1 = nn.ReLU()
         self.relu2 = nn.ReLU()
         self.relu3 = nn.ReLU()
         self.relu4 = nn.ReLU()
+
+
+        # self.conv1 = nn.Conv2d(batch_size, 50, 1)
+        # self.pool = nn.MaxPool2d(3 , 3, 1)
+        # self.conv2 = nn.Conv2d(50, 5, 1)
         # self.conv1 = nn.Conv1d()
 
         # dropout, batchnorm
@@ -89,7 +95,8 @@ def train_model(train_loader):
 
     # Train the model
     n_total_steps = len(train_loader)
-    print(n_total_steps)
+
+    # print()
     for epoch in range(num_epochs):
         for i, (X, labels) in enumerate(train_loader):
             # origin shape: [100, 1, 28, 28]
@@ -97,12 +104,14 @@ def train_model(train_loader):
             # images = images.reshape(-1, 28 * 28).to(device)
             # labels = labels.to(device)
 
-            X = X.to(device)
+            X = torch.unsqueeze(X, 2)
             labels = labels.to(device)
-            # print(X.shape, labels.shape)
+            print(torch.unsqueeze(X, 2),torch.unsqueeze(X, 2).shape, torch.unsqueeze(labels, 1), torch.unsqueeze(labels, 1).shape)
+            X = torch.unsqueeze(X,2)
             # Forward pass
-            outputs = model(X)
-            labels = labels.long()
+            outputs = model(torch.unsqueeze(X, 3))
+            print(outputs,outputs.shape)
+            labels = torch.unsqueeze(labels, 1).long()
             loss = criterion(outputs, labels)
 
             # Backward and optimize
@@ -178,9 +187,9 @@ def test_model(test_loader):
 
 # def plot_cost(loss, num_epouch):
 
-model = CNN(input_size, hidden_size_1, hidden_size_2, hidden_size_3, num_classes, dropout).to(device)
+model = CNN().to(device)
 criterion = nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
+optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
 train_model(train_loader)
 test_model(test_loader)
 

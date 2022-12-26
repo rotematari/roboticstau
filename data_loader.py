@@ -111,12 +111,12 @@ class Data(Dataset):
         true_featurs = data_agmuntation.stdnorm(true_featurs)
         corrent_featurs = true_featurs
 
-        if train:
+        # if train:
         # data_agmuntation
-            corrent_featurs, corrent_labels = data_agmuntation.scaling(true_featurs, corrent_featurs, corrent_labels, true_labels)
-            corrent_featurs, corrent_labels = data_agmuntation.flip(true_featurs, corrent_featurs, corrent_labels, true_labels)
-            corrent_featurs, corrent_labels = data_agmuntation.rotation(true_featurs, corrent_featurs, corrent_labels,  true_labels)
-            corrent_featurs, corrent_labels = data_agmuntation.permutation(true_featurs, corrent_featurs , corrent_labels,  true_labels)
+        #     corrent_featurs, corrent_labels = data_agmuntation.scaling(true_featurs, corrent_featurs, corrent_labels, true_labels)
+        #     corrent_featurs, corrent_labels = data_agmuntation.flip(true_featurs, corrent_featurs, corrent_labels, true_labels)
+        #     corrent_featurs, corrent_labels = data_agmuntation.rotation(true_featurs, corrent_featurs, corrent_labels,  true_labels)
+        #     corrent_featurs, corrent_labels = data_agmuntation.permutation(true_featurs, corrent_featurs , corrent_labels,  true_labels)
         # corrent_featurs, corrent_labels = data_agmuntation.magnitude_wrap(true_featurs, corrent_featurs, corrent_labels,true_labels)
         #
 
@@ -126,7 +126,7 @@ class Data(Dataset):
 
         self.X = torch.from_numpy(np.array(corrent_featurs, dtype=np.float32))
         if train:
-            self.Y = torch.from_numpy(np.array(corrent_labels['class'], dtype=np.float32))
+            self.Y = torch.from_numpy(np.array(corrent_labels, dtype=np.float32))
         else:
             self.Y = torch.from_numpy(np.array(corrent_labels, dtype=np.float32))
 

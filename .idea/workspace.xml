@@ -5,15 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="31066527-d550-4a41-bfcd-43820b76ffc9" name="Changes" comment="25/12 home change">
-      <change afterPath="$PROJECT_DIR$/clasifiers/CNN.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/learn/agmontation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/NN_softmax.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/runConfigurations/CNN.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_19_12_2022,_11_56_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_19_12_2022__11_56__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase__Changes_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clasifiers/NN_softmax.py" beforeDir="false" afterPath="$PROJECT_DIR$/clasifiers/NN_softmax.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clasifiers/NN_softmax_ray_tune.py" beforeDir="false" afterPath="$PROJECT_DIR$/clasifiers/NN_softmax_ray_tune.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_agmuntation.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_agmuntation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clasifiers/CNN.py" beforeDir="false" afterPath="$PROJECT_DIR$/clasifiers/CNN.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_loader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/paramaters.py" beforeDir="false" afterPath="$PROJECT_DIR$/paramaters.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,7 +98,7 @@
       <recent name="$PROJECT_DIR$/../FMG project/clasifiers" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.NN_softmax_ray_tune">
+  <component name="RunManager" selected="Python.CNN">
     <configuration name="NN_softmax" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="research" />
       <option name="INTERPRETER_OPTIONS" value="" />
