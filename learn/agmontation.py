@@ -1,6 +1,6 @@
 # from  https://github.com/uchidalab/time_series_augmentation
 import numpy as np
-from tqdm import tqdm
+# from tqdm import tqdm
 
 
 def jitter(x, sigma=0.03):
@@ -18,7 +18,7 @@ def rotation(x):
 
     flip = np.random.choice([-1], size=(x.shape[0]))
     rotate_axis = np.arange(x.shape[0])
-    np.random.shuffle(rotate_axis)
+    # np.random.shuffle(rotate_axis)
     rotated = flip[:] * x[rotate_axis]
     rotated = rotated.reset_index(drop=True)
 

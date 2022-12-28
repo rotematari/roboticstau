@@ -126,7 +126,7 @@ def train_model(train_loader):
         # if loss <= 0.1:
         #     print("loss small ")
         #     break
-    plt.show()
+    # plt.show()
 
 
 # Test the model
@@ -146,10 +146,15 @@ def test_model(test_loader):
             # max returns (value ,index)
             _, predicted = torch.max(outputs.data, 1)
             n_samples += labels.size(0)
-            n_correct += (predicted == labels).sum().item()
+            for i in range(batch_size):
+                pred = predicted[i]
+                if (labels[i] == pred):
+                    n_correct += 1
 
-        acc = 100.0 * n_correct / n_samples
-        print(f'Accuracy of the network on the 10000 test images: {acc} %')
+            # n_correct += (predicted == labels).sum().item()
+
+        # acc = 100.0 * n_correct / n_samples
+        # print(f'Accuracy of the network : {acc} %')
 
         for i in range(batch_size):
             label = labels[i]
@@ -157,6 +162,7 @@ def test_model(test_loader):
             if (label == pred):
                 n_class_correct[int(label)] += 1
             n_class_samples[int(label)] += 1
+
 
     acc = 100.0 * n_correct / n_samples
     print(f'Accuracy of the network: {acc} %')

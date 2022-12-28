@@ -5,31 +5,22 @@
 #include <SoftwareSerial.h>
 #include <XBee.h>
 
-//Palm Sensors
-//#define P1 A7   //pin 21
-//#define P2 A6   //pin 20
-//
-//#define P4 A16  //pin 40
-//#define P5 A3   //pin 17
 
-//Forearem Sensors
-#define F1 A16   //pin 40
-#define F2 A1   //pin 15
-#define F3 A15  //pin 39
-#define F4 A14  //pin 38
-#define F5 A2   //pin 16
 
-//Biceps Sensors
-#define B1 A13  //pin 27
-#define B2 A12  //pin 26
-//#define B3 A11  //pin 25
+#define S11 A16  //pin 40
+#define S10 A3   //pin 17
+#define S9 A2   //pin 16
+#define S8 A1   //pin 15
+#define S7 A15  //pin 39
+#define S6 A14  //pin 38
+#define S5 A13  //pin 27
+#define S4 A12  //pin 26
+#define S3 A11  //pin 25
+#define S2 A10  //pin 24
+#define S1 A9   //pin 23
 
-//Soulder Sensors
-#define S1 A10  //pin 24
-#define S2 A9   //pin 23
-#define S3 A3   //pin 17
-#define S4 A11  //pin 25
-#define P3 A17  //pin 41
+
+
 
 //SET XBEE3_PRO COMMUNICTION
 const byte rxPin = 0;
@@ -174,29 +165,19 @@ void printMag() {
 
 
 void readset1() {
-  //    Serial.println("AAAAAAA");
-  //  Serial.print("P,");
-  //Serial.print(analogRead(P1)); Serial.print(",");
-  //Serial.print(analogRead(P2)); Serial.print(",");
-  //Serial.print(analogRead(P3)); Serial.print(",");
-  //Serial.print(analogRead(P4)); Serial.print(",");
-  //Serial.print(analogRead(P5)); Serial.print(",");
-  //  Serial.print("F,");
-  Serial.print(analogRead(F1)); Serial.print(",");
-  Serial.print(analogRead(F2)); Serial.print(",");
-  Serial.print(analogRead(F3)); Serial.print(",");
-  Serial.print(analogRead(F4)); Serial.print(",");
-//  Serial.print(analogRead(F5)); Serial.print(",");
-  //  Serial.print("B,");
-  Serial.print(analogRead(B1)); Serial.print(",");
-  Serial.print(analogRead(B2)); Serial.print(",");
-  //Serial.print(analogRead(B3)); Serial.print(",");
-  //  Serial.print("S,");
+
+
   Serial.print(analogRead(S1)); Serial.print(",");
   Serial.print(analogRead(S2)); Serial.print(",");
-//  Serial.print(analogRead(S3)); Serial.print(",");
-  Serial.print(analogRead(S4)); Serial.println(",");
-  //}
+  Serial.print(analogRead(S3)); Serial.print(",");
+  Serial.print(analogRead(S4)); Serial.print(",");
+  Serial.print(analogRead(S5)); Serial.print(",");
+  Serial.print(analogRead(S6)); Serial.print(",");
+  Serial.print(analogRead(S7)); Serial.print(",");
+  Serial.print(analogRead(S8)); Serial.print(",");
+  Serial.print(analogRead(S9)); Serial.print(",");
+  Serial.print(analogRead(S10)); Serial.print(",");
+  Serial.print(analogRead(S11)); Serial.println(",");
 }
 
 

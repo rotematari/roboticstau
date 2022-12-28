@@ -5,13 +5,41 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="31066527-d550-4a41-bfcd-43820b76ffc9" name="Changes" comment="25/12 home change">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_19_12_2022,_11_56_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_19_12_2022__11_56__Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase__Changes_.xml" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/Run_model.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/models/fully_connected.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/models/initializer.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/wandb_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/research.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/research.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clasifiers/CNN.py" beforeDir="false" afterPath="$PROJECT_DIR$/clasifiers/CNN.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/arduino_code/rotem_code121222/rotem_code121222.ino" beforeDir="false" afterPath="$PROJECT_DIR$/arduino_code/rotem_code121222/rotem_code121222.ino" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clasifiers/NN_softmax.py" beforeDir="false" afterPath="$PROJECT_DIR$/clasifiers/NN_softmax.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clasifiers/NN_softmax_ray_tune.py" beforeDir="false" afterPath="$PROJECT_DIR$/clasifiers/NN_softmax_ray_tune.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/forward/forward_0.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/forward/forward_0.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/forward/forward_1.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/forward/forward_1.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/forward/forward_2.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/forward/forward_2.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/left/left_0.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/left/left_0.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/left/left_1.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/left/left_1.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/left/left_2.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/left/left_2.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/relaxed/relaxed_0.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/relaxed/relaxed_0.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/relaxed/relaxed_1.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/relaxed/relaxed_1.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/relaxed/relaxed_2.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/relaxed/relaxed_2.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/tests/forward_3.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/tests/left_3.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/tests/relaxed_3.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/tests/up_3.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/up/up_0.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/up/up_0.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/up/up_1.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/up/up_1.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/up/up_2.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/up/up_2.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_agmuntation.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_agmuntation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_loader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_saver.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_saver.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/learn/agmontation.py" beforeDir="false" afterPath="$PROJECT_DIR$/learn/agmontation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/paramaters.py" beforeDir="false" afterPath="$PROJECT_DIR$/paramaters.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plot_serial.py" beforeDir="false" afterPath="$PROJECT_DIR$/plot_serial.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,14 +126,14 @@
       <recent name="$PROJECT_DIR$/../FMG project/clasifiers" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.CNN">
+  <component name="RunManager">
     <configuration name="NN_softmax" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="research" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="C:\Users\rotem\anaconda3\envs\rotem\python.exe" />
+      <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/clasifiers" />
-      <option name="IS_MODULE_SDK" value="false" />
+      <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/clasifiers/NN_softmax.py" />
@@ -538,7 +566,6 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="first update all files" />
@@ -567,6 +594,12 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/eran_code_example/Model_Run.py</url>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">

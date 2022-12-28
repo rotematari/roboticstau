@@ -15,10 +15,9 @@ ser = serial.Serial('/dev/ttyACM0', 115200)
 def write_firs_line(f):
     f.write("time,")
     f.write("Gx,Gy,Gz,Ax,Ay,Az,Mx,My,Mz,")
-    # f.write("P1,P2,P3,P4,P5,")
-    f.write("F1,F2,")
-    f.write("B1,B2,")
-    f.write("S1,S2,S3,S4,S5,")
+    f.write("S1,S2,")
+    f.write("S3,S4,")
+    f.write("S5,S6,S7,S8,S9,S10,S11,")
     f.write("class\n")
 
 

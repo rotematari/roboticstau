@@ -21,7 +21,7 @@ import paramaters
 dirpath = paramaters.parameters.dirpath
 model_dir_path = r'/home/roblab15/Documents/FMG_project/models'
 # Hyper-parameters
-input_size = 3
+input_size = 6
 num_classes = 4
 # num_epochs = 15
 items = paramaters.parameters.items
@@ -170,7 +170,7 @@ def test_accuracy(net, device="cpu", best_batch_size=10):
     testloader = torch.utils.data.DataLoader(
         testset, batch_size=best_batch_size, shuffle=True, drop_last=True)
 
-    correct = 0
+    n_correct = 0
     total = 0
     n_class_correct = [0 for i in range(4)]
     n_class_samples = [0 for i in range(4)]
@@ -181,12 +181,15 @@ def test_accuracy(net, device="cpu", best_batch_size=10):
             outputs = net(X)
             _, predicted = torch.max(outputs.data, 1)
             total += labels.size(0)
-            # if predicted == labels:
-            #     correct += 1
 
-            correct += (predicted == labels).sum().item()
-        acc = 100.0 * correct / total
-        print(f'Accuracy of the network: {acc} %')
+            for i in range(best_batch_size):
+                pred = predicted[i]
+                if (labels[i] == pred):
+                    n_correct += 1
+
+            # correct += (predicted == labels).sum().item()
+        acc_total = 100.0 * n_correct / total
+        print(f'Accuracy of the network: {acc_total} %')
         for i in range(best_batch_size):
             label = labels[i]
             pred = predicted[i]
@@ -200,7 +203,7 @@ def test_accuracy(net, device="cpu", best_batch_size=10):
         acc = 100.0 * n_class_correct[i] / n_class_samples[i]
         print(f'Accuracy of {classes[i]}: {acc} %')
 
-    return acc
+    return acc_total
 
 
 def main(num_samples=10, max_num_epochs=10, gpus_per_trial=0):

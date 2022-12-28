@@ -6,7 +6,7 @@ import pandas as pd
 from sklearn.preprocessing import StandardScaler
 
 import paramaters
-import python_utils as aug
+
 from learn import agmontation
 items = paramaters.parameters.items
 

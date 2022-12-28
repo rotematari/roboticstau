@@ -72,13 +72,14 @@ class Data(Dataset):
                                 index, num_location_test]  # subtracts the mean val from the original
                         y_test.append(df_test['class'])
                         x_test.append(df_test.filter(items=items))
+
         if train:
             featurs_train = pd.concat(x_train, ignore_index=True)
             labels_train = pd.concat(y_train, ignore_index=True)
 
 
             # for i in range(labels_train.shape[0]):
-            #     if not labels_train[i] == 0 :
+            #     if labels_train[i] == 3:
             #         labels_train[i] = 1
 
             full_data = pd.merge(featurs_train, labels_train, left_index=True, right_index=True)
@@ -86,11 +87,10 @@ class Data(Dataset):
             featurs_test = pd.concat(x_test, ignore_index=True)
             labels_test = pd.concat(y_test, ignore_index=True)
             # for i in range(labels_test.shape[0]):
-            #     if not labels_test[i] == 0 :
+            #     if labels_test[i] == 3:
             #         labels_test[i] = 1
-
-
             full_data = pd.merge(featurs_test, labels_test, left_index=True, right_index=True)
+
         # print(full_data)
 
         # data agmuntations
@@ -112,20 +112,21 @@ class Data(Dataset):
         corrent_featurs = true_featurs
 
         # if train:
-        # data_agmuntation
+        # # data_agmuntation
         #     corrent_featurs, corrent_labels = data_agmuntation.scaling(true_featurs, corrent_featurs, corrent_labels, true_labels)
         #     corrent_featurs, corrent_labels = data_agmuntation.flip(true_featurs, corrent_featurs, corrent_labels, true_labels)
         #     corrent_featurs, corrent_labels = data_agmuntation.rotation(true_featurs, corrent_featurs, corrent_labels,  true_labels)
-        #     corrent_featurs, corrent_labels = data_agmuntation.permutation(true_featurs, corrent_featurs , corrent_labels,  true_labels)
-        # corrent_featurs, corrent_labels = data_agmuntation.magnitude_wrap(true_featurs, corrent_featurs, corrent_labels,true_labels)
-        #
+            # corrent_featurs, corrent_labels = data_agmuntation.permutation(true_featurs, corrent_featurs , corrent_labels,  true_labels)
+            # corrent_featurs, corrent_labels = data_agmuntation.magnitude_wrap(true_featurs, corrent_featurs, corrent_labels,true_labels)
 
-        corrent_featurs = transforms.lda_transform(corrent_featurs,corrent_labels)
+
+        # corrent_featurs = transforms.lda_transform(corrent_featurs,corrent_labels)
         # corrent_featurs = transforms.PCA_transform(corrent_featurs, corrent_labels)
 
 
         self.X = torch.from_numpy(np.array(corrent_featurs, dtype=np.float32))
         if train:
+            # self.Y = torch.from_numpy(np.array(corrent_labels['class'], dtype=np.float32))
             self.Y = torch.from_numpy(np.array(corrent_labels, dtype=np.float32))
         else:
             self.Y = torch.from_numpy(np.array(corrent_labels, dtype=np.float32))
