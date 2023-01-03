@@ -3,6 +3,7 @@ from os.path import join
 from time import gmtime, strftime
 
 import matplotlib.pyplot as plt
+import numpy as np
 import torch
 import torch.nn as nn
 from torch.utils.data import Dataset
@@ -17,14 +18,14 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 items = paramaters.parameters.items
 # Hyper-parameters
 # input_size = 6
-hidden_size_1 = 128
-hidden_size_2 = 16
-hidden_size_3 = 8
+hidden_size_1 = 100
+hidden_size_2 = 50
+hidden_size_3 = 10
 num_classes = 4
 num_epochs = 5
 
-batch_size = 30
-learning_rate = 0.008
+batch_size = 50
+learning_rate = 0.001
 weight_decay = 0.0001
 dropout = 0.1
 
@@ -45,49 +46,47 @@ test_loader = torch.utils.data.DataLoader(dataset=point_data_test,
 
 
 # Fully connected neural network with one hidden layer
-class NeuralNet(nn.Module):
-    def __init__(self, input_size, hidden_size_1, hidden_size_2, hidden_size_3, num_classes, dropout):
-        super(NeuralNet, self).__init__()
-        self.input_size = input_size
-        self.dropout1 = nn.Dropout1d(0.1)
-        self.dropout2 = nn.Dropout1d(0.3)
-        self.dropout3 = nn.Dropout1d(0.2)
+class CNN(nn.Module):
+    def __init__(self):
+        super(CNN, self).__init__()
 
-        self.batchnorm_1 = nn.BatchNorm1d(hidden_size_1)
-        self.batchnorm_2 = nn.BatchNorm1d(hidden_size_2)
-        self.batchnorm_3 = nn.BatchNorm1d(hidden_size_3)
-
+        self.conv1 = nn.Conv1d(3, 3, (1,))
+        self.pool = nn.MaxPool1d(2 ,padding=1)
+        self.conv2 = nn.Conv1d(3, 1, 1)
+        self.lin1 = nn.Linear(1, 80)
+        self.lin2 = nn.Linear(80, 60)
+        self.lin3 = nn.Linear(60, 4)
         self.relu1 = nn.ReLU()
         self.relu2 = nn.ReLU()
         self.relu3 = nn.ReLU()
+        self.relu4 = nn.ReLU()
 
-        self.l1 = nn.Linear(input_size, hidden_size_1)
-        self.l2 = nn.Linear(hidden_size_1, hidden_size_2)
-        self.l3 = nn.Linear(hidden_size_2, hidden_size_3)
-        self.l4 = nn.Linear(hidden_size_3, num_classes)
 
+        # self.conv1 = nn.Conv2d(batch_size, 50, 1)
+        # self.pool = nn.MaxPool2d(3 , 3, 1)
+        # self.conv2 = nn.Conv2d(50, 5, 1)
         # self.conv1 = nn.Conv1d()
 
         # dropout, batchnorm
 
     def forward(self, x):
-        # out = self.dropout(x)
-        out = self.l1(x)
+        out = self.conv1(x)
         out = self.relu1(out)
-        out = self.batchnorm_1(out)
-        out = self.dropout1(out)
+        out = self.pool(out)
 
-        out = self.l2(out)
+        out = self.conv1(out)
         out = self.relu2(out)
-        out = self.batchnorm_2(out)
-        out = self.dropout2(out)
+        out = self.pool(out)
 
-        out = self.l3(out)
+        out = self.lin1(out)
         out = self.relu3(out)
-        out = self.batchnorm_3(out)
-        out = self.dropout3(out)
 
-        out = self.l4(out)
+        out = self.lin2(out)
+        out = self.relu4(out)
+
+        out = self.lin3(out)
+
+
         return out
 
 
@@ -96,7 +95,8 @@ def train_model(train_loader):
 
     # Train the model
     n_total_steps = len(train_loader)
-    print(n_total_steps)
+
+    # print()
     for epoch in range(num_epochs):
         for i, (X, labels) in enumerate(train_loader):
             # origin shape: [100, 1, 28, 28]
@@ -104,12 +104,14 @@ def train_model(train_loader):
             # images = images.reshape(-1, 28 * 28).to(device)
             # labels = labels.to(device)
 
-            X = X.to(device)
+            X = torch.unsqueeze(X, 2)
             labels = labels.to(device)
-            # print(X.shape, labels.shape)
+            print(torch.unsqueeze(X, 2),torch.unsqueeze(X, 2).shape, torch.unsqueeze(labels, 1), torch.unsqueeze(labels, 1).shape)
+            X = torch.unsqueeze(X,2)
             # Forward pass
-            outputs = model(X)
-            labels = labels.long()
+            outputs = model(torch.unsqueeze(X, 3))
+            print(outputs,outputs.shape)
+            labels = torch.unsqueeze(labels, 1).long()
             loss = criterion(outputs, labels)
 
             # Backward and optimize
@@ -126,7 +128,7 @@ def train_model(train_loader):
         # if loss <= 0.1:
         #     print("loss small ")
         #     break
-    # plt.show()
+    plt.show()
 
 
 # Test the model
@@ -146,15 +148,10 @@ def test_model(test_loader):
             # max returns (value ,index)
             _, predicted = torch.max(outputs.data, 1)
             n_samples += labels.size(0)
-            for i in range(batch_size):
-                pred = predicted[i]
-                if (labels[i] == pred):
-                    n_correct += 1
+            n_correct += (predicted == labels).sum().item()
 
-            # n_correct += (predicted == labels).sum().item()
-
-        # acc = 100.0 * n_correct / n_samples
-        # print(f'Accuracy of the network : {acc} %')
+        acc = 100.0 * n_correct / n_samples
+        print(f'Accuracy of the network on the 10000 test images: {acc} %')
 
         for i in range(batch_size):
             label = labels[i]
@@ -162,7 +159,6 @@ def test_model(test_loader):
             if (label == pred):
                 n_class_correct[int(label)] += 1
             n_class_samples[int(label)] += 1
-
 
     acc = 100.0 * n_correct / n_samples
     print(f'Accuracy of the network: {acc} %')
@@ -191,9 +187,9 @@ def test_model(test_loader):
 
 # def plot_cost(loss, num_epouch):
 
-model = NeuralNet(input_size, hidden_size_1, hidden_size_2, hidden_size_3, num_classes, dropout).to(device)
+model = CNN().to(device)
 criterion = nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
+optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
 train_model(train_loader)
 test_model(test_loader)
 

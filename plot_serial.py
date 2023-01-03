@@ -27,6 +27,7 @@ y7 = []
 y8 = []
 y9 = []
 y10 = []
+y11 = []
 
 data_len = len(data)
 
@@ -54,20 +55,24 @@ def animate(i):
     y7.append(data[data_len - 7])
     y8.append(data[data_len - 8])
     y9.append(data[data_len - 9])
-    # y10.append(data[data_len - 10])
+    y10.append(data[data_len - 10])
+    y11.append(data[data_len - 11])
 
     plt.cla()
-
-    # plt.plot(x, y1, label='S5')
-    plt.plot(x, y2, label='S4')
-    plt.plot(x, y3, label='S3')
-    plt.plot(x, y4, label='S2')
-    plt.plot(x, y5, label='S1')
-    plt.plot(x, y6, label='B2')
-    plt.plot(x, y7, label='B1')
-    # plt.plot(x, y8, label='F2')
-    # plt.plot(x, y9, label='F1')
-    # plt.plot(x, y10, label='F1')
+    # # lower arm
+    # plt.plot(x, y1, label='S11')
+    # plt.plot(x, y3, label='S9')
+    # plt.plot(x, y4, label='S8')
+    # # upper arm
+    # plt.plot(x, y2, label='S10')
+    # plt.plot(x, y5, label='S7')
+    # sholder
+    plt.plot(x, y6, label='S6')
+    plt.plot(x, y7, label='S5')
+    plt.plot(x, y8, label='S4')
+    plt.plot(x, y9, label='S3')
+    plt.plot(x, y10, label='S2')
+    plt.plot(x, y11, label='S1')
     plt.legend(loc='upper left')
     plt.tight_layout()
 
