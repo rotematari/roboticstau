@@ -1,4 +1,7 @@
 import argparse
+import time
+from os.path import join
+
 import wandb
 
 import torch
@@ -11,59 +14,64 @@ import paramaters
 import data_loader
 from models import fully_connected, initializer
 import Run_model
+import utils
 
-# start a new wandb run to track this script
-wandb.init(
-    # set the wandb project where this run will be logged
-    project="pointing",
-    config={}
-
-)
+# # start a new wandb run to track this script
+# wandb.init(
+#     # set the wandb project where this run will be logged
+#     project="pointing",
+#     config={}
+#
+# )
 
 parser = argparse.ArgumentParser(description='Training Config', add_help=False)
 
+# destanations
 
-#
+parser.add_argument('--model_path', type=str, default=r'/home/roblab15/Documents/FMG_project/models/saved_models'
+                    , help='enter model dir path')
 
-parser.add_argument('--initialize_weights', type=str, default=True
+parser.add_argument('--initialize_weights', type=str, default=False
                     , help='initialize weights')
-parser.add_argument('--pre_train_own_model', type=str, default=False,
-                    help='load pretrained model weights')
+parser.add_argument('--pre_train_own_model', type=str, default=True,
+                    help='if pretrained model weights :True')
+parser.add_argument('--train_model', type=str, default=False,
+                    help='to train model:True')
 
 # hyper meters
-parser.add_argument('--batch_size', type=int, default=20,
+parser.add_argument('--batch_size', type=int, default=30,
                     help='input batch size for training (default: 20)')
-parser.add_argument('--epoch', type=int, default=5,
+parser.add_argument('--epoch', type=int, default=21,
                     help='input num of epoch (default: 5')
-parser.add_argument('--num_classes', type=int, default=4,
+parser.add_argument('--num_classes', type=int, default=2,
                     help='input num of classes (default: 4')
-parser.add_argument('-lr', '--learning_rate', type=int, default=0.001,
+parser.add_argument('-lr', '--learning_rate', type=int, default=0.0006042626727762781,
                     help='input learning rate (default: 0.001')
-parser.add_argument('-wd', '--weight_decay', type=int, default=0.0001,
+parser.add_argument('-wd', '--weight_decay', type=int, default=3.643379907226691e-05,
                     help='input weight_decay (default: 0.0001')
-parser.add_argument('--hidden_size_1', type=int, default=10,
+parser.add_argument('--hidden_size_1', type=int, default=16,
                     help='input hidden_size_1 (default: 5')
-parser.add_argument('--hidden_size_2', type=int, default=10,
+parser.add_argument('--hidden_size_2', type=int, default=16,
                     help='input hidden_size_2 (default: 5')
-parser.add_argument('--hidden_size_3', type=int, default=10,
+parser.add_argument('--hidden_size_3', type=int, default=16,
                     help='input hidden_size_3 (default: 5')
-parser.add_argument('--dropout_1', type=int, default=0.1,
+parser.add_argument('--dropout_1', type=int, default=0.015376617828307836,
                     help='input dropout_1(default: 0.1')
-parser.add_argument('--dropout_2', type=int, default=0.1,
+parser.add_argument('--dropout_2', type=int, default=0.14942078024203984,
                     help='input dropout_2 (default: 0.1')
-parser.add_argument('--dropout_3', type=int, default=0.1,
+parser.add_argument('--dropout_3', type=int, default=0.03077733834382956,
                     help='input dropout_3(default: 0.1')
 
 
-def main(args_config,device):
+def main(args_config, device):
     # data loader
     train_data = data_loader.Data(train=True, dirpath=paramaters.parameters.dirpath, items=paramaters.parameters.items)
-    # test_data = data_loader.Data(train=False, dirpath=paramaters.parameters.dirpath, items=paramaters.parameters.items)
+    test_data = data_loader.Data(train=False, dirpath=paramaters.parameters.dirpath, items=paramaters.parameters.items)
 
     input_size = train_data.n_featurs
 
     # split train
-    test_abs = int(len(train_data) * 0.8)
+    test_abs = int(len(train_data) * 0.9)
     train_subset, validation_subset = random_split(train_data, [test_abs, len(train_data) - test_abs])
 
     # torch data loader
@@ -75,41 +83,59 @@ def main(args_config,device):
                                                     shuffle=True, drop_last=True)
 
     # ##test
-    # test_loader = torch.utils.data.DataLoader(dataset=test_data, batch_size=args_config.batch_size, shuffle=False,
-    #                                           drop_last=True)
+
+    test_loader = torch.utils.data.DataLoader(dataset=test_data, batch_size=args_config.batch_size, shuffle=True,
+                                              drop_last=True)
 
     model = fully_connected.NeuralNet(train_data.n_featurs, args_config)
 
     if args_config.pre_train_own_model:
-        model_weights_path = r'/home/roblab15/Documents/FMG_project/models/'
-        model.load_state_dict(model_weights_path)
-    elif args_config.initialize_weights :
+        model_weights_path = r'/home/roblab15/Documents/FMG_project/models/saved_models/model_02_Jan_2023_12:15.pt'
+        model.load_state_dict(torch.load(model_weights_path))
+    elif args_config.initialize_weights:
         model.apply(initializer.initialize_weights)
 
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=args_config.learning_rate,
-                                     weight_decay=args_config.weight_decay)
+                                 weight_decay=args_config.weight_decay)
+    if args_config.train_model:
+        for epoch in range(0, args_config.epoch):
+            model.train()
+            model, optimizer = Run_model.train_epoch(epoch=epoch, model=model, train_loader=train_loader
+                                                     , criterion=criterion, optimizer=optimizer,
+                                                     args_config=args_config, device=device)
+        checkpoint = {
+            "state_dict": model.state_dict(),
+            "optimizer": optimizer.state_dict(),
+        }
 
-    for epoch in range(0, args_config.epoch):
-        model, optimizer = Run_model.train_epoch(epoch=epoch, model=model, train_loader=train_loader
-                                                 ,criterion=criterion,optimizer=optimizer,
-                                                 args_config=args_config,device=device)
-    checkpoint = {
-        "state_dict": model.state_dict(),
-        "optimizer": optimizer.state_dict(),
-    }
-    state = check_accuracy(state=state,
-                           model=model,
-                           optimizer=optimizer,
-                           validation_loader=validation_loader,
-                           args_config=args_config,
-                           scheduler=scheduler, device=device,
-                           epochs=epoch, IOU_metrics=IOU_metrics)
+    model.eval()
+    state = Run_model.check_accuracy(model=model,
+                                     optimizer=optimizer,
+                                     validation_loader=validation_loader,
+                                     args_config=args_config,
+                                     device=device,
+                                     criterion=criterion, )
+
+    print("test")
+    model.eval()
+    test_state = Run_model.check_accuracy(model=model,
+                                     optimizer=optimizer,
+                                     validation_loader=test_loader,
+                                     args_config=args_config,
+                                     device=device,
+                                     criterion=criterion, )
+
+    # saves model and optimizer
+    save = 0
+    save = input(" to save net press 1 ")
+    if save == '1':
+        utils.save_net(checkpoint, args_config)
 
 if __name__ == '__main__':
     args_config = parser.parse_args()
     # adds all of the arguments as config variables
-    wandb.config.update(args_config)
+    # wandb.config.update(args_config)
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     main(args_config, device)

@@ -65,11 +65,12 @@ class Data(Dataset):
                     for file_name in onlyfiles:
 
                         df_test = pd.read_csv(join(filepath, file_name))
+                        df_test = df_test.iloc[100:, :].reset_index(drop=True)
                         df_test.drop(['time'], axis=1, inplace=True, errors="ignor")
                         num_location_test = file_name[file_name.find('_') + 1]
                         for index in items:
-                            df_test[index] -= df_mean_test.loc[
-                                index, num_location_test]  # subtracts the mean val from the original
+                            df_test[index] -= df_mean_test.loc[index, num_location_test]  # subtracts the mean val from the original
+
                         y_test.append(df_test['class'])
                         x_test.append(df_test.filter(items=items))
 
@@ -78,17 +79,17 @@ class Data(Dataset):
             labels_train = pd.concat(y_train, ignore_index=True)
 
 
-            # for i in range(labels_train.shape[0]):
-            #     if labels_train[i] == 3:
-            #         labels_train[i] = 1
+            for i in range(labels_train.shape[0]):
+                if labels_train[i] == 3 or labels_train[i] == 2:
+                    labels_train[i] = 1
 
             full_data = pd.merge(featurs_train, labels_train, left_index=True, right_index=True)
         else:
             featurs_test = pd.concat(x_test, ignore_index=True)
             labels_test = pd.concat(y_test, ignore_index=True)
-            # for i in range(labels_test.shape[0]):
-            #     if labels_test[i] == 3:
-            #         labels_test[i] = 1
+            for i in range(labels_test.shape[0]):
+                if labels_test[i] == 3 or labels_test[i] == 2:
+                    labels_test[i] = 1
             full_data = pd.merge(featurs_test, labels_test, left_index=True, right_index=True)
 
         # print(full_data)

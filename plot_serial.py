@@ -59,7 +59,7 @@ def animate(i):
     y11.append(data[data_len - 11])
 
     plt.cla()
-    # lower arm
+    # # lower arm
     # plt.plot(x, y1, label='S11')
     # plt.plot(x, y3, label='S9')
     # plt.plot(x, y4, label='S8')

@@ -3,7 +3,8 @@ import numpy as np
 import wandb
 
 
-def train_epoch(epoch, model, train_loader, optimizer, args_config, logging, criterion, device):
+def train_epoch(epoch, model, train_loader, optimizer, args_config, criterion, device):
+    train_loader.size()
     for batch_index, (input, labels) in enumerate(train_loader):
         input = input.to(device)
         labels = labels.to(device)
@@ -18,38 +19,47 @@ def train_epoch(epoch, model, train_loader, optimizer, args_config, logging, cri
         loss.backward()
         optimizer.step()
 
+    return model, optimizer
 
-def check_accuracy(epoch, model, validation_loader, optimizer, args_config, logging, criterion, device):
+
+def check_accuracy( model, validation_loader, optimizer, args_config, criterion, device):
     with torch.no_grad():
         n_correct = 0
         n_samples = 0
         n_class_correct = [0 for i in range(4)]
         n_class_samples = [0 for i in range(4)]
+        class_acc = [0 for i in range(4)]
+        count = 0
         for batch_index, (input, labels) in enumerate(validation_loader):
             labels = labels.to(device)
             input = input.to(device)
-
             outputs = model(input)
+
             _, predicted = torch.max(outputs.data, 1)
 
             n_samples += labels.size(0)
-            n_correct += (predicted == outputs).sum()
-            acc = n_correct / n_samples * 100
-            print(f'accurcy :{acc} %\n')
+            n_correct += (predicted == labels).sum()
+            acc = n_correct / n_samples
+                # print(f'accurcy :{acc} %')
+            count += 1
+            # for i in range(args_config.batch_size):
+            #     pred = predicted[i]
+            #     if (labels[i] == pred):
+            #         n_correct += 1
 
-            for i in range(args_config.batch_size):
-                pred = predicted[i]
-                if (labels[i] == pred):
-                    n_correct += 1
+            for j in range(args_config.batch_size):
+                label = labels[j]
+                pred = predicted[j]
+                if (label == pred):
+                    n_class_correct[int(label)] += 1
+                n_class_samples[int(label)] += 1
 
-        for i in range(args_config.batch_size):
-            label = labels[i]
-            pred = predicted[i]
-            if (label == pred):
-                n_class_correct[int(label)] += 1
-            n_class_samples[int(label)] += 1
-    class_acc = []
-    for i in range(4):
-        class_acc[i] = 100.0 * n_class_correct[i] / n_class_samples[i]
-        print(f'Accuracy of {i}: {class_acc[i]} %')
+    # try:
+    for k in range(args_config.num_classes):
+        if not n_class_samples[k] == 0:
+            class_acc[k] = 100.0 * n_class_correct[k] / n_class_samples[k]
+            print(f'Accuracy of {k}: {class_acc[k]} %')
+    # except:
+    #     print("no match")
+    print(f'accurcy :{acc} %')
     return acc
