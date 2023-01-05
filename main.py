@@ -28,14 +28,14 @@ parser = argparse.ArgumentParser(description='Training Config', add_help=False)
 
 # destanations
 
-parser.add_argument('--model_path', type=str, default=r'/home/roblab15/Documents/FMG_project/models/saved_models'
+parser.add_argument('--model_path', type=str, default=r'/home/roblab20/Documents/rotem/models/saved_models'
                     , help='enter model dir path')
 
-parser.add_argument('--initialize_weights', type=str, default=False
+parser.add_argument('--initialize_weights', type=str, default=True
                     , help='initialize weights')
-parser.add_argument('--pre_train_own_model', type=str, default=True,
+parser.add_argument('--pre_train_own_model', type=str, default=False,
                     help='if pretrained model weights :True')
-parser.add_argument('--train_model', type=str, default=False,
+parser.add_argument('--train_model', type=str, default=True,
                     help='to train model:True')
 
 # hyper meters
@@ -43,7 +43,7 @@ parser.add_argument('--batch_size', type=int, default=30,
                     help='input batch size for training (default: 20)')
 parser.add_argument('--epoch', type=int, default=21,
                     help='input num of epoch (default: 5')
-parser.add_argument('--num_classes', type=int, default=2,
+parser.add_argument('--num_classes', type=int, default=4,
                     help='input num of classes (default: 4')
 parser.add_argument('-lr', '--learning_rate', type=int, default=0.0006042626727762781,
                     help='input learning rate (default: 0.001')
@@ -90,7 +90,7 @@ def main(args_config, device):
     model = fully_connected.NeuralNet(train_data.n_featurs, args_config)
 
     if args_config.pre_train_own_model:
-        model_weights_path = r'/home/roblab15/Documents/FMG_project/models/saved_models/model_02_Jan_2023_12:15.pt'
+        model_weights_path = r'/home/roblab20/Documents/rotem/models/saved_models/model_05_Jan_2023_14:41.pt'
         model.load_state_dict(torch.load(model_weights_path))
     elif args_config.initialize_weights:
         model.apply(initializer.initialize_weights)
@@ -98,9 +98,11 @@ def main(args_config, device):
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=args_config.learning_rate,
                                  weight_decay=args_config.weight_decay)
+
+    model.to(device)
+
     if args_config.train_model:
         for epoch in range(0, args_config.epoch):
-            model.train()
             model, optimizer = Run_model.train_epoch(epoch=epoch, model=model, train_loader=train_loader
                                                      , criterion=criterion, optimizer=optimizer,
                                                      args_config=args_config, device=device)
@@ -120,17 +122,18 @@ def main(args_config, device):
     print("test")
     model.eval()
     test_state = Run_model.check_accuracy(model=model,
-                                     optimizer=optimizer,
-                                     validation_loader=test_loader,
-                                     args_config=args_config,
-                                     device=device,
-                                     criterion=criterion, )
+                                          optimizer=optimizer,
+                                          validation_loader=test_loader,
+                                          args_config=args_config,
+                                          device=device,
+                                          criterion=criterion, )
 
     # saves model and optimizer
     save = 0
-    save = input(" to save net press 1 ")
-    if save == '1':
+    # save = input(" to save net press 1 ")
+    if test_state > 0.85:
         utils.save_net(checkpoint, args_config)
+
 
 if __name__ == '__main__':
     args_config = parser.parse_args()
@@ -138,4 +141,5 @@ if __name__ == '__main__':
     # wandb.config.update(args_config)
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-    main(args_config, device)
+    for i in range(10):
+        main(args_config, device)

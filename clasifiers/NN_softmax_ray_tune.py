@@ -16,6 +16,8 @@ from torch.utils.data import random_split
 import data_loader
 import paramaters
 
+
+from ray.air import session
 # import real_time_data
 
 dirpath = paramaters.parameters.dirpath
@@ -29,7 +31,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 classes = ['0', '1', '2', '3']
 
 
-# Fully connected neural network with one hidden layer
+# Fully connected neural network
 class NeuralNet(nn.Module):
     def __init__(self, input_size, hidden_size_1, hidden_size_2, hidden_size_3, num_classes, dropout_1, dropout_2,
                  dropout_3):
@@ -100,7 +102,7 @@ def train_cifar(config, checkpoint_dir=None, data_dir=None):
                     config["dropout_1"], config["dropout_2"], config["dropout_3"])
     net.to(device)
     net.train()
-    criterion = nn.CrossEntropyLoss(size_average=True)
+    criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(net.parameters(), lr=config["learning_rate"], weight_decay=config["weight_decay"] )
 
 
@@ -203,8 +205,8 @@ def test_accuracy(net, device="cpu", best_batch_size=10):
 
 
 def main(num_samples=10, max_num_epochs=10, gpus_per_trial=0):
-    config = {
 
+    config = {
         "weight_decay": tune.loguniform(1e-6, 1e-4),
         "epoch": tune.loguniform(10, 50),
         "hidden_size_1": tune.sample_from(lambda _: 2 ** np.random.randint(2, 8)),
@@ -229,7 +231,7 @@ def main(num_samples=10, max_num_epochs=10, gpus_per_trial=0):
         metric_columns=["loss", "accuracy", "training_iteration"])
     result = tune.run(
         partial(train_cifar, data_dir=dirpath),
-        resources_per_trial={"cpu": 10, "gpu": gpus_per_trial},
+        resources_per_trial={"cpu": 5, "gpu": gpus_per_trial},
         config=config,
         num_samples=num_samples,
         scheduler=scheduler,

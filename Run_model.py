@@ -4,7 +4,7 @@ import wandb
 
 
 def train_epoch(epoch, model, train_loader, optimizer, args_config, criterion, device):
-    train_loader.size()
+    model.cuda()
     for batch_index, (input, labels) in enumerate(train_loader):
         input = input.to(device)
         labels = labels.to(device)
@@ -23,6 +23,7 @@ def train_epoch(epoch, model, train_loader, optimizer, args_config, criterion, d
 
 
 def check_accuracy( model, validation_loader, optimizer, args_config, criterion, device):
+    model.cuda()
     with torch.no_grad():
         n_correct = 0
         n_samples = 0

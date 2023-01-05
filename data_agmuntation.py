@@ -53,6 +53,7 @@ def find_mean(states_dir, data_dir_path, items):
 
 # 1 filter the data by 10 point avg
 def filter(feature_df):
+
     feature_df_roll = feature_df.rolling(window=10).mean()
     feature_df_roll = feature_df_roll.dropna().reset_index(drop=True)
 
@@ -60,8 +61,11 @@ def filter(feature_df):
 
 
 # min max normalization
-def min_max_norm(feature_df):
-    df_norm = (feature_df - feature_df.min()) / (feature_df.max() - feature_df.min())
+def min_max_norm(true_featurs):
+
+    true_featurs = pd.DataFrame(true_featurs, columns=items)
+
+    df_norm = (true_featurs - true_featurs.min()) / (true_featurs.max() - true_featurs.min())
 
     return df_norm
 
@@ -69,6 +73,7 @@ def min_max_norm(feature_df):
 # standardization
 
 def stdnorm(feature_df):
+
     scaler = StandardScaler()
     scaler.fit(feature_df)
     X = scaler.transform(feature_df)  # X = X*x_std + x_mean # Denormalize or use scaler.inverse_transform(X)
