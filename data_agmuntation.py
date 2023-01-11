@@ -55,6 +55,7 @@ def find_mean(states_dir, data_dir_path, items):
 def filter(feature_df):
 
     feature_df_roll = feature_df.rolling(window=10).mean()
+
     feature_df_roll = feature_df_roll.dropna().reset_index(drop=True)
 
     return feature_df_roll
@@ -74,11 +75,13 @@ def min_max_norm(true_featurs):
 
 def stdnorm(feature_df):
 
-    scaler = StandardScaler()
+    true_featurs = pd.DataFrame(feature_df, columns=items)
+    scaler = StandardScaler(with_mean=False)
     scaler.fit(feature_df)
     X = scaler.transform(feature_df)  # X = X*x_std + x_mean # Denormalize or use scaler.inverse_transform(X)
     x_mean = scaler.mean_
     x_std = scaler.scale_
+    # feature_df /= x_std
     return X
 
 

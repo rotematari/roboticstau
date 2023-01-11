@@ -19,6 +19,8 @@ def train_epoch(epoch, model, train_loader, optimizer, args_config, criterion, d
         loss.backward()
         optimizer.step()
 
+    print(f' Loss: {loss.item():.4f}')
+
     return model, optimizer
 
 

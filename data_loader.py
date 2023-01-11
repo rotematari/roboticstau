@@ -33,6 +33,7 @@ class Data(Dataset):
         # states dictionary
         filesanddir = [f for f in listdir(dirpath)]
         df_mean, df_mean_test = data_agmuntation.find_mean(filesanddir, dirpath, items)
+        self.n_classes = 4
 
         if train:
             for dir_name in filesanddir:
@@ -49,9 +50,9 @@ class Data(Dataset):
 
                         num_location = file_name[file_name.find('_') + 1]
 
-                        if dir_name == 'relaxed':
-                            for index in items:
-                                df[index] -= df_mean.loc[index, num_location]  # subtracts the mean val from the original
+                        # if dir_name == 'relaxed':
+                        for index in items:
+                            df[index] -= df_mean.loc[index, num_location]  # subtracts the mean val from the original
                         y_train.append(df['class'])
                         x_train.append(df.filter(items=items))
                         count += 1
@@ -83,7 +84,7 @@ class Data(Dataset):
             # for i in range(labels_train.shape[0]):
             #     if labels_train[i] == 3 or labels_train[i] == 2:
             #         labels_train[i] = 1
-
+            #         self.n_classes = 2
             full_data = pd.merge(featurs_train, labels_train, left_index=True, right_index=True)
         else:
             featurs_test = pd.concat(x_test, ignore_index=True)
@@ -92,6 +93,7 @@ class Data(Dataset):
             # for i in range(labels_test.shape[0]):
             #     if labels_test[i] == 3 or labels_test[i] == 2:
             #         labels_test[i] = 1
+            #         self.n_classes = 2
 
 
             full_data = pd.merge(featurs_test, labels_test, left_index=True, right_index=True)
@@ -137,6 +139,7 @@ class Data(Dataset):
         x_temp1 = np.array(corrent_featurs)
         self.n_samples = x_temp1.shape[0]
         self.n_featurs = x_temp1.shape[1]
+
 
     def __getitem__(self, index):
         return self.X[index], self.Y[index]

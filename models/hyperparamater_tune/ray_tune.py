@@ -17,18 +17,56 @@ import data_loader
 import paramaters
 from models import fully_connected as net
 
-class arg_config:
-    def __init__(self, config):
-        self.batch_size = config["batch_size"]
-        self.dropout_1 = config["dropout_1"]
-        self.dropout_2 = config["dropout_1"]
-        self.dropout_3 = config["dropout_1"]
-        self.hidden_size_1 = config["dropout_1"]
-        self.hidden_size_2 = config["dropout_1"]
-        self.hidden_size_3 = config["dropout_1"]
-        self.num_classes = config["dropout_1"]
+# class arg_config:
+#     def __init__(self, config):
+#         self.batch_size = config["batch_size"]
+#         self.dropout_1 = config["dropout_1"]
+#         self.dropout_2 = config["dropout_2"]
+#         self.dropout_3 = config["dropout_3"]
+#         self.hidden_size_1 = config["dropout_1"]
+#         self.hidden_size_2 = config["dropout_1"]
+#         self.hidden_size_3 = config["dropout_1"]
+#         self.num_classes = config["dropout_1"]
 
 
+class NeuralNet(nn.Module):
+    def __init__(self, input_size, dropout_1, dropout_3, dropout_2,hidden_size_1,hidden_size_2,hidden_size_3,num_classes):
+        super(NeuralNet, self).__init__()
+        self.input_size = input_size
+
+        self.dropout1 = nn.Dropout1d(dropout_1)
+        self.dropout2 = nn.Dropout1d(dropout_2)
+        self.dropout3 = nn.Dropout1d(dropout_3)
+
+        self.batch_norm_1 = nn.BatchNorm1d(hidden_size_1)
+        self.batch_norm_2 = nn.BatchNorm1d(hidden_size_2)
+        self.batch_norm_3 = nn.BatchNorm1d(hidden_size_3)
+
+        self.relu1 = nn.ReLU()
+        self.relu2 = nn.ReLU()
+        self.relu3 = nn.ReLU()
+
+        self.l1 = nn.Linear(input_size, hidden_size_1)
+        self.l2 = nn.Linear(hidden_size_1, hidden_size_2)
+        self.l3 = nn.Linear(hidden_size_2, hidden_size_3)
+        self.l4 = nn.Linear(hidden_size_3, num_classes)
+
+    def forward(self, x):
+        # layer 1
+        out = self.relu1(self.l1(x))
+        out = self.batch_norm_1(out)
+        out = self.dropout1(out)
+        # layer 2
+        out = self.relu2(self.l2(out))
+        out = self.batch_norm_2(out)
+        out = self.dropout2(out)
+        # layer 3
+        out = self.relu3(self.l3(out))
+        out = self.batch_norm_3(out)
+        out = self.dropout3(out)
+        # outer layer
+        out = self.l4(out)
+        return out
 def main(max_num_epochs=15, gpus_per_trial=1, num_samples=1):
     train_data = data_loader.Data(train=True, dirpath=paramaters.parameters.dirpath, items=paramaters.parameters.items)
 
@@ -56,7 +94,7 @@ def main(max_num_epochs=15, gpus_per_trial=1, num_samples=1):
                            "weight_decay", "epoch"],
         metric_columns=["loss", "accuracy", "training_iteration"])
     result = tune.run(
-        partial(train),
+        partial(train, ),
         resources_per_trial={"cpu": 10, "gpu": gpus_per_trial},
         config=config,
         num_samples=num_samples,
@@ -70,8 +108,10 @@ def main(max_num_epochs=15, gpus_per_trial=1, num_samples=1):
     print("Best trial final validation accuracy: {}".format(
         best_trial.last_result["accuracy"]))
 
-    best_args_config = arg_config(best_trial.config)
-    best_trained_model = net(train_data.n_featurs, best_args_config)
+    # best_args_config = arg_config(best_trial.config)
+    best_trained_model =     net = NeuralNet(train_data.n_featurs,best_trial.config["dropout_1"], best_trial.config["dropout_2"], best_trial.config["dropout_3"] ,
+                    best_trial.config["hidden_size_1"], best_trial.config["hidden_size_2"],best_trial.config["hidden_size_3"],
+                    num_classes=train_data.n_featurs)
 
     device = "cpu"
     if torch.cuda.is_available():
@@ -80,7 +120,7 @@ def main(max_num_epochs=15, gpus_per_trial=1, num_samples=1):
             best_trained_model = nn.DataParallel(best_trained_model)
     best_trained_model.to(device)
 
-    best_checkpoint_dir = best_trial.checkpoint.value
+    best_checkpoint_dir = best_trial.checkpoint.dir_or_data
     model_state, optimizer_state = torch.load(os.path.join(
         best_checkpoint_dir, "checkpoint"))
     best_trained_model.load_state_dict(model_state)
@@ -89,8 +129,9 @@ def main(max_num_epochs=15, gpus_per_trial=1, num_samples=1):
     print("Best trial test set accuracy: {}".format(test_acc))
 
 
-def train(net, config, device="cpu"):
-    args_config = arg_config(config)
+def train(config, checkpoint_dir=None):
+
+    # args_config = arg_config(config)
 
     # data sets
     train_data = data_loader.Data(train=True, dirpath=paramaters.parameters.dirpath, items=paramaters.parameters.items)
@@ -101,12 +142,14 @@ def train(net, config, device="cpu"):
 
     # torch data loader seperate to batches and shuffel
 
-    train_loader = torch.utils.data.DataLoader(dataset=train_subset, batch_size=args_config.batch_size, shuffle=True,
+    train_loader = torch.utils.data.DataLoader(dataset=train_subset, batch_size=config["batch_size"], shuffle=True,
                                                drop_last=True)
-    validation_loader = torch.utils.data.DataLoader(dataset=validation_subset, batch_size=args_config.batch_size,
+    validation_loader = torch.utils.data.DataLoader(dataset=validation_subset, batch_size=config["batch_size"],
                                                     shuffle=True, drop_last=True)
 
-    net = net(train_data.n_featurs, args_config)
+    net = NeuralNet(train_data.n_featurs,config["dropout_1"], config["dropout_2"], config["dropout_3"] ,
+                    config["hidden_size_1"], config["hidden_size_2"],config["hidden_size_3"],
+                    num_classes=train_data.n_featurs)
     net = net.to(device)
     net.train()
     net.cuda()
@@ -193,6 +236,7 @@ def test_accuracy(net, device="cpu", best_batch_size=10):
             # correct += (predicted == labels).sum().item()
         acc_total = 100.0 * n_correct / total
         print(f'Accuracy of the network: {acc_total} %')
+
         for i in range(best_batch_size):
             label = labels[i]
             pred = predicted[i]
@@ -201,12 +245,15 @@ def test_accuracy(net, device="cpu", best_batch_size=10):
             n_class_samples[int(label)] += 1
 
     for i in range(4):
-        acc = 100.0 * n_class_correct[i] / n_class_samples[i]
-        print(f'Accuracy of {classes[i]}: {acc} %')
+        try :
+            acc = 100.0 * n_class_correct[i] / n_class_samples[i]
+            print(f'Accuracy of {classes[i]}: {acc} %')
+        except:
+            print(f'no samples in {i}')
 
     return acc_total
 
 
 if __name__ == '__main__':
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    main(max_num_epochs=15, gpus_per_trial=1, num_samples=1)
+    main(max_num_epochs=100, gpus_per_trial=1, num_samples=15)

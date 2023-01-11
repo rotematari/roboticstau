@@ -39,27 +39,27 @@ parser.add_argument('--train_model', type=str, default=True,
                     help='to train model:True')
 
 # hyper meters
-parser.add_argument('--batch_size', type=int, default=30,
+parser.add_argument('--batch_size', type=int, default=20,
                     help='input batch size for training (default: 20)')
-parser.add_argument('--epoch', type=int, default=21,
+parser.add_argument('--epoch', type=int, default=8,
                     help='input num of epoch (default: 5')
 parser.add_argument('--num_classes', type=int, default=4,
                     help='input num of classes (default: 4')
-parser.add_argument('-lr', '--learning_rate', type=int, default=0.0006042626727762781,
+parser.add_argument('-lr', '--learning_rate', type=int, default= 0.07377084647975934,
                     help='input learning rate (default: 0.001')
-parser.add_argument('-wd', '--weight_decay', type=int, default=3.643379907226691e-05,
+parser.add_argument('-wd', '--weight_decay', type=int, default=2.643887676317213e-05,
                     help='input weight_decay (default: 0.0001')
-parser.add_argument('--hidden_size_1', type=int, default=16,
+parser.add_argument('--hidden_size_1', type=int, default=64,
                     help='input hidden_size_1 (default: 5')
-parser.add_argument('--hidden_size_2', type=int, default=16,
+parser.add_argument('--hidden_size_2', type=int, default=128,
                     help='input hidden_size_2 (default: 5')
-parser.add_argument('--hidden_size_3', type=int, default=16,
+parser.add_argument('--hidden_size_3', type=int, default=64,
                     help='input hidden_size_3 (default: 5')
-parser.add_argument('--dropout_1', type=int, default=0.015376617828307836,
+parser.add_argument('--dropout_1', type=int, default=0.025321265231112014,
                     help='input dropout_1(default: 0.1')
-parser.add_argument('--dropout_2', type=int, default=0.14942078024203984,
+parser.add_argument('--dropout_2', type=int, default= 0.03193992930059613,
                     help='input dropout_2 (default: 0.1')
-parser.add_argument('--dropout_3', type=int, default=0.03077733834382956,
+parser.add_argument('--dropout_3', type=int, default=0.021450112872249766,
                     help='input dropout_3(default: 0.1')
 
 
@@ -90,7 +90,7 @@ def main(args_config, device):
     model = fully_connected.NeuralNet(train_data.n_featurs, args_config)
 
     if args_config.pre_train_own_model:
-        model_weights_path = r'/home/roblab20/Documents/rotem/models/saved_models/model_05_Jan_2023_14:41.pt'
+        model_weights_path = r'/home/roblab20/Documents/rotem/models/saved_models/model_10_Jan_2023_16:08.pt'
         model.load_state_dict(torch.load(model_weights_path))
     elif args_config.initialize_weights:
         model.apply(initializer.initialize_weights)
@@ -109,6 +109,7 @@ def main(args_config, device):
         checkpoint = {
             "state_dict": model.state_dict(),
             "optimizer": optimizer.state_dict(),
+
         }
 
     model.eval()
@@ -130,9 +131,9 @@ def main(args_config, device):
 
     # saves model and optimizer
     save = 0
-    # save = input(" to save net press 1 ")
-    if test_state > 0.85:
-        utils.save_net(checkpoint, args_config)
+    # # save = input(" to save net press 1 ")
+    if test_state > 0.8:
+        utils.save_net(checkpoint, args_config, test_state)
 
 
 if __name__ == '__main__':
