@@ -7,7 +7,7 @@ import numpy as np
 
 def lda_transform(train_featurs, train_labels ):
 
-    clf = LinearDiscriminantAnalysis()
+    clf = LinearDiscriminantAnalysis(solver="eigen")
 
     # train_data = data_loader.Data(train=True, dirpath=paramaters.parameters.dirpath, items=paramaters.parameters.items)
     # test_data = data_loader.Data(train=False, dirpath=paramaters.parameters.dirpath, items=paramaters.parameters.items)

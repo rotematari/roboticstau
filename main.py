@@ -16,13 +16,13 @@ from models import fully_connected, initializer
 import Run_model
 import utils
 
-# # start a new wandb run to track this script
-# wandb.init(
-#     # set the wandb project where this run will be logged
-#     project="pointing",
-#     config={}
-#
-# )
+# start a new wandb run to track this script
+wandb.init(
+    # set the wandb project where this run will be logged
+    project="pointing",
+    config={}
+
+)
 
 parser = argparse.ArgumentParser(description='Training Config', add_help=False)
 
@@ -41,25 +41,25 @@ parser.add_argument('--train_model', type=str, default=True,
 # hyper meters
 parser.add_argument('--batch_size', type=int, default=20,
                     help='input batch size for training (default: 20)')
-parser.add_argument('--epoch', type=int, default=8,
+parser.add_argument('--epoch', type=int, default=50,
                     help='input num of epoch (default: 5')
 parser.add_argument('--num_classes', type=int, default=4,
                     help='input num of classes (default: 4')
-parser.add_argument('-lr', '--learning_rate', type=int, default= 0.07377084647975934,
+parser.add_argument('-lr', '--learning_rate', type=int, default= 0.01306988530510535,
                     help='input learning rate (default: 0.001')
-parser.add_argument('-wd', '--weight_decay', type=int, default=2.643887676317213e-05,
+parser.add_argument('-wd', '--weight_decay', type=int, default=1.3972998390212782e-06,
                     help='input weight_decay (default: 0.0001')
-parser.add_argument('--hidden_size_1', type=int, default=64,
+parser.add_argument('--hidden_size_1', type=int, default=4,
                     help='input hidden_size_1 (default: 5')
-parser.add_argument('--hidden_size_2', type=int, default=128,
+parser.add_argument('--hidden_size_2', type=int, default=64,
                     help='input hidden_size_2 (default: 5')
 parser.add_argument('--hidden_size_3', type=int, default=64,
                     help='input hidden_size_3 (default: 5')
-parser.add_argument('--dropout_1', type=int, default=0.025321265231112014,
+parser.add_argument('--dropout_1', type=int, default=0.025815114547734695,
                     help='input dropout_1(default: 0.1')
-parser.add_argument('--dropout_2', type=int, default= 0.03193992930059613,
+parser.add_argument('--dropout_2', type=int, default= 0.011199123124155278,
                     help='input dropout_2 (default: 0.1')
-parser.add_argument('--dropout_3', type=int, default=0.021450112872249766,
+parser.add_argument('--dropout_3', type=int, default=0.048169880128418226,
                     help='input dropout_3(default: 0.1')
 
 
@@ -96,7 +96,7 @@ def main(args_config, device):
         model.apply(initializer.initialize_weights)
 
     criterion = nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=args_config.learning_rate,
+    optimizer = torch.optim.SGD(model.parameters(), lr=args_config.learning_rate,
                                  weight_decay=args_config.weight_decay)
 
     model.to(device)
@@ -132,14 +132,14 @@ def main(args_config, device):
     # saves model and optimizer
     save = 0
     # # save = input(" to save net press 1 ")
-    if test_state > 0.8:
+    if test_state > 0.9:
         utils.save_net(checkpoint, args_config, test_state)
 
 
 if __name__ == '__main__':
     args_config = parser.parse_args()
     # adds all of the arguments as config variables
-    # wandb.config.update(args_config)
+    wandb.config.update(args_config)
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     for i in range(10):

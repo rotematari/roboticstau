@@ -1,6 +1,7 @@
 from os import listdir
 from os.path import isfile, join
 import serial
+import time
 
 filepath = '//data'
 dirpath = '/home/roblab20/Documents/rotem/data'
@@ -22,7 +23,9 @@ def write_firs_line(f):
 
 
 def write_line(f, state=None):
-    for j in range(600):
+    t_start = time.time()
+
+    for j in range(2000):
         line = ser.readline()  # read a byte
         string = line.decode('utf-8')  # ('latin-1')  # convert the byte string to a unicode string
         string = string.strip()
@@ -30,8 +33,9 @@ def write_line(f, state=None):
         string.replace("[", '')
         string.replace("]", '')
         f.write(f'{string}' + f'{str(state)}' + '\n')
+    t_end = time.time()
 
-
+    print(t_end-t_start)
 for i in range(len(dirs)):
 
     state = input("choose state : 0=relaxed, 1=forward , 2=left , 3=up \n")

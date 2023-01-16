@@ -78,7 +78,7 @@ void setup()
 void loop()
 {
   unsigned long myTime;
-  delay(100);
+//  delay(100);
 
   digitalWrite(30, HIGH);
   digitalWrite(31, LOW);

@@ -52,7 +52,7 @@ class Data(Dataset):
 
                         # if dir_name == 'relaxed':
                         for index in items:
-                            df[index] -= df_mean.loc[index, num_location]  # subtracts the mean val from the original
+                            df[index] -= df_mean.loc[index, num_location]  # subtracts the bias val from the original
                         y_train.append(df['class'])
                         x_train.append(df.filter(items=items))
                         count += 1
@@ -77,44 +77,48 @@ class Data(Dataset):
                         x_test.append(df_test.filter(items=items))
 
         if train:
-            featurs_train = pd.concat(x_train, ignore_index=True)
-            labels_train = pd.concat(y_train, ignore_index=True)
+            featurs = pd.concat(x_train, ignore_index=True)
+            labels = pd.concat(y_train, ignore_index=True)
 
 
             # for i in range(labels_train.shape[0]):
             #     if labels_train[i] == 3 or labels_train[i] == 2:
             #         labels_train[i] = 1
             #         self.n_classes = 2
-            full_data = pd.merge(featurs_train, labels_train, left_index=True, right_index=True)
+            # full_data = pd.merge(featurs_train, labels_train, left_index=True, right_index=True)
         else:
-            featurs_test = pd.concat(x_test, ignore_index=True)
-            labels_test = pd.concat(y_test, ignore_index=True)
+            featurs = pd.concat(x_test, ignore_index=True)
+            labels = pd.concat(y_test, ignore_index=True)
 
             # for i in range(labels_test.shape[0]):
             #     if labels_test[i] == 3 or labels_test[i] == 2:
             #         labels_test[i] = 1
             #         self.n_classes = 2
 
-
-            full_data = pd.merge(featurs_test, labels_test, left_index=True, right_index=True)
+            # full_data = pd.merge(featurs_test, labels_test, left_index=True, right_index=True)
 
         # print(full_data)
 
         # data agmuntations
-        # rooling mean of 10 points
-        mean_filter_df = data_agmuntation.filter(full_data)
+        # normalization
+        # corrent_featurs = data_agmuntation.min_max_norm(corrent_featurs)
+        corrent_featurs = data_agmuntation.stdnorm(featurs)
 
+        # rooling mean of 10 points
+        corrent_featurs = data_agmuntation.filter(corrent_featurs)
+        corrent_labels = labels
 
         # print(full_data)
-        true_featurs = mean_filter_df[items]
-        true_labels = mean_filter_df['class']
-        corrent_labels = true_labels
+        # true_featurs = mean_filter_df[items]
+        # true_labels = mean_filter_df['class']
+        # corrent_labels = true_labels
+        #
+        # corrent_featurs = true_featurs
 
 
-        # normalization
-        # true_featurs = data_agmuntation.min_max_norm(true_featurs)
-        true_featurs = data_agmuntation.stdnorm(true_featurs)
-        corrent_featurs = true_featurs
+
+
+
 
         # if train:
         # # data_agmuntation
@@ -124,8 +128,8 @@ class Data(Dataset):
             # corrent_featurs, corrent_labels = data_agmuntation.permutation(true_featurs, corrent_featurs , corrent_labels,  true_labels)
             # corrent_featurs, corrent_labels = data_agmuntation.magnitude_wrap(true_featurs, corrent_featurs, corrent_labels,true_labels)
 
+        # corrent_featurs = transforms.lda_transform(corrent_featurs, corrent_labels)
 
-        # corrent_featurs = transforms.lda_transform(corrent_featurs,corrent_labels)
         # corrent_featurs = transforms.PCA_transform(corrent_featurs, corrent_labels)
 
 

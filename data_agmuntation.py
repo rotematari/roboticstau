@@ -54,10 +54,14 @@ def find_mean(states_dir, data_dir_path, items):
 # 1 filter the data by 10 point avg
 def filter(feature_df):
 
-    feature_df_roll = feature_df.rolling(window=10).mean()
+    feature_df = pd.DataFrame(feature_df, columns=items)
+    feature_df_roll_mean = feature_df.rolling(window=50).mean()
+    feature_df_roll_mean = feature_df_roll_mean.dropna().reset_index(drop=True)
+    feature_df_roll_std = feature_df.rolling(window=50).std()
+    feature_df_roll_std.columns = ['S1_std', 'S2_std', 'S3_std', 'S4_std', 'S5_std', 'S6_std']
+    feature_df_roll_std = feature_df_roll_std.dropna().reset_index(drop=True)
 
-    feature_df_roll = feature_df_roll.dropna().reset_index(drop=True)
-
+    feature_df_roll = pd.concat([feature_df_roll_mean,feature_df_roll_std], axis = 1)
     return feature_df_roll
 
 
@@ -65,7 +69,6 @@ def filter(feature_df):
 def min_max_norm(true_featurs):
 
     true_featurs = pd.DataFrame(true_featurs, columns=items)
-
     df_norm = (true_featurs - true_featurs.min()) / (true_featurs.max() - true_featurs.min())
 
     return df_norm
@@ -75,7 +78,7 @@ def min_max_norm(true_featurs):
 
 def stdnorm(feature_df):
 
-    true_featurs = pd.DataFrame(feature_df, columns=items)
+    # true_featurs = pd.DataFrame(feature_df)
     scaler = StandardScaler(with_mean=False)
     scaler.fit(feature_df)
     X = scaler.transform(feature_df)  # X = X*x_std + x_mean # Denormalize or use scaler.inverse_transform(X)
@@ -93,7 +96,6 @@ def scaling(true_featurs, corrent_featurs, corrent_labels, true_label, scale=3):
     # duplicate labels
     corrent_labels = pd.DataFrame(corrent_labels, columns=['class'])
     true_label = pd.DataFrame(true_label, columns=['class'])
-
     true_featurs = pd.DataFrame(true_featurs, columns=items)
     corrent_featurs = pd.DataFrame(corrent_featurs, columns=items)
     corrent_labels = corrent_labels.append(true_label, ignore_index=True)

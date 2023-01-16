@@ -2,9 +2,11 @@ import torch
 import numpy as np
 import wandb
 
+# def log(loss, accuracy, epoch):
 
 def train_epoch(epoch, model, train_loader, optimizer, args_config, criterion, device):
     model.cuda()
+    wandb.watch(model,criterion,log="all")
     for batch_index, (input, labels) in enumerate(train_loader):
         input = input.to(device)
         labels = labels.to(device)
@@ -18,6 +20,7 @@ def train_epoch(epoch, model, train_loader, optimizer, args_config, criterion, d
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
+        wandb.log({"epoch": epoch, "loss": loss.item()})
 
     print(f' Loss: {loss.item():.4f}')
 
@@ -43,6 +46,7 @@ def check_accuracy( model, validation_loader, optimizer, args_config, criterion,
             n_samples += labels.size(0)
             n_correct += (predicted == labels).sum()
             acc = n_correct / n_samples
+            wandb.log({"acc":acc})
                 # print(f'accurcy :{acc} %')
             count += 1
             # for i in range(args_config.batch_size):
@@ -64,5 +68,6 @@ def check_accuracy( model, validation_loader, optimizer, args_config, criterion,
             print(f'Accuracy of {k}: {class_acc[k]} %')
     # except:
     #     print("no match")
+
     print(f'accurcy :{acc} %')
     return acc
