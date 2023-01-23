@@ -41,32 +41,36 @@ parser.add_argument('--train_model', type=str, default=True,
 # hyper meters
 parser.add_argument('--batch_size', type=int, default=20,
                     help='input batch size for training (default: 20)')
-parser.add_argument('--epoch', type=int, default=50,
+parser.add_argument('--epoch', type=int, default=12,
                     help='input num of epoch (default: 5')
 parser.add_argument('--num_classes', type=int, default=4,
                     help='input num of classes (default: 4')
-parser.add_argument('-lr', '--learning_rate', type=int, default= 0.01306988530510535,
+parser.add_argument('-lr', '--learning_rate', type=int, default=0.01786545311029036,
                     help='input learning rate (default: 0.001')
-parser.add_argument('-wd', '--weight_decay', type=int, default=1.3972998390212782e-06,
+parser.add_argument('-wd', '--weight_decay', type=int, default=2.6855359747729944e-05,
                     help='input weight_decay (default: 0.0001')
-parser.add_argument('--hidden_size_1', type=int, default=4,
+parser.add_argument('--hidden_size_1', type=int, default=64,
                     help='input hidden_size_1 (default: 5')
-parser.add_argument('--hidden_size_2', type=int, default=64,
+parser.add_argument('--hidden_size_2', type=int, default=128,
                     help='input hidden_size_2 (default: 5')
-parser.add_argument('--hidden_size_3', type=int, default=64,
+parser.add_argument('--hidden_size_3', type=int, default=32,
                     help='input hidden_size_3 (default: 5')
-parser.add_argument('--dropout_1', type=int, default=0.025815114547734695,
+parser.add_argument('--dropout_1', type=int, default=0.027793683687556105,
                     help='input dropout_1(default: 0.1')
-parser.add_argument('--dropout_2', type=int, default= 0.011199123124155278,
+parser.add_argument('--dropout_2', type=int, default=0.04720404224908827,
                     help='input dropout_2 (default: 0.1')
-parser.add_argument('--dropout_3', type=int, default=0.048169880128418226,
+parser.add_argument('--dropout_3', type=int, default=0.039895370370821547,
                     help='input dropout_3(default: 0.1')
+parser.add_argument('--sensors', type=list,
+                    default=['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'S11'],
+                    help='sensors to input(default: 0.1')
 
 
 def main(args_config, device):
     # data loader
-    train_data = data_loader.Data(train=True, dirpath=paramaters.parameters.dirpath, items=paramaters.parameters.items)
-    test_data = data_loader.Data(train=False, dirpath=paramaters.parameters.dirpath, items=paramaters.parameters.items)
+    train_data = data_loader.Data(args_config, train=True, dirpath=paramaters.parameters.dirpath,
+                                  items=args_config.sensors)
+    test_data = data_loader.Data(args_config,train=False, dirpath=paramaters.parameters.dirpath, items=args_config.sensors)
 
     input_size = train_data.n_featurs
 
@@ -97,7 +101,7 @@ def main(args_config, device):
 
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.SGD(model.parameters(), lr=args_config.learning_rate,
-                                 weight_decay=args_config.weight_decay)
+                                weight_decay=args_config.weight_decay)
 
     model.to(device)
 
@@ -142,5 +146,5 @@ if __name__ == '__main__':
     wandb.config.update(args_config)
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-    for i in range(10):
+    for i in range(5):
         main(args_config, device)

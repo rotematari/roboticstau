@@ -32,7 +32,7 @@ def animate(i):
     data = [float(i) for i in list_data]  # convert  string to a float
     data_len = len(data)
 
-    x.append(data[0])
+    # x.append(data[0])
     y1.append(data[data_len - 1])
     y2.append(data[data_len - 2])
     y3.append(data[data_len - 3])
@@ -47,23 +47,24 @@ def animate(i):
 
     plt.cla()
     # # lower arm
-    # plt.plot(x, y1, label='S11')
-    # plt.plot(x, y3, label='S9')
-    # plt.plot(x, y4, label='S8')
-    # # upper arm
-    # plt.plot(x, y2, label='S10')
-    # plt.plot(x, y5, label='S7')
+    plt.plot(y1, label='S11')
+    plt.plot(y3, label='S9')
+    plt.plot(y4, label='S8')
+    # upper arm
+    plt.plot(y2, label='S10')
+    plt.plot(y5, label='S7')
     # sholder
-    plt.plot(x, y6, label='S6')
-    plt.plot(x, y7, label='S5')
-    plt.plot(x, y8, label='S4')
-    plt.plot(x, y9, label='S3')
-    plt.plot(x, y10, label='S2')
-    plt.plot(x, y11, label='S1')
+    plt.plot(y6, label='S6')
+    plt.plot(y7, label='S5')
+    plt.plot(y8, label='S4')
+    plt.plot(y9, label='S3')
+    plt.plot(y10, label='S2')
+    plt.plot( y11, label='S1')
     plt.legend(loc='upper left')
     plt.tight_layout()
 
 def run():
+
 
     ani = animation.FuncAnimation(plt.gcf(), animate, interval=1)
     plt.tight_layout()

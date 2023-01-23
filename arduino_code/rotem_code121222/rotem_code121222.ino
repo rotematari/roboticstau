@@ -52,7 +52,6 @@ void setup()
   digitalWrite(30, LOW);
   digitalWrite(31, LOW);
 
-  //  attachInterrupt(digitalPinToInterrupt(buttonPin), raise_flag, RISING);
 
   //IMU init
   Serial.begin(baudRate);//initialization of  SERIAL 9600 B.R
@@ -65,11 +64,8 @@ void setup()
     while (1);
   }
 
-  //  Serial.println("SETUP:");
+ 
   hc06.begin(baudRate);//initialization of  xbee  SERIAL communication B.R
-  //  Serial.println("begin:");
-  //DEFINE I2C -IMU
-  //Wire.begin(18, 19);
   Wire.setSCL(19);//DEFINE LEGS- SCL
   Wire.setSDA(18);//DEFINE LEG-SDA
   Wire.setClock(74880);
@@ -78,10 +74,10 @@ void setup()
 void loop()
 {
   unsigned long myTime;
-//  delay(100);
-
+  
   digitalWrite(30, HIGH);
   digitalWrite(31, LOW);
+  
   if (button == false) {
     if ( imu.gyroAvailable() ) {
       imu.readGyro(); //measure with the gyroscope
@@ -100,20 +96,16 @@ void loop()
     printGyro();
     printAccel();
     printMag();
-    //    delayMicroseconds(1600);
+  
 
 
     //PRINT SENSORS DATA
     readset1();
-    //    Serial.println();
     digitalWrite(31, HIGH);
     digitalWrite(30, LOW);
     delayMicroseconds(1600);
-    //readset2();
-    i = i + 1;
 
 
-    //    Serial.println("num: " + i);
 
   }
   else {
@@ -123,50 +115,24 @@ void loop()
 
 
 void printGyro() {
-  //  float array1[] = {1000001.0, imu.calcGyro(imu.gx), imu.calcGyro(imu.gy), imu.calcGyro(imu.gz)};
+
   Serial.print(String("") + imu.calcGyro(imu.gx) + String(",") + imu.calcGyro(imu.gy) + String(",") + imu.calcGyro(imu.gz) + String(","));
-  //  Serial.println(String("G,") + imu.calcGyro(imu.gx) + String(",") + imu.calcGyro(imu.gy) + String(",") + imu.calcGyro(imu.gz));
-  //  byte *p = (byte*)array1;
-  //  for (byte i = 1; i <= sizeof(array1); i++){
-  //    Serial.println("gyr" + i);
-  //    Serial.print("G " + p[i]);
-  //    hc06.println(p[i]);
-  //    hc06.write(p[i]);
-  //  }
+
 }
 
 
 void printAccel() {
   Serial.print(String("") + imu.calcAccel(imu.ax) + String(",") + imu.calcAccel(imu.ay) + String(",") + imu.calcAccel(imu.az) + String(","));
-  //  Serial.println(String("A,") + imu.calcAccel(imu.ax) + String(",") + imu.calcAccel(imu.ay) + String(",") + imu.calcAccel(imu.az));
-  //  float array2[] = {1000002.0, imu.calcAccel(imu.ax), imu.calcAccel(imu.ay), imu.calcAccel(imu.az)};
-  //  byte *p = (byte*)array2;
-  //  for (byte i = 0; i < sizeof(array2); i++){
-  //  Serial.println("accel" + i);
-  //  hc06.println(p[i]);
-  //  Serial.println("A " + p[i]);
-  //  hc06.write(p[i]);
-  //  }
+
 }
 
 
 void printMag() {
   Serial.print(String("") + imu.calcMag(imu.mx) + String(",") + imu.calcMag(imu.my) + String(",") + imu.calcMag(imu.mz) + String(","));
-  //  Serial.println(String("M,") + imu.calcMag(imu.mx) + String(",") + imu.calcMag(imu.my) + String(",") + imu.calcMag(imu.mz));
-  //  float array3[] = {1000003.0, imu.calcMag(imu.mx), imu.calcMag(imu.my), imu.calcMag(imu.mz)};
-  //  byte *p = (byte*)array3;
-  //  for (byte i = 0; i < sizeof(array3); i++) {
-  //    //Serial.println("A" + i);
-  //    Serial.println("M " + p[i]);
-  //    //hc06.println(p[i]);
-  //    //hc06.write(p[i]);
-  //  }
+
 }
 
-
 void readset1() {
-
-
   Serial.print(analogRead(S1)); Serial.print(",");
   Serial.print(analogRead(S2)); Serial.print(",");
   Serial.print(analogRead(S3)); Serial.print(",");

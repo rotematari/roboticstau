@@ -25,11 +25,11 @@ y_real_train = []
 x_real_train = []
 count = 0
 sample_rate = 10
-items = paramaters.parameters.items
+# items = paramaters.parameters.items
 
 
 class Data(Dataset):
-    def __init__(self, train=True, dirpath=None, items=None):
+    def __init__(self,args_config, train=True, dirpath=None, items=None):
         # states dictionary
         filesanddir = [f for f in listdir(dirpath)]
         df_mean, df_mean_test = data_agmuntation.find_mean(filesanddir, dirpath, items)
@@ -105,7 +105,7 @@ class Data(Dataset):
         corrent_featurs = data_agmuntation.stdnorm(featurs)
 
         # rooling mean of 10 points
-        corrent_featurs = data_agmuntation.filter(corrent_featurs)
+        corrent_featurs = data_agmuntation.filter(corrent_featurs, args_config=args_config)
         corrent_labels = labels
 
         # print(full_data)

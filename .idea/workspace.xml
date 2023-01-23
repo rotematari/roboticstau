@@ -4,16 +4,40 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="31066527-d550-4a41-bfcd-43820b76ffc9" name="Changes" comment="5/1">
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+    <list default="true" id="31066527-d550-4a41-bfcd-43820b76ffc9" name="Changes" comment="15/1">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Run_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/Run_model.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/arduino_code/rotem_code121222/rotem_code121222.ino" beforeDir="false" afterPath="$PROJECT_DIR$/arduino_code/rotem_code121222/rotem_code121222.ino" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clasifiers/transforms.py" beforeDir="false" afterPath="$PROJECT_DIR$/clasifiers/transforms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/forward/forward_0.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/forward/forward_0.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/forward/forward_1.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/forward/forward_1.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/forward/forward_2.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/forward/forward_2.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/forward/forward_3.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/forward/forward_3.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/forward/forward_4.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/forward/forward_4.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/left/left_0.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/left/left_0.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/left/left_1.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/left/left_1.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/left/left_2.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/left/left_2.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/left/left_3.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/left/left_3.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/left/left_4.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/left/left_4.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/relaxed/relaxed_0.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/relaxed/relaxed_0.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/relaxed/relaxed_1.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/relaxed/relaxed_1.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/relaxed/relaxed_2.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/relaxed/relaxed_2.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/relaxed/relaxed_3.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/relaxed/relaxed_3.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/relaxed/relaxed_4.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/relaxed/relaxed_4.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/tests/forward_2.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/tests/left_2.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/tests/relaxed_2.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/tests/up_2.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/up/up_0.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/up/up_0.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/up/up_1.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/up/up_1.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/up/up_2.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/up/up_2.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/up/up_3.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/up/up_3.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/up/up_4.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/up/up_4.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data_agmuntation.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_agmuntation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_loader.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data_saver.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_saver.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/hyperparamater_tune/ray_tune.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/hyperparamater_tune/ray_tune.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/paramaters.py" beforeDir="false" afterPath="$PROJECT_DIR$/paramaters.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plots/plot_fulldata.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/plot_fulldata.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plots/plot_serial.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/plot_serial.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/real_time_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/real_time_data.py" afterDir="false" />
@@ -562,7 +586,14 @@
       <option name="project" value="LOCAL" />
       <updated>1673430152561</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL-00041" summary="15/1">
+      <created>1673886159539</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1673886159539</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -613,7 +644,8 @@
     <MESSAGE value="25/12 home change" />
     <MESSAGE value="3/1 new change" />
     <MESSAGE value="5/1" />
-    <option name="LAST_COMMIT_MESSAGE" value="5/1" />
+    <MESSAGE value="15/1" />
+    <option name="LAST_COMMIT_MESSAGE" value="15/1" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

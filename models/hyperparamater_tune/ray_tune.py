@@ -17,16 +17,7 @@ import data_loader
 import paramaters
 from models import fully_connected as net
 
-# class arg_config:
-#     def __init__(self, config):
-#         self.batch_size = config["batch_size"]
-#         self.dropout_1 = config["dropout_1"]
-#         self.dropout_2 = config["dropout_2"]
-#         self.dropout_3 = config["dropout_3"]
-#         self.hidden_size_1 = config["dropout_1"]
-#         self.hidden_size_2 = config["dropout_1"]
-#         self.hidden_size_3 = config["dropout_1"]
-#         self.num_classes = config["dropout_1"]
+
 
 
 class NeuralNet(nn.Module):
@@ -256,4 +247,4 @@ def test_accuracy(net, device="cpu", best_batch_size=10):
 
 if __name__ == '__main__':
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    main(max_num_epochs=100, gpus_per_trial=1, num_samples=15)
+    main(max_num_epochs=100, gpus_per_trial=1, num_samples=10)

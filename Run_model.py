@@ -6,7 +6,7 @@ import wandb
 
 def train_epoch(epoch, model, train_loader, optimizer, args_config, criterion, device):
     model.cuda()
-    wandb.watch(model,criterion,log="all")
+    wandb.watch(model, criterion, log="all")
     for batch_index, (input, labels) in enumerate(train_loader):
         input = input.to(device)
         labels = labels.to(device)

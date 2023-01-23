@@ -8,8 +8,8 @@ from sklearn.preprocessing import StandardScaler
 import paramaters
 
 from learn import agmontation
-items = paramaters.parameters.items
 
+# items = paramaters.parameters.items
 
 # finds the mean of relaxed state
 df_mean = pd.DataFrame()
@@ -52,22 +52,20 @@ def find_mean(states_dir, data_dir_path, items):
 
 
 # 1 filter the data by 10 point avg
-def filter(feature_df):
-
-    feature_df = pd.DataFrame(feature_df, columns=items)
-    feature_df_roll_mean = feature_df.rolling(window=50).mean()
+def filter(feature_df,args_config):
+    feature_df = pd.DataFrame(feature_df, columns=args_config.sensors)
+    feature_df_roll_mean = feature_df.rolling(window=100).mean()
     feature_df_roll_mean = feature_df_roll_mean.dropna().reset_index(drop=True)
-    feature_df_roll_std = feature_df.rolling(window=50).std()
-    feature_df_roll_std.columns = ['S1_std', 'S2_std', 'S3_std', 'S4_std', 'S5_std', 'S6_std']
+    feature_df_roll_std = feature_df.rolling(window=100).std()
+    feature_df_roll_std.columns = ['S1_std', 'S2_std', 'S3_std', 'S4_std', 'S5_std', 'S6_std', 'S7_std', 'S8_std','S9_std','S10_std','S11_std']
     feature_df_roll_std = feature_df_roll_std.dropna().reset_index(drop=True)
 
-    feature_df_roll = pd.concat([feature_df_roll_mean,feature_df_roll_std], axis = 1)
+    feature_df_roll = pd.concat([feature_df_roll_mean, feature_df_roll_std], axis=1)
     return feature_df_roll
 
 
 # min max normalization
 def min_max_norm(true_featurs):
-
     true_featurs = pd.DataFrame(true_featurs, columns=items)
     df_norm = (true_featurs - true_featurs.min()) / (true_featurs.max() - true_featurs.min())
 
@@ -77,7 +75,6 @@ def min_max_norm(true_featurs):
 # standardization
 
 def stdnorm(feature_df):
-
     # true_featurs = pd.DataFrame(feature_df)
     scaler = StandardScaler(with_mean=False)
     scaler.fit(feature_df)
@@ -118,7 +115,8 @@ def flip(true_featurs, corrent_featurs, corrent_labels, true_label):
     # true_featurs = true_featurs.rolling(window=9901).flip()
 
     for i in range(4):
-        temp_df = true_featurs.loc[int(i * true_featurs.shape[0] / 4):int((i + 1) * true_featurs.shape[0] / 4 - 1), :].copy()
+        temp_df = true_featurs.loc[int(i * true_featurs.shape[0] / 4):int((i + 1) * true_featurs.shape[0] / 4 - 1),
+                  :].copy()
 
         temp_df = temp_df.iloc[::-1, :]
 
@@ -129,6 +127,7 @@ def flip(true_featurs, corrent_featurs, corrent_labels, true_label):
     corrent_featurs = corrent_featurs.append(new_feature_df, ignore_index=True)
 
     return corrent_featurs, corrent_labels
+
 
 def rotation(true_featurs, corrent_featurs, corrent_labels, true_label):
     # duplicate labels
@@ -142,17 +141,18 @@ def rotation(true_featurs, corrent_featurs, corrent_labels, true_label):
     # true_featurs = true_featurs.rolling(window=9901).flip()
 
     for i in range(4):
-        temp_df = true_featurs.loc[int(i * true_featurs.shape[0] / 4):int((i + 1) * true_featurs.shape[0] / 4 - 1), :].copy()
+        temp_df = true_featurs.loc[int(i * true_featurs.shape[0] / 4):int((i + 1) * true_featurs.shape[0] / 4 - 1),
+                  :].copy()
         temp_df = temp_df.reset_index(drop=True)
         for index, item in temp_df.items():
-           temp_df.loc[:,index] = agmontation.rotation(item).copy()
-
+            temp_df.loc[:, index] = agmontation.rotation(item).copy()
 
         new_feature_df = new_feature_df.append(temp_df, ignore_index=True)
 
     corrent_featurs = corrent_featurs.append(new_feature_df, ignore_index=True)
 
     return corrent_featurs, corrent_labels
+
 
 ##Permutation
 
@@ -167,7 +167,7 @@ def permutation(true_featurs, corrent_featurs, corrent_labels, true_label):
 
     new_feature_df = pd.DataFrame(columns=items)
     for i in range(4):
-        temp_df = true_featurs.loc[int(i * true_featurs.shape[0]/ 4):int((i + 1) * true_featurs.shape[0] / 4 - 1), :]
+        temp_df = true_featurs.loc[int(i * true_featurs.shape[0] / 4):int((i + 1) * true_featurs.shape[0] / 4 - 1), :]
         nrows = temp_df.shape[0]
         b = np.random.permutation(nrows)
         temp_df = temp_df.take(b)
@@ -176,6 +176,7 @@ def permutation(true_featurs, corrent_featurs, corrent_labels, true_label):
     corrent_featurs = corrent_featurs.append(new_feature_df, ignore_index=True)
 
     return corrent_featurs, corrent_labels
+
 
 def magnitude_wrap(true_featurs, corrent_featurs, corrent_labels, true_label):
     # duplicate labels
@@ -188,13 +189,12 @@ def magnitude_wrap(true_featurs, corrent_featurs, corrent_labels, true_label):
 
     new_feature_df = pd.DataFrame(columns=items)
     for i in range(4):
-        temp_df = true_featurs.loc[int(i * true_featurs.shape[0] / 4):int((i + 1) * true_featurs.shape[0] / 4 - 1), :].copy()
+        temp_df = true_featurs.loc[int(i * true_featurs.shape[0] / 4):int((i + 1) * true_featurs.shape[0] / 4 - 1),
+                  :].copy()
         temp_df = temp_df.reset_index(drop=True)
         for index, item in temp_df.items():
-           temp_df.loc[:,index] = agmontation.magnitude_warp(item).copy()
+            temp_df.loc[:, index] = agmontation.magnitude_warp(item).copy()
 
     corrent_featurs = corrent_featurs.append(new_feature_df, ignore_index=True)
 
     return corrent_featurs, corrent_labels
-
-
