@@ -16,6 +16,8 @@ df_mean = pd.DataFrame()
 
 
 def find_mean(states_dir, data_dir_path, items):
+
+
     for dir_name in states_dir:
         filepath = data_dir_path + '/' + dir_name
         onlyfiles = [f for f in listdir(filepath) if isfile(join(filepath, f))]

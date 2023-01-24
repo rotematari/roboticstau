@@ -5,43 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="31066527-d550-4a41-bfcd-43820b76ffc9" name="Changes" comment="15/1">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/research.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/research.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Run_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/Run_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/arduino_code/rotem_code121222/rotem_code121222.ino" beforeDir="false" afterPath="$PROJECT_DIR$/arduino_code/rotem_code121222/rotem_code121222.ino" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/forward/forward_0.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/forward/forward_0.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/forward/forward_1.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/forward/forward_1.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/forward/forward_2.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/forward/forward_2.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/forward/forward_3.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/forward/forward_3.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/forward/forward_4.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/forward/forward_4.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/left/left_0.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/left/left_0.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/left/left_1.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/left/left_1.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/left/left_2.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/left/left_2.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/left/left_3.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/left/left_3.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/left/left_4.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/left/left_4.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/relaxed/relaxed_0.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/relaxed/relaxed_0.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/relaxed/relaxed_1.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/relaxed/relaxed_1.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/relaxed/relaxed_2.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/relaxed/relaxed_2.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/relaxed/relaxed_3.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/relaxed/relaxed_3.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/relaxed/relaxed_4.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/relaxed/relaxed_4.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/tests/forward_2.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/tests/left_2.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/tests/relaxed_2.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/tests/up_2.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/up/up_0.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/up/up_0.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/up/up_1.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/up/up_1.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/up/up_2.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/up/up_2.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/up/up_3.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/up/up_3.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/up/up_4.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/up/up_4.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_agmuntation.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_agmuntation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_loader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_saver.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_saver.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/hyperparamater_tune/ray_tune.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/hyperparamater_tune/ray_tune.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/paramaters.py" beforeDir="false" afterPath="$PROJECT_DIR$/paramaters.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plots/plot_fulldata.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/plot_fulldata.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plots/plot_serial.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/plot_serial.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/real_time_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/real_time_data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/real_time_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/real_time_test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -122,8 +90,10 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "/home/roblab20/Documents/rotem/models/hyperparamater_tune/ray_tune.py",
+    "last_opened_file_path": "/home/robotics20/anaconda3/bin/conda-debug",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>
@@ -141,6 +111,9 @@
       <module name="research" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/clasifiers" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -658,6 +631,11 @@
           <url>file://$USER_HOME$/anaconda3/envs/rotem/lib/python3.10/site-packages/torch/serialization.py</url>
           <line>241</line>
           <option name="timeStamp" value="68" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/data_loader.py</url>
+          <line>35</line>
+          <option name="timeStamp" value="70" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

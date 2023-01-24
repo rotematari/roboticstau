@@ -28,8 +28,10 @@ parser = argparse.ArgumentParser(description='Training Config', add_help=False)
 
 # destanations
 
-parser.add_argument('--model_path', type=str, default=r'/home/roblab20/Documents/rotem/models/saved_models'
+parser.add_argument('--model_path', type=str, default=r'/home/robotics20/Documents/rotem/models'
                     , help='enter model dir path')
+parser.add_argument('--data_path', type=str, default=r'/home/robotics20/Documents/rotem/data'
+                    , help='enter data dir path')
 
 parser.add_argument('--initialize_weights', type=str, default=True
                     , help='initialize weights')
@@ -68,9 +70,9 @@ parser.add_argument('--sensors', type=list,
 
 def main(args_config, device):
     # data loader
-    train_data = data_loader.Data(args_config, train=True, dirpath=paramaters.parameters.dirpath,
+    train_data = data_loader.Data(args_config, train=True, dirpath=args_config.data_path,
                                   items=args_config.sensors)
-    test_data = data_loader.Data(args_config,train=False, dirpath=paramaters.parameters.dirpath, items=args_config.sensors)
+    test_data = data_loader.Data(args_config, train=False, dirpath=args_config.data_path, items=args_config.sensors)
 
     input_size = train_data.n_featurs
 

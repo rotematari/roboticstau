@@ -10,7 +10,7 @@ import torchvision.transforms as transforms
 import data_agmuntation
 import paramaters
 from clasifiers import transforms
-dirpath = paramaters.parameters.dirpath
+# dirpath = paramaters.parameters.dirpath
 
 x_train = []
 x_test = []
@@ -30,6 +30,7 @@ sample_rate = 10
 
 class Data(Dataset):
     def __init__(self,args_config, train=True, dirpath=None, items=None):
+
         # states dictionary
         filesanddir = [f for f in listdir(dirpath)]
         df_mean, df_mean_test = data_agmuntation.find_mean(filesanddir, dirpath, items)
