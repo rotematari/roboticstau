@@ -16,13 +16,16 @@ parser.add_argument('--model_path', type=str, default=r'/home/robotics20/Documen
 parser.add_argument('--data_path', type=str, default=r'/home/robotics20/Documents/rotem/data'
                     , help='enter data dir path')
 parser.add_argument('--sensors', type=list,
-                    default=['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'S11'],
+                    default=['S1', 'S2', 'S3', 'S4', 'S5', 'S7', 'S10'],
+                    help='sensors to input(default: 0.1')
+parser.add_argument('--std', type=list,
+                    default=['S1_std', 'S2_std', 'S3_std', 'S4_std', 'S5_std', 'S7_std','S11_std'],
                     help='sensors to input(default: 0.1')
 
-sample_rate = 10
+
 def main(args_config):
     items = args_config.sensors
-    x = data_loader.Data(args_config,train=True, dirpath=args_config.data_path, items=args_config.sensors)
+    x = data_loader.Data(args_config, train=True, dirpath=args_config.data_path, items=args_config.sensors)
 
 
 
@@ -33,10 +36,10 @@ def main(args_config):
     y5 = x.X[:, 4].numpy()
     y6 = x.X[:, 5].numpy()
     y7 = x.X[:, 6].numpy()
-    y8 = x.X[:, 7].numpy()
-    y9 = x.X[:, 8].numpy()
-    y10 = x.X[:, 9].numpy()
-    y11 = x.X[:, 10].numpy()
+    # y8 = x.X[:, 7].numpy()
+    # y9 = x.X[:, 8].numpy()
+    # y10 = x.X[:, 9].numpy()
+    # y11 = x.X[:, 10].numpy()
 
     lables = x.Y
 
@@ -49,10 +52,10 @@ def main(args_config):
     plt.plot(list(y5))
     plt.plot(list(y6))
     plt.plot(list(y7))
-    plt.plot(list(y8),'c')
-    plt.plot(list(y9),'r')
-    plt.plot(list(y10),'g')
-    plt.plot(list(y11),'b')
+    # plt.plot(list(y8),'c')
+    # plt.plot(list(y9),'r')
+    # plt.plot(list(y10),'g')
+    # plt.plot(list(y11),'b')
     plt.plot(list(lables))
     plt.legend(items)
 

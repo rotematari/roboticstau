@@ -40,7 +40,10 @@ parser.add_argument('--pre_train_own_model', type=str, default=False,
 parser.add_argument('--train_model', type=str, default=True,
                     help='to train model:True')
 parser.add_argument('--sensors', type=list,
-                    default=['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'S11'],
+                    default=['S1', 'S2', 'S3', 'S4', 'S5', 'S7', 'S10'],
+                    help='sensors to input(default: 0.1')
+parser.add_argument('--std', type=list,
+                    default=['S1_std', 'S2_std', 'S3_std', 'S4_std', 'S5_std', 'S7_std','S11_std'],
                     help='sensors to input(default: 0.1')
 
 

@@ -25,7 +25,7 @@ def write_firs_line(f):
 def write_line(f, state=None):
     t_start = time.time()
 
-    for j in range(5000):
+    for j in range(1000):
         line = ser.readline()  # read a byte
         string = line.decode('utf-8')  # ('latin-1')  # convert the byte string to a unicode string
         string = string.strip()

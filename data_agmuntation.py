@@ -16,7 +16,7 @@ df_mean = pd.DataFrame()
 
 
 def find_mean(states_dir, data_dir_path, items):
-
+    cut = 100
 
     for dir_name in states_dir:
         filepath = data_dir_path + '/' + dir_name
@@ -28,10 +28,19 @@ def find_mean(states_dir, data_dir_path, items):
             c = 0
             for file_name in onlyfiles:
                 df = pd.read_csv(join(filepath, file_name))
-                df = df.iloc[100:, :].reset_index(drop=True)
+                df = df.iloc[cut:, :].reset_index(drop=True)
                 df.drop(['time'], axis=1, inplace=True, errors="ignor")
                 df = df.filter(items=items)
                 num = file_name[file_name.find('_') + 1]
+
+                if len(file_name) > 13:
+                    num = file_name[file_name.find('_') + 2]
+                    temp = int(num)
+                    mul = file_name[file_name.find('_') + 1]
+                    temp += int(mul)* 10
+
+                    num = str(temp)
+
                 df_mean[num] = df.mean()  # new data frame of mean vals
         if dir_name == 'tests':
             filepath = data_dir_path + '/' + dir_name
@@ -44,10 +53,16 @@ def find_mean(states_dir, data_dir_path, items):
             for file_name in onlyfiles:
                 if 'relaxed' in file_name:
                     df_test = pd.read_csv(join(filepath, file_name))
-                    df_test = df_test.iloc[100:, :].reset_index(drop=True)
+                    df_test = df_test.iloc[cut:, :].reset_index(drop=True)
                     df_test.drop(['time'], axis=1, inplace=True, errors="ignor")
                     df_test = df_test.filter(items=items)
                     num = file_name[file_name.find('_') + 1]
+                    if len(file_name) > 13:
+                        num = file_name[file_name.find('_') + 2]
+                        temp = int(num)
+                        mul = file_name[file_name.find('_') + 1]
+                        temp += int(mul)*10
+                        num = str(temp)
                     df_mean_test[num] = df_test.mean()
 
     return df_mean, df_mean_test
@@ -56,10 +71,10 @@ def find_mean(states_dir, data_dir_path, items):
 # 1 filter the data by 10 point avg
 def filter(feature_df,args_config):
     feature_df = pd.DataFrame(feature_df, columns=args_config.sensors)
-    feature_df_roll_mean = feature_df.rolling(window=100).mean()
+    feature_df_roll_mean = feature_df.rolling(window=10).mean()
     feature_df_roll_mean = feature_df_roll_mean.dropna().reset_index(drop=True)
-    feature_df_roll_std = feature_df.rolling(window=100).std()
-    feature_df_roll_std.columns = ['S1_std', 'S2_std', 'S3_std', 'S4_std', 'S5_std', 'S6_std', 'S7_std', 'S8_std','S9_std','S10_std','S11_std']
+    feature_df_roll_std = feature_df.rolling(window=10).std()
+    feature_df_roll_std.columns = args_config.std
     feature_df_roll_std = feature_df_roll_std.dropna().reset_index(drop=True)
 
     feature_df_roll = pd.concat([feature_df_roll_mean, feature_df_roll_std], axis=1)
