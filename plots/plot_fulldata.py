@@ -60,28 +60,30 @@ def main(args_config):
     plt.legend(items)
 
 
-    # plt.figure(2)
-    # z = data_loader.Data(train=False, dirpath=dirpath, items=items)
-    #
-    #
-    #
-    # y1 = z.X[:, 0].numpy()
-    # y2 = z.X[:, 1].numpy()
-    # y3 = z.X[:, 2].numpy()
-    # # y4 = z.X[:, 3].numpy()
-    # # y5 = z.X[:, 4].numpy()
-    # # y6 = z.X[:, 5].numpy()
-    # lables = z.Y
-    #
-    # # list(y)
-    # plt.plot(list(y1))
-    # plt.plot(list(y2))
-    # plt.plot(list(y3))
-    # # plt.plot(list(y4))
-    # # plt.plot(list(y5))
-    # # plt.plot(list(y6))
-    # plt.plot(list(lables))
-    # plt.legend(items)
+    plt.figure(2)
+    z = data_loader.Data(args_config, train=False, dirpath=args_config.data_path, items=args_config.sensors)
+
+
+
+    y1 = z.X[:, 0].numpy()
+    y2 = z.X[:, 1].numpy()
+    y3 = z.X[:, 2].numpy()
+    y4 = z.X[:, 3].numpy()
+    y5 = z.X[:, 4].numpy()
+    y6 = z.X[:, 5].numpy()
+    y7 = z.X[:, 5].numpy()
+    lables = z.Y
+
+    # list(y)
+    plt.plot(list(y1))
+    plt.plot(list(y2))
+    plt.plot(list(y3))
+    plt.plot(list(y4))
+    plt.plot(list(y5))
+    plt.plot(list(y6))
+    plt.plot(list(y7))
+    plt.plot(list(lables))
+    plt.legend(items)
     plt.show()
 
 if __name__ == '__main__':

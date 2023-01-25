@@ -35,13 +35,20 @@ parser.add_argument('--dropout_2', type=int, default=0.04720404224908827,
 parser.add_argument('--dropout_3', type=int, default=0.039895370370821547,
                     help='input dropout_3(default: 0.1')
 parser.add_argument('--sensors', type=list,
-                    default=['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'S11'],
+                    default=['S1', 'S2', 'S3', 'S4', 'S5', 'S7', 'S10'],
+                    help='sensors to input(default: 0.1')
+parser.add_argument('--std', type=list,
+                    default=['S1_std', 'S2_std', 'S3_std', 'S4_std', 'S5_std', 'S7_std', 'S11_std'],
+                    help='sensors to input(default: 0.1')
+parser.add_argument('--all_data', type=list,
+                    default=['time', 'Gx', 'Gy', 'Gz', 'Ax', 'Ay', 'Az', 'Mx', 'My', 'Mz', 'S1', 'S2', 'S3', 'S4', 'S5',
+                             'S6', 'S7', 'S8', 'S9', 'S10', 'S11'],
                     help='sensors to input(default: 0.1')
 
 
-def real_time(model, mean_relaxed, full_arr_std, calibrate=True, s=(200, 6)):
+def real_time(model, args_config, mean_relaxed, full_arr_std, calibrate=True, s=(200, 6)):
     # try:
-    X = real_time_data.Data(mean_relaxed, full_arr_std, calibrate=calibrate, s=s)
+    X = real_time_data.Data(mean_relaxed, full_arr_std, args_config, calibrate=calibrate, s=s)
 
     mean_relaxed = X.mean_relaxed
     full_arr_std = X.full_arr_std
@@ -63,10 +70,10 @@ def run_test(args_config):
     s = (500, len(args_config.sensors))
     mean_relaxed = np.zeros(s)
     full_arr_std = 1
-    input_size = 22
+    input_size = 14
     calibrate = True
 
-    PATH = r'/home/roblab20/Documents/rotem/models/saved_models/model_17_Jan_2023_14:51.pt'
+    PATH = r'/home/robotics20/Documents/rotem/models/model_25_Jan_2023_11:34.pt'
     model = fully_connected.NeuralNet(input_size, args_config)
     model.load_state_dict(torch.load(PATH))
     model.eval()
@@ -74,7 +81,7 @@ def run_test(args_config):
     run = True
     while run:
         # time.sleep(0.2)
-        predicted, calibrate, mean_relaxed, full_arr_std = real_time(model, mean_relaxed, full_arr_std, args_config,
+        predicted, calibrate, mean_relaxed, full_arr_std = real_time(model, args_config, mean_relaxed, full_arr_std,
                                                                      calibrate, s=s)
 
         print(predicted)

@@ -33,7 +33,7 @@ def find_mean(states_dir, data_dir_path, items):
                 df = df.filter(items=items)
                 num = file_name[file_name.find('_') + 1]
 
-                if len(file_name) > 13:
+                if file_name[file_name.find('_') + 2] != '.':
                     num = file_name[file_name.find('_') + 2]
                     temp = int(num)
                     mul = file_name[file_name.find('_') + 1]
@@ -57,12 +57,13 @@ def find_mean(states_dir, data_dir_path, items):
                     df_test.drop(['time'], axis=1, inplace=True, errors="ignor")
                     df_test = df_test.filter(items=items)
                     num = file_name[file_name.find('_') + 1]
-                    if len(file_name) > 13:
+                    if file_name[file_name.find('_') + 2] != '.':
                         num = file_name[file_name.find('_') + 2]
                         temp = int(num)
                         mul = file_name[file_name.find('_') + 1]
                         temp += int(mul)*10
                         num = str(temp)
+
                     df_mean_test[num] = df_test.mean()
 
     return df_mean, df_mean_test

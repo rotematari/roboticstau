@@ -55,7 +55,7 @@ class Data(Dataset):
 
                         num_location = file_name[file_name.find('_') + 1]
 
-                        if len(file_name) > 13:
+                        if file_name[file_name.find('_') + 2] != '.':
                             num_location = file_name[file_name.find('_') + 2]
                             temp = int(num_location)
                             mul = file_name[file_name.find('_') + 1]
@@ -82,14 +82,15 @@ class Data(Dataset):
                         df_test.drop(['time'], axis=1, inplace=True, errors="ignor")
                         num_location_test = file_name[file_name.find('_') + 1]
                         count += 1
-                        if len(file_name) > 13:
+                        if file_name[file_name.find('_') + 2] != '.':
+                            num_location_test = file_name[file_name.find('_') + 2]
                             temp = int(num_location_test)
                             mul = file_name[file_name.find('_') + 1]
                             temp += int(mul) * 10
                             num_location_test = str(temp)
+
                         for index in items:
-                            df_test[index] -= df_mean_test.loc[
-                                index, num_location_test]  # subtracts the mean val from the original
+                            df_test[index] -= df_mean_test.loc[index, num_location_test]  # subtracts the mean val from the original
 
                         y_test.append(df_test['class'])
                         x_test.append(df_test.filter(items=items))
