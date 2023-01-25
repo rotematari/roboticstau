@@ -3,8 +3,8 @@ from os.path import isfile, join
 import serial
 import time
 
-filepath = '//data'
-dirpath = '/home/roblab20/Documents/rotem/data'
+
+dirpath = '/home/robotics20/Documents/rotem/data'
 
 dirs = [f for f in listdir(dirpath)]
 # make sure the 'COM#' is set according the Windows Device Manager

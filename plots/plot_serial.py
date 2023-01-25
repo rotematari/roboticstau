@@ -48,13 +48,13 @@ def animate(i):
     plt.cla()
     # # lower arm
     plt.plot(y1, label='S11')
-    plt.plot(y3, label='S9')
-    plt.plot(y4, label='S8')
+    # plt.plot(y3, label='S9')
+    # plt.plot(y4, label='S8')
     # upper arm
     plt.plot(y2, label='S10')
     plt.plot(y5, label='S7')
     # sholder
-    plt.plot(y6, label='S6')
+    # plt.plot(y6, label='S6')
     plt.plot(y7, label='S5')
     plt.plot(y8, label='S4')
     plt.plot(y9, label='S3')

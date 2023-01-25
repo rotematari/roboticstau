@@ -33,6 +33,7 @@ class Data(Dataset):
 
         # states dictionary
         filesanddir = [f for f in listdir(dirpath)]
+
         df_mean, df_mean_test = data_agmuntation.find_mean(filesanddir, dirpath, items)
         self.n_classes = 4
 
@@ -46,7 +47,7 @@ class Data(Dataset):
 
                         df = pd.read_csv(join(filepath, file_name))
                         # cuts first 100 samples
-                        df = df.iloc[100:, :].reset_index(drop=True)
+                        df = df.iloc[500:, :].reset_index(drop=True)
                         df.drop(['time'], axis=1, inplace=True, errors="ignor")
 
                         num_location = file_name[file_name.find('_') + 1]
@@ -67,7 +68,7 @@ class Data(Dataset):
                     for file_name in onlyfiles:
 
                         df_test = pd.read_csv(join(filepath, file_name))
-                        df_test = df_test.iloc[100:, :].reset_index(drop=True)
+                        df_test = df_test.iloc[500:, :].reset_index(drop=True)
                         df_test.drop(['time'], axis=1, inplace=True, errors="ignor")
                         num_location_test = file_name[file_name.find('_') + 1]
 

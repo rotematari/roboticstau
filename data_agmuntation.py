@@ -50,7 +50,7 @@ def find_mean(states_dir, data_dir_path, items):
                     num = file_name[file_name.find('_') + 1]
                     df_mean_test[num] = df_test.mean()
 
-            return df_mean, df_mean_test
+    return df_mean, df_mean_test
 
 
 # 1 filter the data by 10 point avg

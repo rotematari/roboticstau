@@ -39,6 +39,10 @@ parser.add_argument('--pre_train_own_model', type=str, default=False,
                     help='if pretrained model weights :True')
 parser.add_argument('--train_model', type=str, default=True,
                     help='to train model:True')
+parser.add_argument('--sensors', type=list,
+                    default=['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'S11'],
+                    help='sensors to input(default: 0.1')
+
 
 # hyper meters
 parser.add_argument('--batch_size', type=int, default=20,
@@ -63,9 +67,6 @@ parser.add_argument('--dropout_2', type=int, default=0.04720404224908827,
                     help='input dropout_2 (default: 0.1')
 parser.add_argument('--dropout_3', type=int, default=0.039895370370821547,
                     help='input dropout_3(default: 0.1')
-parser.add_argument('--sensors', type=list,
-                    default=['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'S11'],
-                    help='sensors to input(default: 0.1')
 
 
 def main(args_config, device):
