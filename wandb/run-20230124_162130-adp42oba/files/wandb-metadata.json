@@ -1,0 +1,165 @@
+{
+    "os": "Linux-5.15.0-58-generic-x86_64-with-glibc2.31",
+    "python": "3.10.9",
+    "heartbeatAt": "2023-01-24T14:21:31.810026",
+    "startedAt": "2023-01-24T14:21:30.648259",
+    "docker": null,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "/home/robotics20/Documents/rotem/main.py",
+    "codePath": "main.py",
+    "git": {
+        "remote": "https://github.com/rotematari/roboticstau.git",
+        "commit": "aa25f5b20fc4a5cffc5b4b3b55224f86acf229bc"
+    },
+    "email": "rotem.atri@gmail.com",
+    "root": "/home/robotics20/Documents/rotem",
+    "host": "robotics20-Z690-UD",
+    "username": "robotics20",
+    "executable": "/home/robotics20/anaconda3/envs/rotem/bin/python",
+    "cpu_count": 16,
+    "cpu_count_logical": 24,
+    "cpu_freq": {
+        "current": 3.1108750000000014,
+        "min": 800.0,
+        "max": 3916.6666666666665
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 1.061,
+            "min": 800.0,
+            "max": 4000.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 4000.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 4000.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 4000.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        }
+    ],
+    "disk": {
+        "total": 553.1872482299805,
+        "used": 42.44912338256836
+    },
+    "gpu": "NVIDIA GeForce RTX 3060 Ti",
+    "gpu_count": 1,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA GeForce RTX 3060 Ti",
+            "memory_total": 8589934592
+        }
+    ],
+    "memory": {
+        "total": 62.64353561401367
+    }
+}

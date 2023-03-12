@@ -1,0 +1,187 @@
+2023-01-25 13:12:47,950 INFO    StreamThr :42266 [internal.py:wandb_internal():87] W&B internal server running at pid: 42266, started at: 2023-01-25 13:12:47.950076
+2023-01-25 13:12:47,951 DEBUG   HandlerThread:42266 [handler.py:handle_request():144] handle_request: status
+2023-01-25 13:12:47,952 INFO    WriterThread:42266 [datastore.py:open_for_write():85] open: /home/robotics20/Documents/rotem/wandb/run-20230125_131247-wor46yei/run-wor46yei.wandb
+2023-01-25 13:12:47,952 DEBUG   SenderThread:42266 [sender.py:send():334] send: header
+2023-01-25 13:12:47,953 DEBUG   SenderThread:42266 [sender.py:send():334] send: run
+2023-01-25 13:12:48,769 INFO    SenderThread:42266 [dir_watcher.py:__init__():216] watching files in: /home/robotics20/Documents/rotem/wandb/run-20230125_131247-wor46yei/files
+2023-01-25 13:12:48,769 INFO    SenderThread:42266 [sender.py:_start_run_threads():1065] run started: wor46yei with start time 1674645167.949929
+2023-01-25 13:12:48,769 DEBUG   SenderThread:42266 [sender.py:send_request():361] send_request: summary_record
+2023-01-25 13:12:48,770 INFO    SenderThread:42266 [sender.py:_save_file():1319] saving file wandb-summary.json with policy end
+2023-01-25 13:12:48,770 DEBUG   HandlerThread:42266 [handler.py:handle_request():144] handle_request: check_version
+2023-01-25 13:12:48,770 DEBUG   SenderThread:42266 [sender.py:send_request():361] send_request: check_version
+2023-01-25 13:12:49,064 DEBUG   HandlerThread:42266 [handler.py:handle_request():144] handle_request: run_start
+2023-01-25 13:12:49,076 DEBUG   HandlerThread:42266 [system_info.py:__init__():31] System info init
+2023-01-25 13:12:49,076 DEBUG   HandlerThread:42266 [system_info.py:__init__():46] System info init done
+2023-01-25 13:12:49,076 INFO    HandlerThread:42266 [system_monitor.py:start():151] Starting system monitor
+2023-01-25 13:12:49,077 INFO    SystemMonitor:42266 [system_monitor.py:_start():116] Starting system asset monitoring threads
+2023-01-25 13:12:49,077 INFO    HandlerThread:42266 [system_monitor.py:probe():172] Collecting system info
+2023-01-25 13:12:49,078 INFO    SystemMonitor:42266 [interfaces.py:start():168] Started cpu
+2023-01-25 13:12:49,080 INFO    SystemMonitor:42266 [interfaces.py:start():168] Started disk
+2023-01-25 13:12:49,081 INFO    SystemMonitor:42266 [interfaces.py:start():168] Started gpu
+2023-01-25 13:12:49,081 INFO    SystemMonitor:42266 [interfaces.py:start():168] Started memory
+2023-01-25 13:12:49,083 INFO    SystemMonitor:42266 [interfaces.py:start():168] Started network
+2023-01-25 13:12:49,114 DEBUG   HandlerThread:42266 [system_info.py:probe():195] Probing system
+2023-01-25 13:12:49,115 DEBUG   HandlerThread:42266 [system_info.py:_probe_git():180] Probing git
+2023-01-25 13:12:49,121 DEBUG   HandlerThread:42266 [system_info.py:_probe_git():188] Probing git done
+2023-01-25 13:12:49,121 DEBUG   HandlerThread:42266 [system_info.py:probe():241] Probing system done
+2023-01-25 13:12:49,121 DEBUG   HandlerThread:42266 [system_monitor.py:probe():181] {'os': 'Linux-5.15.0-58-generic-x86_64-with-glibc2.31', 'python': '3.10.9', 'heartbeatAt': '2023-01-25T11:12:49.114338', 'startedAt': '2023-01-25T11:12:47.943947', 'docker': None, 'cuda': None, 'args': (), 'state': 'running', 'program': '/home/robotics20/Documents/rotem/main.py', 'codePath': 'main.py', 'git': {'remote': 'https://github.com/rotematari/roboticstau.git', 'commit': '72bc604165157f483dfb0b413e8caf01959f33eb'}, 'email': 'rotem.atri@gmail.com', 'root': '/home/robotics20/Documents/rotem', 'host': 'robotics20-Z690-UD', 'username': 'robotics20', 'executable': '/home/robotics20/anaconda3/envs/rotem/bin/python', 'cpu_count': 16, 'cpu_count_logical': 24, 'cpu_freq': {'current': 3.0779583333333345, 'min': 800.0, 'max': 3916.6666666666665}, 'cpu_freq_per_core': [{'current': 3.2, 'min': 800.0, 'max': 3900.0}, {'current': 3.2, 'min': 800.0, 'max': 3900.0}, {'current': 3.2, 'min': 800.0, 'max': 3900.0}, {'current': 3.2, 'min': 800.0, 'max': 3900.0}, {'current': 1.081, 'min': 800.0, 'max': 4000.0}, {'current': 3.2, 'min': 800.0, 'max': 4000.0}, {'current': 3.2, 'min': 800.0, 'max': 4000.0}, {'current': 3.2, 'min': 800.0, 'max': 4000.0}, {'current': 3.2, 'min': 800.0, 'max': 3900.0}, {'current': 3.2, 'min': 800.0, 'max': 3900.0}, {'current': 3.2, 'min': 800.0, 'max': 3900.0}, {'current': 3.2, 'min': 800.0, 'max': 3900.0}, {'current': 3.2, 'min': 800.0, 'max': 3900.0}, {'current': 3.2, 'min': 800.0, 'max': 3900.0}, {'current': 3.2, 'min': 800.0, 'max': 3900.0}, {'current': 3.2, 'min': 800.0, 'max': 3900.0}, {'current': 3.2, 'min': 800.0, 'max': 3900.0}, {'current': 3.2, 'min': 800.0, 'max': 3900.0}, {'current': 3.2, 'min': 800.0, 'max': 3900.0}, {'current': 3.2, 'min': 800.0, 'max': 3900.0}, {'current': 3.2, 'min': 800.0, 'max': 3900.0}, {'current': 3.2, 'min': 800.0, 'max': 3900.0}, {'current': 3.2, 'min': 800.0, 'max': 3900.0}, {'current': 3.2, 'min': 800.0, 'max': 3900.0}], 'disk': {'total': 553.1872482299805, 'used': 44.49884033203125}, 'gpu': 'NVIDIA GeForce RTX 3060 Ti', 'gpu_count': 1, 'gpu_devices': [{'name': 'NVIDIA GeForce RTX 3060 Ti', 'memory_total': 8589934592}], 'memory': {'total': 62.64353561401367}}
+2023-01-25 13:12:49,122 INFO    HandlerThread:42266 [system_monitor.py:probe():182] Finished collecting system info
+2023-01-25 13:12:49,122 INFO    HandlerThread:42266 [system_monitor.py:probe():185] Publishing system info
+2023-01-25 13:12:49,122 DEBUG   HandlerThread:42266 [system_info.py:_save_pip():51] Saving list of pip packages installed into the current environment
+2023-01-25 13:12:49,122 DEBUG   HandlerThread:42266 [system_info.py:_save_pip():67] Saving pip packages done
+2023-01-25 13:12:49,122 DEBUG   HandlerThread:42266 [system_info.py:_save_conda():74] Saving list of conda packages installed into the current environment
+2023-01-25 13:12:49,123 ERROR   HandlerThread:42266 [system_info.py:_save_conda():85] Error saving conda packages: [Errno 2] No such file or directory: 'conda'
+Traceback (most recent call last):
+  File "/home/robotics20/anaconda3/envs/rotem/lib/python3.10/site-packages/wandb/sdk/internal/system/system_info.py", line 81, in _save_conda
+    subprocess.call(
+  File "/home/robotics20/anaconda3/envs/rotem/lib/python3.10/subprocess.py", line 345, in call
+    with Popen(*popenargs, **kwargs) as p:
+  File "/home/robotics20/anaconda3/envs/rotem/lib/python3.10/subprocess.py", line 971, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/home/robotics20/anaconda3/envs/rotem/lib/python3.10/subprocess.py", line 1847, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: 'conda'
+2023-01-25 13:12:49,123 DEBUG   HandlerThread:42266 [system_info.py:_save_conda():86] Saving conda packages done
+2023-01-25 13:12:49,124 INFO    HandlerThread:42266 [system_monitor.py:probe():187] Finished publishing system info
+2023-01-25 13:12:49,125 DEBUG   SenderThread:42266 [sender.py:send():334] send: files
+2023-01-25 13:12:49,125 INFO    SenderThread:42266 [sender.py:_save_file():1319] saving file wandb-metadata.json with policy now
+2023-01-25 13:12:49,129 DEBUG   HandlerThread:42266 [handler.py:handle_request():144] handle_request: stop_status
+2023-01-25 13:12:49,130 DEBUG   SenderThread:42266 [sender.py:send_request():361] send_request: stop_status
+2023-01-25 13:12:49,507 DEBUG   SenderThread:42266 [sender.py:send():334] send: telemetry
+2023-01-25 13:12:49,507 DEBUG   SenderThread:42266 [sender.py:send():334] send: config
+2023-01-25 13:12:49,509 DEBUG   SenderThread:42266 [sender.py:send():334] send: exit
+2023-01-25 13:12:49,510 INFO    SenderThread:42266 [sender.py:send_exit():557] handling exit code: 1
+2023-01-25 13:12:49,510 INFO    SenderThread:42266 [sender.py:send_exit():559] handling runtime: 0
+2023-01-25 13:12:49,510 INFO    SenderThread:42266 [sender.py:_save_file():1319] saving file wandb-summary.json with policy end
+2023-01-25 13:12:49,511 INFO    SenderThread:42266 [sender.py:send_exit():565] send defer
+2023-01-25 13:12:49,511 DEBUG   HandlerThread:42266 [handler.py:handle_request():144] handle_request: defer
+2023-01-25 13:12:49,511 INFO    HandlerThread:42266 [handler.py:handle_request_defer():170] handle defer: 0
+2023-01-25 13:12:49,512 DEBUG   SenderThread:42266 [sender.py:send_request():361] send_request: defer
+2023-01-25 13:12:49,512 INFO    SenderThread:42266 [sender.py:send_request_defer():581] handle sender defer: 0
+2023-01-25 13:12:49,512 INFO    SenderThread:42266 [sender.py:transition_state():585] send defer: 1
+2023-01-25 13:12:49,512 DEBUG   HandlerThread:42266 [handler.py:handle_request():144] handle_request: defer
+2023-01-25 13:12:49,512 INFO    HandlerThread:42266 [handler.py:handle_request_defer():170] handle defer: 1
+2023-01-25 13:12:49,512 DEBUG   SenderThread:42266 [sender.py:send_request():361] send_request: defer
+2023-01-25 13:12:49,513 INFO    SenderThread:42266 [sender.py:send_request_defer():581] handle sender defer: 1
+2023-01-25 13:12:49,513 INFO    SenderThread:42266 [sender.py:transition_state():585] send defer: 2
+2023-01-25 13:12:49,513 DEBUG   HandlerThread:42266 [handler.py:handle_request():144] handle_request: defer
+2023-01-25 13:12:49,513 INFO    HandlerThread:42266 [handler.py:handle_request_defer():170] handle defer: 2
+2023-01-25 13:12:49,513 INFO    HandlerThread:42266 [system_monitor.py:finish():161] Stopping system monitor
+2023-01-25 13:12:49,514 DEBUG   SystemMonitor:42266 [system_monitor.py:_start():130] Starting system metrics aggregation loop
+2023-01-25 13:12:49,514 INFO    HandlerThread:42266 [interfaces.py:finish():175] Joined cpu
+2023-01-25 13:12:49,515 INFO    HandlerThread:42266 [interfaces.py:finish():175] Joined disk
+2023-01-25 13:12:49,515 DEBUG   SystemMonitor:42266 [system_monitor.py:_start():137] Finished system metrics aggregation loop
+2023-01-25 13:12:49,515 DEBUG   SystemMonitor:42266 [system_monitor.py:_start():141] Publishing last batch of metrics
+2023-01-25 13:12:49,544 INFO    HandlerThread:42266 [interfaces.py:finish():175] Joined gpu
+2023-01-25 13:12:49,545 INFO    HandlerThread:42266 [interfaces.py:finish():175] Joined memory
+2023-01-25 13:12:49,545 INFO    HandlerThread:42266 [interfaces.py:finish():175] Joined network
+2023-01-25 13:12:49,545 DEBUG   SenderThread:42266 [sender.py:send_request():361] send_request: defer
+2023-01-25 13:12:49,545 INFO    SenderThread:42266 [sender.py:send_request_defer():581] handle sender defer: 2
+2023-01-25 13:12:49,545 INFO    SenderThread:42266 [sender.py:transition_state():585] send defer: 3
+2023-01-25 13:12:49,545 DEBUG   SenderThread:42266 [sender.py:send():334] send: stats
+2023-01-25 13:12:49,545 DEBUG   HandlerThread:42266 [handler.py:handle_request():144] handle_request: defer
+2023-01-25 13:12:49,545 INFO    HandlerThread:42266 [handler.py:handle_request_defer():170] handle defer: 3
+2023-01-25 13:12:49,545 DEBUG   SenderThread:42266 [sender.py:send_request():361] send_request: defer
+2023-01-25 13:12:49,545 INFO    SenderThread:42266 [sender.py:send_request_defer():581] handle sender defer: 3
+2023-01-25 13:12:49,545 INFO    SenderThread:42266 [sender.py:transition_state():585] send defer: 4
+2023-01-25 13:12:49,545 DEBUG   HandlerThread:42266 [handler.py:handle_request():144] handle_request: defer
+2023-01-25 13:12:49,545 INFO    HandlerThread:42266 [handler.py:handle_request_defer():170] handle defer: 4
+2023-01-25 13:12:49,546 DEBUG   SenderThread:42266 [sender.py:send_request():361] send_request: defer
+2023-01-25 13:12:49,546 INFO    SenderThread:42266 [sender.py:send_request_defer():581] handle sender defer: 4
+2023-01-25 13:12:49,546 INFO    SenderThread:42266 [sender.py:transition_state():585] send defer: 5
+2023-01-25 13:12:49,546 DEBUG   HandlerThread:42266 [handler.py:handle_request():144] handle_request: defer
+2023-01-25 13:12:49,546 INFO    HandlerThread:42266 [handler.py:handle_request_defer():170] handle defer: 5
+2023-01-25 13:12:49,546 DEBUG   SenderThread:42266 [sender.py:send():334] send: summary
+2023-01-25 13:12:49,546 INFO    SenderThread:42266 [sender.py:_save_file():1319] saving file wandb-summary.json with policy end
+2023-01-25 13:12:49,546 DEBUG   SenderThread:42266 [sender.py:send_request():361] send_request: defer
+2023-01-25 13:12:49,546 INFO    SenderThread:42266 [sender.py:send_request_defer():581] handle sender defer: 5
+2023-01-25 13:12:49,546 INFO    SenderThread:42266 [sender.py:transition_state():585] send defer: 6
+2023-01-25 13:12:49,546 DEBUG   HandlerThread:42266 [handler.py:handle_request():144] handle_request: defer
+2023-01-25 13:12:49,546 INFO    HandlerThread:42266 [handler.py:handle_request_defer():170] handle defer: 6
+2023-01-25 13:12:49,546 DEBUG   SenderThread:42266 [sender.py:send_request():361] send_request: defer
+2023-01-25 13:12:49,546 INFO    SenderThread:42266 [sender.py:send_request_defer():581] handle sender defer: 6
+2023-01-25 13:12:49,548 DEBUG   HandlerThread:42266 [handler.py:handle_request():144] handle_request: status_report
+2023-01-25 13:12:49,772 INFO    Thread-13 :42266 [dir_watcher.py:_on_file_created():275] file/dir created: /home/robotics20/Documents/rotem/wandb/run-20230125_131247-wor46yei/files/wandb-metadata.json
+2023-01-25 13:12:49,772 INFO    Thread-13 :42266 [dir_watcher.py:_on_file_created():275] file/dir created: /home/robotics20/Documents/rotem/wandb/run-20230125_131247-wor46yei/files/requirements.txt
+2023-01-25 13:12:49,773 INFO    Thread-13 :42266 [dir_watcher.py:_on_file_created():275] file/dir created: /home/robotics20/Documents/rotem/wandb/run-20230125_131247-wor46yei/files/wandb-summary.json
+2023-01-25 13:12:49,773 INFO    Thread-13 :42266 [dir_watcher.py:_on_file_created():275] file/dir created: /home/robotics20/Documents/rotem/wandb/run-20230125_131247-wor46yei/files/output.log
+2023-01-25 13:12:49,773 INFO    Thread-13 :42266 [dir_watcher.py:_on_file_created():275] file/dir created: /home/robotics20/Documents/rotem/wandb/run-20230125_131247-wor46yei/files/conda-environment.yaml
+2023-01-25 13:12:49,956 INFO    SenderThread:42266 [sender.py:transition_state():585] send defer: 7
+2023-01-25 13:12:49,956 DEBUG   HandlerThread:42266 [handler.py:handle_request():144] handle_request: defer
+2023-01-25 13:12:49,956 INFO    HandlerThread:42266 [handler.py:handle_request_defer():170] handle defer: 7
+2023-01-25 13:12:49,956 DEBUG   SenderThread:42266 [sender.py:send_request():361] send_request: defer
+2023-01-25 13:12:49,956 INFO    SenderThread:42266 [sender.py:send_request_defer():581] handle sender defer: 7
+2023-01-25 13:12:50,008 INFO    Thread-16 :42266 [upload_job.py:push():143] Uploaded file /tmp/tmpshdpuruzwandb/7n1u11u7-wandb-metadata.json
+2023-01-25 13:12:50,336 DEBUG   HandlerThread:42266 [handler.py:handle_request():144] handle_request: poll_exit
+2023-01-25 13:12:50,771 INFO    Thread-13 :42266 [dir_watcher.py:_on_file_modified():292] file/dir modified: /home/robotics20/Documents/rotem/wandb/run-20230125_131247-wor46yei/files/config.yaml
+2023-01-25 13:12:51,516 INFO    SenderThread:42266 [sender.py:transition_state():585] send defer: 8
+2023-01-25 13:12:51,517 DEBUG   SenderThread:42266 [sender.py:send_request():361] send_request: poll_exit
+2023-01-25 13:12:51,517 DEBUG   HandlerThread:42266 [handler.py:handle_request():144] handle_request: defer
+2023-01-25 13:12:51,517 INFO    HandlerThread:42266 [handler.py:handle_request_defer():170] handle defer: 8
+2023-01-25 13:12:51,518 DEBUG   SenderThread:42266 [sender.py:send_request():361] send_request: defer
+2023-01-25 13:12:51,518 INFO    SenderThread:42266 [sender.py:send_request_defer():581] handle sender defer: 8
+2023-01-25 13:12:51,525 INFO    SenderThread:42266 [sender.py:transition_state():585] send defer: 9
+2023-01-25 13:12:51,525 DEBUG   HandlerThread:42266 [handler.py:handle_request():144] handle_request: defer
+2023-01-25 13:12:51,525 INFO    HandlerThread:42266 [handler.py:handle_request_defer():170] handle defer: 9
+2023-01-25 13:12:51,526 DEBUG   SenderThread:42266 [sender.py:send():334] send: artifact
+2023-01-25 13:12:51,771 INFO    Thread-13 :42266 [dir_watcher.py:_on_file_modified():292] file/dir modified: /home/robotics20/Documents/rotem/wandb/run-20230125_131247-wor46yei/files/output.log
+2023-01-25 13:12:53,469 INFO    SenderThread:42266 [sender.py:send_artifact():1415] sent artifact job-https___github.com_rotematari_roboticstau.git_main.py - {'id': 'QXJ0aWZhY3Q6MzQyMTM0MjU3', 'digest': '59ae1b10d49e5cf25e3ed9b165f79a08', 'state': 'COMMITTED', 'aliases': [{'artifactCollectionName': 'job-https___github.com_rotematari_roboticstau.git_main.py', 'alias': 'v9'}], 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjQ5NzA2MTc2', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6MzQyMTM0MjU3', 'versionIndex': 9}}, 'version': 'v9'}
+2023-01-25 13:12:53,469 DEBUG   SenderThread:42266 [sender.py:send_request():361] send_request: defer
+2023-01-25 13:12:53,469 INFO    SenderThread:42266 [sender.py:send_request_defer():581] handle sender defer: 9
+2023-01-25 13:12:53,470 INFO    SenderThread:42266 [dir_watcher.py:finish():362] shutting down directory watcher
+2023-01-25 13:12:53,772 INFO    SenderThread:42266 [dir_watcher.py:finish():392] scan: /home/robotics20/Documents/rotem/wandb/run-20230125_131247-wor46yei/files
+2023-01-25 13:12:53,772 INFO    SenderThread:42266 [dir_watcher.py:finish():406] scan save: /home/robotics20/Documents/rotem/wandb/run-20230125_131247-wor46yei/files/conda-environment.yaml conda-environment.yaml
+2023-01-25 13:12:53,773 INFO    SenderThread:42266 [dir_watcher.py:finish():406] scan save: /home/robotics20/Documents/rotem/wandb/run-20230125_131247-wor46yei/files/requirements.txt requirements.txt
+2023-01-25 13:12:53,773 INFO    SenderThread:42266 [dir_watcher.py:finish():406] scan save: /home/robotics20/Documents/rotem/wandb/run-20230125_131247-wor46yei/files/wandb-metadata.json wandb-metadata.json
+2023-01-25 13:12:53,773 INFO    SenderThread:42266 [dir_watcher.py:finish():406] scan save: /home/robotics20/Documents/rotem/wandb/run-20230125_131247-wor46yei/files/config.yaml config.yaml
+2023-01-25 13:12:53,773 INFO    SenderThread:42266 [dir_watcher.py:finish():406] scan save: /home/robotics20/Documents/rotem/wandb/run-20230125_131247-wor46yei/files/wandb-summary.json wandb-summary.json
+2023-01-25 13:12:53,773 INFO    SenderThread:42266 [dir_watcher.py:finish():406] scan save: /home/robotics20/Documents/rotem/wandb/run-20230125_131247-wor46yei/files/output.log output.log
+2023-01-25 13:12:53,773 INFO    SenderThread:42266 [sender.py:transition_state():585] send defer: 10
+2023-01-25 13:12:53,774 DEBUG   HandlerThread:42266 [handler.py:handle_request():144] handle_request: defer
+2023-01-25 13:12:53,774 INFO    HandlerThread:42266 [handler.py:handle_request_defer():170] handle defer: 10
+2023-01-25 13:12:53,778 DEBUG   SenderThread:42266 [sender.py:send_request():361] send_request: defer
+2023-01-25 13:12:53,778 INFO    SenderThread:42266 [sender.py:send_request_defer():581] handle sender defer: 10
+2023-01-25 13:12:53,779 INFO    SenderThread:42266 [file_pusher.py:finish():160] shutting down file pusher
+2023-01-25 13:12:54,671 INFO    Thread-17 :42266 [upload_job.py:push():143] Uploaded file /home/robotics20/Documents/rotem/wandb/run-20230125_131247-wor46yei/files/requirements.txt
+2023-01-25 13:12:54,706 INFO    Thread-19 :42266 [upload_job.py:push():143] Uploaded file /home/robotics20/Documents/rotem/wandb/run-20230125_131247-wor46yei/files/wandb-summary.json
+2023-01-25 13:12:54,757 INFO    Thread-20 :42266 [upload_job.py:push():143] Uploaded file /home/robotics20/Documents/rotem/wandb/run-20230125_131247-wor46yei/files/output.log
+2023-01-25 13:12:55,042 INFO    Thread-18 :42266 [upload_job.py:push():143] Uploaded file /home/robotics20/Documents/rotem/wandb/run-20230125_131247-wor46yei/files/config.yaml
+2023-01-25 13:12:55,242 INFO    Thread-12 (_thread_body):42266 [sender.py:transition_state():585] send defer: 11
+2023-01-25 13:12:55,243 DEBUG   HandlerThread:42266 [handler.py:handle_request():144] handle_request: defer
+2023-01-25 13:12:55,243 INFO    HandlerThread:42266 [handler.py:handle_request_defer():170] handle defer: 11
+2023-01-25 13:12:55,243 DEBUG   SenderThread:42266 [sender.py:send_request():361] send_request: defer
+2023-01-25 13:12:55,244 INFO    SenderThread:42266 [sender.py:send_request_defer():581] handle sender defer: 11
+2023-01-25 13:12:55,244 INFO    SenderThread:42266 [file_pusher.py:join():165] waiting for file pusher
+2023-01-25 13:12:55,244 INFO    SenderThread:42266 [sender.py:transition_state():585] send defer: 12
+2023-01-25 13:12:55,244 DEBUG   HandlerThread:42266 [handler.py:handle_request():144] handle_request: defer
+2023-01-25 13:12:55,244 INFO    HandlerThread:42266 [handler.py:handle_request_defer():170] handle defer: 12
+2023-01-25 13:12:55,245 DEBUG   SenderThread:42266 [sender.py:send_request():361] send_request: defer
+2023-01-25 13:12:55,245 INFO    SenderThread:42266 [sender.py:send_request_defer():581] handle sender defer: 12
+2023-01-25 13:12:55,338 DEBUG   HandlerThread:42266 [handler.py:handle_request():144] handle_request: keepalive
+2023-01-25 13:12:55,431 INFO    SenderThread:42266 [sender.py:transition_state():585] send defer: 13
+2023-01-25 13:12:55,431 DEBUG   HandlerThread:42266 [handler.py:handle_request():144] handle_request: defer
+2023-01-25 13:12:55,431 INFO    HandlerThread:42266 [handler.py:handle_request_defer():170] handle defer: 13
+2023-01-25 13:12:55,432 DEBUG   SenderThread:42266 [sender.py:send_request():361] send_request: defer
+2023-01-25 13:12:55,432 INFO    SenderThread:42266 [sender.py:send_request_defer():581] handle sender defer: 13
+2023-01-25 13:12:55,432 INFO    SenderThread:42266 [sender.py:transition_state():585] send defer: 14
+2023-01-25 13:12:55,432 DEBUG   HandlerThread:42266 [handler.py:handle_request():144] handle_request: defer
+2023-01-25 13:12:55,432 INFO    HandlerThread:42266 [handler.py:handle_request_defer():170] handle defer: 14
+2023-01-25 13:12:55,433 DEBUG   SenderThread:42266 [sender.py:send():334] send: final
+2023-01-25 13:12:55,433 DEBUG   SenderThread:42266 [sender.py:send():334] send: footer
+2023-01-25 13:12:55,433 DEBUG   SenderThread:42266 [sender.py:send_request():361] send_request: defer
+2023-01-25 13:12:55,433 INFO    SenderThread:42266 [sender.py:send_request_defer():581] handle sender defer: 14
+2023-01-25 13:12:55,434 DEBUG   HandlerThread:42266 [handler.py:handle_request():144] handle_request: poll_exit
+2023-01-25 13:12:55,435 DEBUG   SenderThread:42266 [sender.py:send_request():361] send_request: poll_exit
+2023-01-25 13:12:55,435 DEBUG   HandlerThread:42266 [handler.py:handle_request():144] handle_request: server_info
+2023-01-25 13:12:55,436 DEBUG   HandlerThread:42266 [handler.py:handle_request():144] handle_request: get_summary
+2023-01-25 13:12:55,437 DEBUG   HandlerThread:42266 [handler.py:handle_request():144] handle_request: sampled_history
+2023-01-25 13:12:55,437 DEBUG   SenderThread:42266 [sender.py:send_request():361] send_request: server_info
+2023-01-25 13:12:55,805 INFO    MainThread:42266 [wandb_run.py:_footer_history_summary_info():3427] rendering history
+2023-01-25 13:12:55,805 INFO    MainThread:42266 [wandb_run.py:_footer_history_summary_info():3459] rendering summary
+2023-01-25 13:12:55,805 INFO    MainThread:42266 [wandb_run.py:_footer_sync_info():3383] logging synced files
+2023-01-25 13:12:55,806 DEBUG   HandlerThread:42266 [handler.py:handle_request():144] handle_request: shutdown
+2023-01-25 13:12:55,806 INFO    HandlerThread:42266 [handler.py:finish():841] shutting down handler
+2023-01-25 13:12:56,437 INFO    WriterThread:42266 [datastore.py:close():299] close: /home/robotics20/Documents/rotem/wandb/run-20230125_131247-wor46yei/run-wor46yei.wandb
+2023-01-25 13:12:56,805 INFO    SenderThread:42266 [sender.py:finish():1491] shutting down sender
+2023-01-25 13:12:56,805 INFO    SenderThread:42266 [file_pusher.py:finish():160] shutting down file pusher
+2023-01-25 13:12:56,805 INFO    SenderThread:42266 [file_pusher.py:join():165] waiting for file pusher

@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/snap/pycharm-community/312/plugins/python-ce/helpers/pydev/pydevd.py", line 1496, in _exec
+    pydev_imports.execfile(file, globals, locals)  # execute the script
+  File "/snap/pycharm-community/312/plugins/python-ce/helpers/pydev/_pydev_imps/_pydev_execfile.py", line 18, in execfile
+    exec(compile(contents+"\n", file, 'exec'), glob, loc)
+  File "/home/robotics20/Documents/rotem/main.py", line 152, in <module>
+    main(args_config, device)
+  File "/home/robotics20/Documents/rotem/main.py", line 73, in main
+    train_data = data_loader.Data(args_config, train=True, dirpath=args_config.data_path,
+  File "/home/robotics20/Documents/rotem/data_loader.py", line 36, in __init__
+    df_mean, df_mean_test = data_agmuntation.find_mean(filesanddir, dirpath, items)
+TypeError: cannot unpack non-iterable NoneType object

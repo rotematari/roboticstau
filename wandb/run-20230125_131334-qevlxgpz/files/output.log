@@ -1,0 +1,25 @@
+Traceback (most recent call last):
+  File "/home/robotics20/anaconda3/envs/rotem/lib/python3.10/site-packages/pandas/core/indexes/base.py", line 3802, in get_loc
+    return self._engine.get_loc(casted_key)
+  File "pandas/_libs/index.pyx", line 138, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 165, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 5745, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 5753, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: '1'
+The above exception was the direct cause of the following exception:
+Traceback (most recent call last):
+  File "/home/robotics20/Documents/rotem/main.py", line 156, in <module>
+    main(args_config, device)
+  File "/home/robotics20/Documents/rotem/main.py", line 79, in main
+    test_data = data_loader.Data(args_config, train=False, dirpath=args_config.data_path, items=args_config.sensors)
+  File "/home/robotics20/Documents/rotem/data_loader.py", line 91, in __init__
+    df_test[index] -= df_mean_test.loc[
+  File "/home/robotics20/anaconda3/envs/rotem/lib/python3.10/site-packages/pandas/core/indexing.py", line 1066, in __getitem__
+    return self.obj._get_value(*key, takeable=self._takeable)
+  File "/home/robotics20/anaconda3/envs/rotem/lib/python3.10/site-packages/pandas/core/frame.py", line 3917, in _get_value
+    series = self._get_item_cache(col)
+  File "/home/robotics20/anaconda3/envs/rotem/lib/python3.10/site-packages/pandas/core/frame.py", line 4282, in _get_item_cache
+    loc = self.columns.get_loc(item)
+  File "/home/robotics20/anaconda3/envs/rotem/lib/python3.10/site-packages/pandas/core/indexes/base.py", line 3804, in get_loc
+    raise KeyError(key) from err
+KeyError: '1'

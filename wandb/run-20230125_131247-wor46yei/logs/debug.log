@@ -1,0 +1,26 @@
+2023-01-25 13:12:47,946 INFO    MainThread:42236 [wandb_setup.py:_flush():68] Configure stats pid to 42236
+2023-01-25 13:12:47,946 INFO    MainThread:42236 [wandb_setup.py:_flush():68] Loading settings from /home/robotics20/.config/wandb/settings
+2023-01-25 13:12:47,946 INFO    MainThread:42236 [wandb_setup.py:_flush():68] Loading settings from /home/robotics20/Documents/rotem/wandb/settings
+2023-01-25 13:12:47,946 INFO    MainThread:42236 [wandb_setup.py:_flush():68] Loading settings from environment variables: {'_require_service': 'True'}
+2023-01-25 13:12:47,947 INFO    MainThread:42236 [wandb_setup.py:_flush():68] Inferring run settings from compute environment: {'program_relpath': 'main.py', 'program': '/home/robotics20/Documents/rotem/main.py'}
+2023-01-25 13:12:47,947 INFO    MainThread:42236 [wandb_init.py:_log_setup():478] Logging user logs to /home/robotics20/Documents/rotem/wandb/run-20230125_131247-wor46yei/logs/debug.log
+2023-01-25 13:12:47,947 INFO    MainThread:42236 [wandb_init.py:_log_setup():479] Logging internal logs to /home/robotics20/Documents/rotem/wandb/run-20230125_131247-wor46yei/logs/debug-internal.log
+2023-01-25 13:12:47,947 INFO    MainThread:42236 [wandb_init.py:init():518] calling init triggers
+2023-01-25 13:12:47,947 INFO    MainThread:42236 [wandb_init.py:init():521] wandb.init called with sweep_config: {}
+config: {}
+2023-01-25 13:12:47,947 INFO    MainThread:42236 [wandb_init.py:init():571] starting backend
+2023-01-25 13:12:47,947 INFO    MainThread:42236 [wandb_init.py:init():575] setting up manager
+2023-01-25 13:12:47,948 INFO    MainThread:42236 [backend.py:_multiprocessing_setup():106] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2023-01-25 13:12:47,949 INFO    MainThread:42236 [wandb_init.py:init():582] backend started and connected
+2023-01-25 13:12:47,950 INFO    MainThread:42236 [wandb_init.py:init():670] updated telemetry
+2023-01-25 13:12:47,952 INFO    MainThread:42236 [wandb_init.py:init():710] communicating run to backend with 60.0 second timeout
+2023-01-25 13:12:48,769 INFO    MainThread:42236 [wandb_run.py:_on_init():2121] communicating current version
+2023-01-25 13:12:49,058 INFO    MainThread:42236 [wandb_run.py:_on_init():2125] got version response 
+2023-01-25 13:12:49,058 INFO    MainThread:42236 [wandb_init.py:init():758] starting run threads in backend
+2023-01-25 13:12:49,129 INFO    MainThread:42236 [wandb_run.py:_console_start():2101] atexit reg
+2023-01-25 13:12:49,129 INFO    MainThread:42236 [wandb_run.py:_redirect():1959] redirect: SettingsConsole.WRAP_RAW
+2023-01-25 13:12:49,130 INFO    MainThread:42236 [wandb_run.py:_redirect():2024] Wrapping output streams.
+2023-01-25 13:12:49,130 INFO    MainThread:42236 [wandb_run.py:_redirect():2046] Redirects installed.
+2023-01-25 13:12:49,130 INFO    MainThread:42236 [wandb_init.py:init():798] run started, returning control to user process
+2023-01-25 13:12:49,134 INFO    MainThread:42236 [wandb_run.py:_config_callback():1249] config_cb None None {'model_path': '/home/robotics20/Documents/rotem/models', 'data_path': '/home/robotics20/Documents/rotem/data', 'initialize_weights': True, 'pre_train_own_model': False, 'train_model': True, 'sensors': ['S1', 'S2', 'S3', 'S4', 'S5', 'S7', 'S10'], 'std': ['S1_std', 'S2_std', 'S3_std', 'S4_std', 'S5_std', 'S7_std', 'S11_std'], 'batch_size': 20, 'epoch': 12, 'num_classes': 4, 'learning_rate': 0.01786545311029036, 'weight_decay': 2.6855359747729944e-05, 'hidden_size_1': 64, 'hidden_size_2': 128, 'hidden_size_3': 32, 'dropout_1': 0.027793683687556105, 'dropout_2': 0.04720404224908827, 'dropout_3': 0.039895370370821547}
+2023-01-25 13:12:56,808 WARNING MsgRouterThr:42236 [router.py:message_loop():77] message_loop has been closed

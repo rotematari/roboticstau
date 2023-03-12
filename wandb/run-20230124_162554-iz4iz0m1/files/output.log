@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/home/robotics20/Documents/rotem/main.py", line 152, in <module>
+    main(args_config, device)
+  File "/home/robotics20/Documents/rotem/main.py", line 73, in main
+    train_data = data_loader.Data(args_config, train=True, dirpath=args_config.data_path,
+  File "/home/robotics20/Documents/rotem/data_loader.py", line 36, in __init__
+    df_mean, df_mean_test = data_agmuntation.find_mean(filesanddir, dirpath, items)
+TypeError: cannot unpack non-iterable NoneType object

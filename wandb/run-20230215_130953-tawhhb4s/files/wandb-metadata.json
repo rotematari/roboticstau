@@ -1,0 +1,157 @@
+{
+    "os": "Linux-5.15.0-58-generic-x86_64-with-glibc2.31",
+    "python": "3.10.9",
+    "heartbeatAt": "2023-02-15T11:09:54.508185",
+    "startedAt": "2023-02-15T11:09:53.305050",
+    "docker": null,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "/home/robotics20/Documents/rotem/main.py",
+    "codePath": "main.py",
+    "git": {
+        "remote": "https://github.com/rotematari/roboticstau.git",
+        "commit": "14598345ebac5721d8dbc957aae63ba988ffa943"
+    },
+    "email": "rotem.atri@gmail.com",
+    "root": "/home/robotics20/Documents/rotem",
+    "host": "robotics20-Z690-UD",
+    "username": "robotics20",
+    "executable": "/home/robotics20/anaconda3/envs/rotem/bin/python",
+    "cpu_count": 16,
+    "cpu_count_logical": 24,
+    "cpu_freq": {
+        "current": 3.1735833333333345,
+        "min": 800.0,
+        "max": 3916.6666666666665
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 4000.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 4000.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 4000.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 4000.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 1.856,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 3.2,
+            "min": 800.0,
+            "max": 3900.0
+        }
+    ],
+    "disk": {
+        "total": 553.1872482299805,
+        "used": 45.981624603271484
+    },
+    "memory": {
+        "total": 62.64353561401367
+    }
+}
