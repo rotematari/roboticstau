@@ -1,0 +1,96 @@
+
+import torch
+from torch.utils.data import Dataset, DataLoader
+
+import numpy as np
+import pandas as pd
+
+from os import listdir
+from os.path import isfile, join
+
+
+def sepatare_data(full_df):
+
+
+    imu_data_index = ['Gx', 'Gy', 'Gz', 'Ax', 'Ay', 'Az', 'Mx', 'My', 'Mz']
+    fmg_data_index = ['S1','S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'S11']
+
+    ##needs to change
+    # data_sesion_start_time_stamps = ['data_sesion_start_time_stamp']
+
+    fmg_df = full_df[fmg_data_index]
+    imu_df = full_df[imu_data_index]
+
+
+    assert isinstance(fmg_df, pd.DataFrame),"fmg_df is not pd.dataframe"
+    assert isinstance(imu_df, pd.DataFrame),"imu_df is not pd.dataframe"
+    
+
+    return fmg_df, imu_df 
+
+
+## will find bias for each time stamped sesion 
+def find_bias(fmg_df):
+
+    bias_df = pd.DataFrame()
+
+    for time_stamp in fmg_df['time_stamp'].value_counts().index:
+
+        temp_df = fmg_df[fmg_df['time_stamp'] == time_stamp].mean().transpose()
+        temp_df['time_stamp'] = time_stamp
+        fmg_bias_df = pd.concat([fmg_bias_df,temp_df],axis= 1,ignore_index=True)
+        fmg_bias_df = fmg_bias_df.transpose()    
+    
+    return fmg_bias_df
+
+def find_std(fmg_df):
+    
+    std_df = pd.DataFrame()
+
+    for time_stamp in fmg_df['time_stamp'].value_counts().index:
+
+        temp_df = fmg_df[fmg_df['time_stamp'] == time_stamp].mean().transpose()
+        temp_df['time_stamp'] = time_stamp
+        fmg_bias_df = pd.concat([fmg_bias_df,temp_df],axis= 1,ignore_index=True)
+        fmg_bias_df = fmg_bias_df.transpose()    
+    
+    return fmg_bias_df
+
+
+   
+
+def subtract_bias(fmg_df):
+
+    bias_df = find_bias(fmg_df)
+    for time_stamp in fmg_df['data_sesion_start_time_stamp'].value_count().index:
+            
+        temp_fmg_df = fmg_df[fmg_df['data_sesion_start_time_stamp'] ==time_stamp].drop('data_sesion_start_time_stamp',axis=1) - np.array(bias_df[bias_df['data_sesion_start_time_stamp'] == time_stamp].drop('data_sesion_start_time_stamp',axis=1))
+        new_fmg_df = pd.concat([new_fmg_df,temp_fmg_df],axis= 0)
+
+    return new_fmg_df
+
+
+## torch data set 
+class data(Dataset):
+    def __init__(self,args_config,train=True):
+
+        ## get dir names and location 
+
+
+        ## seperates the IMU data from the FGM data 
+        # make sure each one has labalings 
+
+        
+
+
+        ## finds the mean/bias of each data collection sesion - calclulated from the relaxed data 
+
+        ## subtracts the bias from the data 
+
+
+
+    def __getitem__(self, index):
+        return self.featurs[index],self.labels[index]
+
+    def __len__(self):
+        return self.n_samples   

@@ -1,0 +1,36 @@
+import torch
+from torch.utils.data import Dataset, DataLoader
+
+import numpy as np
+import pandas as pd
+
+from os import listdir
+from os.path import isfile, join
+
+import argparse
+
+parser = argparse.ArgumentParser(description='Training Config', add_help=False)
+
+parser.add_argument('--data_path', type=str, default=r'/home/robotics20/Documents/rotem/new_code/data/current_data /relaxed'
+                    , help='enter data dir path')
+
+
+def data_loder(args_config):
+    full_df = pd.DataFrame()
+    for i, file in enumerate(listdir(args_config.data_path)):
+
+        df = pd.read_csv(join(args_config.data_path,file))
+        full_df = pd.concat([full_df,df],axis=0)
+
+    full_df = full_df.dropna(axis=0)
+
+    return full_df
+
+
+
+# if __name__ == '__main__':
+#     args_config = parser.parse_args()
+
+#     df = data_loder(args_config=args_config) 
+#     print(df)
+    

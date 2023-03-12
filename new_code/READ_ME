@@ -1,0 +1,37 @@
+## initail data form 
+# imu data * 9 , fmg data *40 ,relaxed=True/false , data_sesion_start_time_stamp, label*12 
+#   
+
+
+## prapere data 
+# get data from dir to one pandas dataframe 
+
+
+
+## seperates the IMU data from the FGM data 
+# make sure each one has labalings 
+
+## finds the bias of each data collection sesion - calclulated from the mean of the relaxed data 
+# returs a bais_dataframe with size of (data_sesion_start_time_stamp.value_count,len(fmgsensors))
+
+## subtracts the bais_dataframe from the fmg_data
+## normalization 
+ 
+## fully 
+# 1. FMG 
+# 2. imu 
+# 3. fmg +imu 
+
+## same fully fmg_mean,fmg_std 
+# 1. FMG 
+# 2. imu 
+# 3. fmg +imu 
+
+## grafh of data size to acc 
+# n data points from each time stamp 
+
+
+
+## 2,n,fmg+ fmg_std  
+# fmg (n_sampels,40/80/120)
+# fmg velosity

@@ -1,12 +1,15 @@
 from os import listdir
 from os.path import isfile, join
-from torch.utils.data import Dataset, DataLoader
+
 import numpy as np
 import pandas as pd
+
 import torch
 import torch.nn as nn
 import torchvision
 import torchvision.transforms as transforms
+from torch.utils.data import Dataset, DataLoader
+
 import data_agmuntation
 import paramaters
 from clasifiers import transforms
