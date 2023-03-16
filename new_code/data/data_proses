@@ -34,7 +34,7 @@ def find_bias(fmg_df):
 
     bias_df = pd.DataFrame()
 
-    for time_stamp in fmg_df['time_stamp'].value_counts().index:
+    for time_stamp in fmg_df['time_stamp'].unique():
 
         temp_df = fmg_df[fmg_df['time_stamp'] == time_stamp].mean().transpose()
         temp_df['time_stamp'] = time_stamp
@@ -47,7 +47,7 @@ def find_std(fmg_df):
     
     std_df = pd.DataFrame()
 
-    for time_stamp in fmg_df['time_stamp'].value_counts().index:
+    for time_stamp in fmg_df['data_sesion_start_time_stamp'].unique():
 
         temp_df = fmg_df[fmg_df['time_stamp'] == time_stamp].mean().transpose()
         temp_df['time_stamp'] = time_stamp
@@ -62,7 +62,7 @@ def find_std(fmg_df):
 def subtract_bias(fmg_df):
 
     bias_df = find_bias(fmg_df)
-    for time_stamp in fmg_df['data_sesion_start_time_stamp'].value_count().index:
+    for time_stamp in fmg_df['data_sesion_start_time_stamp'].unique():
             
         temp_fmg_df = fmg_df[fmg_df['data_sesion_start_time_stamp'] ==time_stamp].drop('data_sesion_start_time_stamp',axis=1) - np.array(bias_df[bias_df['data_sesion_start_time_stamp'] == time_stamp].drop('data_sesion_start_time_stamp',axis=1))
         new_fmg_df = pd.concat([new_fmg_df,temp_fmg_df],axis= 0)
