@@ -68,7 +68,7 @@ def init_natnetClient():
 
 def write_line(f,NatNetClient):
 
-    sesion_time_stamp = t.strftime("%d_%b_%Y_%H:%M", time.gmtime())
+    sesion_time_stamp = t.strftime("%d_%b_%Y_%H:%M", t.gmtime())
 
 
     line = ser.readline()  # read a byte
