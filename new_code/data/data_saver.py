@@ -9,9 +9,9 @@ from NatNetClient import NatNetClient
 
 dirpath = '/home/robotics20/Documents/rotem/data'
 
-dirs = [f for f in listdir(dirpath)]
+# dirs = [f for f in listdir(dirpath)]
 # make sure the 'COM#' is set according the Windows Device Manager
-ser = serial.Serial('/dev/ttyACM0', 115200)
+# ser = serial.Serial('/dev/ttyACM0', 115200)
 
 
 # print format: t,Gx,Gy,Gz,Ax,Ay,Az,Mx,My,Mz,F1,F2,F3,F4,B1,B2,S1,S2,S3,S4,class
@@ -21,8 +21,8 @@ def write_first_line(f):
     # f.write("Gx,Gy,Gz,Ax,Ay,Az,Mx,My,Mz,")
     f.write("S1, S2, S3, S4, S5, S6, S7, S8, S9, S10, S11, S12, S13, S14, S15, S16, S17, S18, S19, S20,")
     f.write("S21, S22, S23, S24, S25, S26, S27, S28, S29, S30, S31, S32, S33, S34, S35, S36, S37, S38, S39, S40, S41, S42, S43, S44, S45, S46, S47, S48,")
-    f.write("M1x,M1y,M1z,M2x,M2y,M2z,M3x,M3y,M3z,M4x,M4y,M4z")
-    f.write("sesion_time_stamp\n")
+    f.write("M1x,M1y,M1z,M2x,M2y,M2z,M3x,M3y,M3z,M4x,M4y,M4z,")
+    f.write("sesion_time_stamp,\n")
 
 
 def receiveNewFrame( frameNumber, markerSetCount, unlabeledMarkersCount, rigidBodyCount, skeletonCount,
@@ -51,13 +51,12 @@ def init_natnetClient():
     # start natnet interface
     natnet = NatNetClient(rigidBodyListListener=receiveRigidBodyList,server="132.66.51.232")#rigidBodyListListener=receiveRigidBodyList)
 
-    natnet.rigidBodyList
-
     keys = ['chest', 'shoulder', 'elbow', 'wrist']
     chest = 1
     shoulder = 2
     elbow = 3
     wrist = 4
+    return natnet
 
     # This dictionary matches the rigid body id (key) to it's name (value)
     motive_matcher = {chest: 'chest',
@@ -66,22 +65,27 @@ def init_natnetClient():
                         elbow: 'wrist',}
 
 
-def write_line(f,NatNetClient):
+def write_line(f,marker_data):
 
     sesion_time_stamp = t.strftime("%d_%b_%Y_%H:%M", t.gmtime())
 
 
-    line = ser.readline()  # read a byte
-    sensor_string = line.decode('utf-8')  # ('latin-1')  # convert the byte string to a unicode string
-    sensor_string = sensor_string.strip()
-    sensor_string.replace("'", '')
-    sensor_string.replace("[", '')
-    sensor_string.replace("]", '')
+    # line = ser.readline()  # read a byte
+    # sensor_string = line.decode('utf-8')  # ('latin-1')  # convert the byte string to a unicode string
+    # sensor_string = sensor_string.strip()
+    # sensor_string.replace("'", '')
+    # sensor_string.replace("[", '')
+    # sensor_string.replace("]", '')
 
-    marker_data = NatNetClient.rigidBodyList
+
+     # test 
+    sensor_string = ''.join(str(i)+',' for i in range(48))
+
+    print(marker_data)
+    marker_string =[]
     for i in range(len(marker_data)):
 
-        marker_string += [str(j)for j in marker_data] 
+        marker_string += [str(j)for j in marker_data[i][1]] 
 
     marker_string = ''.join(str(s)+',' for s in marker_string)
 
@@ -97,14 +101,19 @@ def write_line(f,NatNetClient):
 if __name__ == '__main__':
     
     t_start = t.time()
-
+    NatNet = init_natnetClient()
     # print(fileName)
-    f = open(join('new_code/data/data', 'test'), "w")
+    f = open(join('new_code/data/data', 'test.csv'), "w")
 
     write_first_line(f)
-    write_line(f)
-    f.close()
+    NatNet.run()
+    for i in range(20):
+      marker_data = NatNet.rigidBodyList
 
+      write_line(f,marker_data=marker_data)
+    
+    f.close()
+    NatNet.stop()
 
     t_end = t.time()
     print(t_end-t_start)
@@ -182,5 +191,5 @@ if __name__ == '__main__':
 #         write_line(f, state=state)
 #         f.close()
 
-ser.close()
-print("finished")
+# ser.close()
+# print("finished")
