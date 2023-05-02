@@ -1,7 +1,7 @@
 from __future__ import print_function
 import struct
 import time
-from NatNetClient import NatNetClient
+import NatNetClient
 from collections import defaultdict
 from tqdm.auto import tqdm
 import itertools
@@ -68,11 +68,13 @@ if __name__ == '__main__':
     ## Markers
     take_input = True
     reconnect = False
-    save_path = r'C:\Users\User\Desktop\Eden\data\data_14_3\Eran\1\Angles'
-    img_name_save = r'C:\Users\User\Desktop\Eden\data\data_14_3\Eran\1\image'
+
+    ## 
+    save_path = r'/home/robotics20/Documents/rotem/new_code/data_motive/data'
+    
     marker_dict = defaultdict(list)
-    keys = ['Finger_marker', 'Camera']
-    Finger_marker = 3008
+    keys = ['wrinst_marker','elbow_marker','shulder_marker', 'Camera']
+    wrinst_marker = 3008
     Camera = 3007
     f = 1
     c = 0
@@ -129,15 +131,8 @@ if __name__ == '__main__':
                         data_points += 1
                         times.append(time.time())
 
-                        ### vision ###
-                        ret, frame = cam.read()
-                        marker_data = natnet.call()
-                        if ret == True:
-                            cv2.imshow('frame', frame)
-                            img_name = 'NoPoint'
-                            id_name = save_img(img_name_save, img_name, i, frame)
-                            if cv2.waitKey(1) & 0xFF == ord('q'):
-                                break
+    
+ 
 
                         ### Angles ###
                         assert marker_data[f][0] == Finger_marker
