@@ -21,7 +21,6 @@ def receiveRigidBodyFrame( id, position, rotation ):
     print( "Received frame for rigid body", id )
 
 def receiveRigidBodyList( rigidBodyList, stamp ):
-    pos_l = [] 
     for (ac_id, pos, quat, valid) in rigidBodyList:
         # print("rigidBodyList")
         # print(rigidBodyList)
@@ -32,9 +31,10 @@ def receiveRigidBodyList( rigidBodyList, stamp ):
             continue
         
         # print('id: ', ac_id, 'pos:', pos, 'quat:', quat) 
- 
-    return pos_l
-       
+
+
+def init_natnetClient():
+           
 # start natnet interface
 natnet = NatNetClient(rigidBodyListListener=receiveRigidBodyList,server="132.66.51.232")#rigidBodyListListener=receiveRigidBodyList)
 
@@ -47,22 +47,18 @@ elbow = 3
 wrist = 4
 
 # This dictionary matches the rigid body id (key) to it's name (value)
-motive_matcher = {chest: 'Upper_foram',
-                    shoulder: 'Lower_forarm',
-                    shoulder: 'Finger_marker',
-                    elbow: 'Camera',
-                    wrist: 'body_marker'}
+motive_matcher = {chest: 'chest',
+                    shoulder: 'shoulder',
+                    shoulder: 'elbow',
+                    elbow: 'wrist',}
 marker_data = []
 natnet.run()
+
+def record_data()
 for i in range(10):
-    marker_data.append(natnet.rigidBodyList)
+    marker_data.append(natnet.call())
 
 
 natnet.stop()
 
 
-chest_data = marker_data[0][0]
-shoulder_data = marker_data[0][1]
-
-print(chest_data)
-print(shoulder_data)

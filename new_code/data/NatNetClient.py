@@ -473,4 +473,5 @@ class NatNetClient:
         self.running = False
 
     def call(self):
+        print("call")
         return self.rigidBodyList
