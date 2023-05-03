@@ -79,7 +79,7 @@ class NatNetClient:
         result.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         result.bind(('', 0))
         result.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-        print(result)
+        # print(result)
 
         return result
 
@@ -182,7 +182,7 @@ class NatNetClient:
             for j in range(0, markerCount):
                 pos = Vector3.unpack(data[offset:offset + 12])
                 offset += 12
-                self.__trace("\tMarker", j, ":", pos[0], ",", pos[1], ",", pos[2])
+                # self.__trace("\tMarker", j, ":", pos[0], ",", pos[1], ",", pos[2])
 
         # Unlabeled markers count (4 bytes)
         unlabeledMarkersCount = int.from_bytes(data[offset:offset + 4], byteorder='little')

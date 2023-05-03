@@ -7,11 +7,13 @@ import time as t
 from NatNetClient import NatNetClient
 #import natnetclient as natnet
 
+import matplotlib.pyplot as plt 
+
 dirpath = '/home/robotics20/Documents/rotem/data'
 
 # dirs = [f for f in listdir(dirpath)]
-# make sure the 'COM#' is set according the Windows Device Manager
-# ser = serial.Serial('/dev/ttyACM0', 115200)
+# make sure the 'COM#' is set according the Windows Device Manager /dev/ttyACM0
+ser = serial.Serial('COM7', 115200)
 
 
 # print format: t,Gx,Gy,Gz,Ax,Ay,Az,Mx,My,Mz,F1,F2,F3,F4,B1,B2,S1,S2,S3,S4,class
@@ -65,23 +67,22 @@ def init_natnetClient():
                         elbow: 'wrist',}
 
 
-def write_line(f,marker_data):
+def write_line(f,marker_data,sesion_time_stamp):
 
     sesion_time_stamp = t.strftime("%d_%b_%Y_%H:%M", t.gmtime())
 
 
-    # line = ser.readline()  # read a byte
-    # sensor_string = line.decode('utf-8')  # ('latin-1')  # convert the byte string to a unicode string
-    # sensor_string = sensor_string.strip()
-    # sensor_string.replace("'", '')
-    # sensor_string.replace("[", '')
-    # sensor_string.replace("]", '')
+    line = ser.readline()  # read a byte
+    sensor_string = line.decode('utf-8')  # ('latin-1')  # convert the byte string to a unicode string
+    sensor_string = sensor_string.strip()
+    sensor_string.replace("'", '')
+    sensor_string.replace("[", '')
+    sensor_string.replace("]", '')
 
 
-     # test 
-    sensor_string = ''.join(str(i)+',' for i in range(48))
+    #  # test 
+    # sensor_string = ''.join(str(i)+',' for i in range(48))
 
-    print(marker_data)
     marker_string =[]
     for i in range(len(marker_data)):
 
@@ -91,9 +92,9 @@ def write_line(f,marker_data):
 
     # sensor_string , marker_string , sesion_time_stamp
     f.write(f'{sensor_string}' +f'{marker_string}'+ f'{sesion_time_stamp}' + '\n')
-    
 
 
+    return sesion_time_stamp
 
 
 
@@ -101,95 +102,28 @@ def write_line(f,marker_data):
 if __name__ == '__main__':
     
     t_start = t.time()
+    sesion_time_stamp = t.strftime("%d_%b_%Y_%H_%M", t.gmtime())
+    file_name = sesion_time_stamp + '.csv'
     NatNet = init_natnetClient()
-    # print(fileName)
-    f = open(join('new_code/data/data', 'test.csv'), "w")
+    print(file_name)
+    f = open(join('new_code/data/data', file_name), "w")
 
     write_first_line(f)
     NatNet.run()
-    for i in range(20):
+    t.sleep(0.5)
+    marker_data = NatNet.rigidBodyList
+
+    for i in range(1000):
+      
       marker_data = NatNet.rigidBodyList
 
-      write_line(f,marker_data=marker_data)
+      write_line(f,sesion_time_stamp=sesion_time_stamp ,marker_data=marker_data)
     
     f.close()
     NatNet.stop()
 
     t_end = t.time()
-    print(t_end-t_start)
-
-
-# for i in range(len(dirs)):
-
-#     state = input("choose state : 0=relaxed, 1=forward , 2=left , 3=up \n")
-
-#     if state == '0':
-#         print('ok')
-#         filepath = dirpath + '/' + 'relaxed'
-#         onlyfiles = [f for f in listdir(filepath) if isfile(join(filepath, f))]
-#         num = str(len(onlyfiles))
-#         num = int(num)
-#         Title = 'relaxed_' + str(num)
-#         fileName = Title + '.csv'
-#         if fileName in onlyfiles:
-#             num = int(num) + 1
-#             Title = 'relaxed_' + str(num)
-#             fileName = Title + '.csv'
-
-#         print(fileName)
-#         f = open(join(filepath, fileName), "w")
-#         write_firs_line(f)
-#         write_line(f, state=state)
-#         f.close()
-
-#     elif state == '1':
-#         filepath = dirpath + '/' + 'forward'
-#         onlyfiles = [f for f in listdir(filepath) if isfile(join(filepath, f))]
-#         num = str(len(onlyfiles))
-#         num = int(num)
-#         Title = 'forward_' + str(num)
-#         fileName = Title + '.csv'
-#         if fileName in onlyfiles:
-#             num = int(num) + 1
-#             Title = 'forward_' + str(num)
-#             fileName = Title + '.csv'
-#         print(fileName)
-#         f = open(join(filepath, fileName), "w")
-#         write_firs_line(f)
-#         write_line(f, state=state)
-#         f.close()
-#     elif state == '2':
-#         filepath = dirpath + '/' + 'left'
-#         onlyfiles = [f for f in listdir(filepath) if isfile(join(filepath, f))]
-#         num = str(len(onlyfiles))
-#         num = int(num)
-#         Title = 'left_' + str(num)
-#         fileName = Title + '.csv'
-#         if fileName in onlyfiles:
-#             num = int(num) + 1
-#             Title = 'left_' + str(num)
-#             fileName = Title + '.csv'
-#         print(fileName)
-#         f = open(join(filepath, fileName), "w")
-#         write_firs_line(f)
-#         write_line(f, state=state)
-#         f.close()
-#     elif state == '3':
-#         filepath = dirpath + '/' + 'up'
-#         onlyfiles = [f for f in listdir(filepath) if isfile(join(filepath, f))]
-#         num = str(len(onlyfiles))
-#         num = int(num)
-#         Title = 'up_' + str(num)
-#         fileName = Title + '.csv'
-#         if fileName in onlyfiles:
-#             num = int(num) + 1
-#             Title = 'up_' + str(num)
-#             fileName = Title + '.csv'
-#         print(fileName)
-#         f = open(join(filepath, fileName), "w")
-#         write_firs_line(f)
-#         write_line(f, state=state)
-#         f.close()
-
-# ser.close()
-# print("finished")
+    print(t_end-t_start-0.5)
+    
+    ser.close()
+    print("finished")
