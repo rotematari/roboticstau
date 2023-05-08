@@ -111,27 +111,4 @@ def std_division(df):
 
 
 
-# ## torch data set 
-# class data(Dataset):
-#     def __init__(self,args_config,train=True):
 
-#         ## get dir names and location 
-
-
-#         ## seperates the IMU data from the FGM data 
-#         # make sure each one has labalings 
-
-        
-
-
-#         ## finds the mean/bias of each data collection sesion - calclulated from the relaxed data 
-
-#         ## subtracts the bias from the data 
-
-
-
-#     def __getitem__(self, index):
-#         return self.featurs[index],self.labels[index]
-
-#     def __len__(self):
-#         return self.n_samples   

@@ -15,22 +15,3 @@ parser.add_argument('--data_path', type=str, default=r'/home/robotics20/Document
                     , help='enter data dir path')
 
 
-def data_loder(args_config):
-    full_df = pd.DataFrame()
-    for i, file in enumerate(listdir(args_config.data_path)):
-
-        df = pd.read_csv(join(args_config.data_path,file))
-        full_df = pd.concat([full_df,df],axis=0)
-
-    full_df = full_df.dropna(axis=0)
-
-    return full_df
-
-
-
-# if __name__ == '__main__':
-#     args_config = parser.parse_args()
-
-#     df = data_loder(args_config=args_config) 
-#     print(df)
-    
