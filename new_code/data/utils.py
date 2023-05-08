@@ -1,4 +1,3 @@
-
 import torch
 from torch.utils.data import Dataset, DataLoader
 
@@ -8,6 +7,18 @@ import pandas as pd
 from os import listdir
 from os.path import isfile, join
 
+
+
+
+
+
+def data_loder(dir_path):
+    full_df = pd.DataFrame()
+    for file in listdir(dir_path):
+
+        df = pd.read_csv(join(dir_path,file))
+        full_df = pd.concat([full_df,df],axis=0,ignore_index=True)
+    return full_df
 
 def sepatare_data(full_df):
 
@@ -84,36 +95,4 @@ def std_division(fmg_df):
     return new_fmg_df
  
 
-def plot_data(df):
 
-
-    
-
-
-
-
-
-# ## torch data set 
-# class data(Dataset):
-#     def __init__(self,args_config,train=True):
-
-#         ## get dir names and location 
-
-
-#         ## seperates the IMU data from the FGM data 
-#         # make sure each one has labalings 
-
-        
-
-
-#         ## finds the mean/bias of each data collection sesion - calclulated from the relaxed data 
-
-#         ## subtracts the bias from the data 
-
-
-
-#     def __getitem__(self, index):
-#         return self.featurs[index],self.labels[index]
-
-#     def __len__(self):
-#         return self.n_samples   

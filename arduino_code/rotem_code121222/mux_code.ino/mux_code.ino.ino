@@ -8,7 +8,8 @@
 
 //16-Channel MUX (74HC4067) Interface
 //===================================
-int i,j,count,a_read ; 
+int i,j,count ;
+float a_read; 
 int S[4] = {9,10,11,12};
 int A[3] = {A10,A11,A12};
 int MUXtable[16][4]=
