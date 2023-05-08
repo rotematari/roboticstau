@@ -73,35 +73,47 @@ def subtract_bias(fmg_df):
     return new_fmg_df
 
 
+def std_division(fmg_df):
+
+    std_df = find_std(fmg_df)
+    for time_stamp in fmg_df['sesion_time_stamp'].unique():
+            
+        temp_fmg_df = fmg_df[fmg_df['sesion_time_stamp'] ==time_stamp].drop('sesion_time_stamp',axis=1) - np.array(std_df[std_df['sesion_time_stamp'] == time_stamp].drop('sesion_time_stamp',axis=1))
+        new_fmg_df = pd.concat([new_fmg_df,temp_fmg_df],axis= 0)
+
+    return new_fmg_df
+ 
+
+def plot_data(df):
+
+
+    
 
 
 
 
 
+# ## torch data set 
+# class data(Dataset):
+#     def __init__(self,args_config,train=True):
+
+#         ## get dir names and location 
 
 
-
-## torch data set 
-class data(Dataset):
-    def __init__(self,args_config,train=True):
-
-        ## get dir names and location 
-
-
-        ## seperates the IMU data from the FGM data 
-        # make sure each one has labalings 
+#         ## seperates the IMU data from the FGM data 
+#         # make sure each one has labalings 
 
         
 
 
-        ## finds the mean/bias of each data collection sesion - calclulated from the relaxed data 
+#         ## finds the mean/bias of each data collection sesion - calclulated from the relaxed data 
 
-        ## subtracts the bias from the data 
+#         ## subtracts the bias from the data 
 
 
 
-    def __getitem__(self, index):
-        return self.featurs[index],self.labels[index]
+#     def __getitem__(self, index):
+#         return self.featurs[index],self.labels[index]
 
-    def __len__(self):
-        return self.n_samples   
+#     def __len__(self):
+#         return self.n_samples   
