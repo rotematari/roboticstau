@@ -9,7 +9,6 @@ from os import listdir
 from os.path import isfile, join
 
 
-
 def data_loder(dir_path):
     full_df = pd.DataFrame()
     for file in listdir(dir_path):
