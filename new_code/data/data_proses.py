@@ -60,6 +60,8 @@ def find_bias(df):
 
     return bias_df
 
+
+
 def find_std(df):
     """
     Given a pandas dataframe containing FMG or IMU data, finds the standard deviation for each time stamped session and returns a pandas dataframe.
@@ -73,6 +75,57 @@ def find_std(df):
         std_df = pd.concat([std_df,temp_df],axis=0,ignore_index=False)
 
     return std_df
+
+
+def subtract_bias(df):
+    # Compute the bias for each unique value of the sesion_time_stamp column
+    bias_df = find_bias(df)
+    
+    # Initialize an empty DataFrame to store the result
+    new_df = pd.DataFrame()
+    
+    # Iterate over each unique value of the sesion_time_stamp column
+    for time_stamp in df['sesion_time_stamp'].unique():
+        # Select the rows of df and bias_df corresponding to the current time stamp
+        df_rows = df[df['sesion_time_stamp'] == time_stamp]
+        bias_rows = bias_df[bias_df['sesion_time_stamp'] == time_stamp]
+        
+        # Subtract the bias from the data in df
+        temp_df = df_rows.drop('sesion_time_stamp', axis=1).astype(float) - bias_rows.drop('sesion_time_stamp', axis=1).astype(float)
+        
+        # Add back the sesion_time_stamp column
+        temp_df['sesion_time_stamp'] = time_stamp
+        
+        # Append the result to new_df
+        new_df = pd.concat([new_df, temp_df], axis=0, ignore_index=False)
+    
+    return new_df
+
+
+
+def std_division(df):
+    # Compute the standard deviation for each unique value of the sesion_time_stamp column
+    std_df = find_std(df)
+    
+    # Initialize an empty DataFrame to store the result
+    new_fmg_df = pd.DataFrame()
+    
+    # Iterate over each unique value of the sesion_time_stamp column
+    for time_stamp in df['sesion_time_stamp'].unique():
+        # Select the rows of df and std_df corresponding to the current time stamp
+        df_rows = df[df['sesion_time_stamp'] == time_stamp]
+        std_rows = std_df[std_df['sesion_time_stamp'] == time_stamp]
+        
+        # Divide the data in df by the standard deviation
+        temp_df = df_rows.drop('sesion_time_stamp', axis=1).astype(float) / std_rows.drop('sesion_time_stamp', axis=1).astype(float)
+        
+        # Add back the sesion_time_stamp column
+        temp_df['sesion_time_stamp'] = time_stamp
+        
+        # Append the result to new_fmg_df
+        new_fmg_df = pd.concat([new_fmg_df, temp_df], axis=0)
+    
+    return new_fmg_df
 
 
     

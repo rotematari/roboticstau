@@ -62,6 +62,11 @@ if __name__ == '__main__':
     data = data_proses.data_loder(config=config)
     fmg_df, _, label_df = data_proses.sepatare_data(data)
 
+    # subtract bias 
+    fmg_df = data_proses.find_bias
+
+
+    # std norm
     # Split the data into training and test sets
     train_fmg, test_fmg, train_label, test_label = train_test_split(
         fmg_df, label_df, test_size=config.test_size, random_state=config.random_state)
@@ -83,6 +88,13 @@ if __name__ == '__main__':
     train_loader = DataLoader(train_dataset, batch_size=config.batch_size, shuffle=True)
     val_loader = DataLoader(val_dataset, batch_size=config.batch_size)
     test_loader = DataLoader(test_dataset, batch_size=config.batch_size)
+
+
+ 
+
+
+
+
 
 
 
