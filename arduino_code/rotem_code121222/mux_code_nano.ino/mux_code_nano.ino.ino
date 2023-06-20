@@ -34,29 +34,40 @@ void setup()
     digitalWrite(S[i], LOW);
 
   }
-  Serial.begin(9600);
+  Serial.begin(115200);
+  //delay(10000);
   //analogReadResolution(12);
 }
 //=================================================
 void loop()
 {
+
+  
    
-    for(i=0; i<5; i++)
-    {
-//       delay(1);
+    for(i=0; i<16; i++){
+       selection(i);
+       delay(5);
        for(j=0; j<1; j++)
     {
-      selection(i);
-
-      a_read =  analogRead(A[j]) ;
-      if (a_read>=0 )
-      {
-        count  = j*16+i ;
-        Serial.print(count);Serial.print(":");
-        Serial.print(a_read);Serial.print(",");
+      if (j==1){
+        if (i>1){
+          a_read =  analogRead(A[j]) ;
+          Serial.print(a_read);Serial.print(",");
+          
+          }
+        
         }
+        else {
+          if (i!=10)
+          {
+      a_read =  analogRead(A[j]) ;
+      Serial.print(a_read);Serial.print(",");
+            }
+          }
+
     }
     }
+    
   Serial.println("");
 }
 //=================================================

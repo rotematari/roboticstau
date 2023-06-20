@@ -7,11 +7,9 @@ import pandas as pd
 from os import listdir
 from os.path import isfile, join
 
-import argparse
+def load_data(config:
 
-parser = argparse.ArgumentParser(description='Training Config', add_help=False)
 
-parser.add_argument('--data_path', type=str, default=r'/home/robotics20/Documents/rotem/new_code/data/current_data /relaxed'
-                    , help='enter data dir path')
+    return data 
 
 

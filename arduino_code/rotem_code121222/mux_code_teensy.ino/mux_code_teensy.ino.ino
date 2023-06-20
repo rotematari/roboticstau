@@ -15,7 +15,7 @@
 int i, j, count ;
 float a_read;
 int S[4] = {9,10,11,12};
-int A[3] = {A10,A12,A11};
+int A[3] = {A10,A12,A12};
 int MUXtable[16][4] =
 {
   {0, 0, 0, 0}, {1, 0, 0, 0}, {0, 1, 0, 0}, {1, 1, 0, 0},
@@ -36,7 +36,7 @@ void setup()
     digitalWrite(S[i], LOW);
 
   }
-  Serial.begin(9600);
+  Serial.begin(115200);
   analogReadResolution(12);
 }
 //=================================================
@@ -45,19 +45,16 @@ void loop()
    
     for(i=0; i<16; i++)
     {
+       
+       selection(i);
        delay(5);
        for(j=0; j<2; j++)
     {
-      selection(i);
-
+      
       a_read =  analogRead(A[j]) ;
-      if (a_read>=0 )
-      {
-//          count  = j*16+i ;
-//          Serial.print(count);Serial.print(":");
-        Serial.print(a_read);Serial.print(",");
+      Serial.print(a_read);Serial.print(",");
         }
-    }
+    
     }
   Serial.println("");
 }
