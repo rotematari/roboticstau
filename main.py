@@ -14,7 +14,7 @@ import paramaters
 import data_loader
 from models import fully_connected, initializer
 import Run_model
-import utils
+import utils_old
 
 # start a new wandb run to track this script
 wandb.init(
@@ -143,7 +143,7 @@ def main(args_config, device):
     save = 0
     # # save = input(" to save net press 1 ")
     if test_state > 0.9:
-        utils.save_net(checkpoint, args_config, test_state)
+        utils_old.save_net(checkpoint, args_config, test_state)
 
 
 if __name__ == '__main__':
