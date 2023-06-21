@@ -47,24 +47,15 @@ void loop()
     for(i=0; i<16; i++){
        selection(i);
        delay(5);
-       for(j=0; j<1; j++)
+       for(j=1; j<2; j++)
     {
-      if (j==1){
-        if (i>1){
+
+
           a_read =  analogRead(A[j]) ;
           Serial.print(a_read);Serial.print(",");
           
-          }
-        
-        }
-        else {
-          if (i!=10)
-          {
-      a_read =  analogRead(A[j]) ;
-      Serial.print(a_read);Serial.print(",");
-            }
-          }
-
+          
+       
     }
     }
     

@@ -63,10 +63,15 @@ if __name__ == '__main__':
     fmg_df, _, label_df = data_proses.sepatare_data(data)
 
     # subtract bias 
-    fmg_df = data_proses.find_bias
+    fmg_df = data_proses.subtract_bias(fmg_df)
 
 
     # std norm
+    fmg_df = data_proses.std_division(fmg_df)
+
+    # TODO: add here agmuntations 
+
+
     # Split the data into training and test sets
     train_fmg, test_fmg, train_label, test_label = train_test_split(
         fmg_df, label_df, test_size=config.test_size, random_state=config.random_state)
@@ -89,17 +94,25 @@ if __name__ == '__main__':
     val_loader = DataLoader(val_dataset, batch_size=config.batch_size)
     test_loader = DataLoader(test_dataset, batch_size=config.batch_size)
 
-
- 
-
-
-
-
-
-
-
+    # train 
     train_losses, val_losses = utils.train(config=config,train_loader=train_loader
                                                                              ,val_loader=val_loader,net=net )
+    
+    #plot train
+    utils.plot_losses(train_losses, val_losses,train=True)
+
+    #test 
+    test_loss = utils.test(net=net,config=config,test_loader=test_loader)
+
+    #plot test 
+
+    utils.plot_losses(test_loss,train=True)
+
+
+    
+
+
+
     
 
 

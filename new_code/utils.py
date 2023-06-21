@@ -7,7 +7,7 @@ import pandas as pd
 
 from os import listdir
 from os.path import isfile, join
-
+import matplotlib.pyplot as plt
 
 
 
@@ -33,7 +33,6 @@ def train(config, train_loader, val_loader,net):
     for epoch in range(config.num_epochs):
         # Initialize the epoch loss and accuracy
         train_loss = 0
-        train_accuracy = 0
 
         # Train on the training set
         for inputs, targets in train_loader:
@@ -82,6 +81,59 @@ def train(config, train_loader, val_loader,net):
         print(f'Epoch: {epoch} Train Loss: {train_loss}  Val Loss: {val_loss} ')
 
     return train_losses, val_losses
+
+
+def test(net, config, test_loader):
+    # Define the loss function
+    criterion = net.rmsleloss()
+
+    # Initialize the test loss and accuracy
+    test_loss = 0
+    test_accuracy = 0
+
+    # Evaluate on the test set
+    with torch.no_grad():
+        for inputs, targets in test_loader:
+            outputs = net(inputs)
+            loss = criterion(outputs, targets)
+            test_loss += loss.item()
+        test_loss /= len(test_loader)
+
+    return test_loss
+
+
+
+def plot_losses(train_losses, val_losses=0,train=True):
+    
+    if train:
+        # Create a figure and axis
+        fig, ax = plt.subplots()
+        
+        # Plot the training and validation losses
+        ax.plot(train_losses, label='Training Loss')
+        ax.plot(val_losses, label='Validation Loss')
+        
+        # Add labels and a legend
+        ax.set_xlabel('Epoch')
+        ax.set_ylabel('Loss')
+        ax.legend()
+        
+        # Show the plot
+        plt.show()
+    else:
+        # Create a figure and axis
+        fig, ax = plt.subplots()
+        
+        # Plot the training and validation losses
+        ax.plot(train_losses, label='Test Loss')
+        
+        # Add labels and a legend
+        ax.set_xlabel('Epoch')
+        ax.set_ylabel('Loss')
+        ax.legend()
+        
+        # Show the plot
+        plt.show() 
 
 
 
