@@ -3,12 +3,29 @@ from torch.optim import Adam
 from torch.utils.data import DataLoader, TensorDataset
 
 from sklearn.model_selection import train_test_split
+import sys
+import os
+
+
+PATH = os.path.join(os.path.dirname(__file__),"/models")
+sys.path.insert(0,PATH)
+
 
 import data.data_proses as data_proses
 from models.models import fully_connected as fc 
 
 import utils
 import argparse
+import wandb
+
+# wandb 
+# start a new wandb run to track this script
+wandb.init(
+    # set the wandb project where this run will be logged
+    project="armModeling",
+    config={}
+
+)
 
 # Define the argument parser
 parser = argparse.ArgumentParser(description='Train a neural network.')
@@ -54,6 +71,10 @@ if __name__ == '__main__':
         val_size=args.val_size,
         random_state=args.random_state,
     )
+
+    #update wandb 
+    wandb.config.update(args)
+
     # Create an instance of the FullyConnected class using the configuration object
     net = fc(config)
 
