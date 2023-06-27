@@ -16,6 +16,7 @@ weight_decay : 0.0
 num_epochs : 5 
 batch_size : 50 
 data_path : '/home/robotics20/Documents/rotem/new_code/data/data'
+model_path: '/home/robotics20/Documents/rotem/new_code/models/saved_models'
 test_size : 0.2
 val_size : 0.2
 random_state : 42 

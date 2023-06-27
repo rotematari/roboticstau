@@ -24,14 +24,18 @@ with open('/home/robotics20/Documents/rotem/new_code/config.yaml', 'r') as f:
     args = yaml.safe_load(f)
 
 config = argparse.Namespace(**args)
-# wandb 
-# start a new wandb run to track this script
-wandb.init(
-    # set the wandb project where this run will be logged
-    project="armModeling",
-    config={}
 
-)
+def init(): 
+
+    global wandb_on 
+    wandb_on = 1 # (1 = True, 0 = False)
+
+    global device
+    device = torch.device("cuda" if torch.cuda.is_available() else 'cpu')
+    print(f'Device: {device}')
+
+    return
+
 
 # Define the argument parser
 parser = argparse.ArgumentParser(description='Train a neural network.')
@@ -58,6 +62,15 @@ parser.add_argument('--val_size', type=float, default=config.test_size, help='Th
 parser.add_argument('--random_state', type=int, default=config.random_state, help='The random state for data splitting.')
 
 if __name__ == '__main__':
+
+    init()
+    # wandb 
+# start a new wandb run to track this script
+    wandb.init(project="armModeling",entity='fmgrobotics',config=config)
+    config = wandb.config
+    print(config)
+
+
     # Parse the command-line arguments
     args = parser.parse_args()
 
@@ -79,7 +92,7 @@ if __name__ == '__main__':
     # )
 
     #update wandb 
-    wandb.config.update(args)
+    # wandb.config.update(args)
 
     # Create an instance of the FullyConnected class using the configuration object
     net = fc(config)
@@ -138,15 +151,20 @@ if __name__ == '__main__':
     train_losses, val_losses = utils.train(config=config,train_loader=train_loader
                                                                              ,val_loader=val_loader,net=net )
     
-    #plot train
-    utils.plot_losses(train_losses, val_losses,train=True)
+
 
     #test 
     test_loss = utils.test(net=net,config=config,test_loader=test_loader)
 
-    #plot test 
+    if wandb_on:
+        wandb.log({'Test_loss':test_loss})
 
-    utils.plot_losses(test_loss,train=True)
+    #plot train
+    utils.plot_losses(train_losses, val_losses=val_losses)
+
+
+    if wandb_on:
+        wandb.finish()
 
 
     

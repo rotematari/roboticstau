@@ -19,6 +19,8 @@ import wandb
 import argparse
 import yaml
 
+import time
+
 with open('/home/robotics20/Documents/rotem/new_code/config.yaml', 'r') as f:
     args = yaml.safe_load(f)
 
@@ -44,7 +46,7 @@ def hidden_size_maker(config):
     return hidden_size
 
 
-def train(config, train_loader, val_loader,net,device='cpu'):
+def train(config, train_loader, val_loader,net,device='cpu',wandb_on=0):
     # Create an instance of the FullyConnected class using the configuration object
     # net = net(config)
 
@@ -57,7 +59,7 @@ def train(config, train_loader, val_loader,net,device='cpu'):
     # Create lists to store the training and validation loss 
     train_losses = []
     val_losses = []
-    
+    best_val_loss = 0
 
     # Train the network
     for epoch in range(config.num_epochs):
@@ -94,7 +96,6 @@ def train(config, train_loader, val_loader,net,device='cpu'):
 
         # Initialize the validation loss and accuracy
         val_loss = 0
-        val_accuracy = 0
 
         # Evaluate on the validation set
         with torch.no_grad():
@@ -115,13 +116,26 @@ def train(config, train_loader, val_loader,net,device='cpu'):
         
         # Print the epoch loss and accuracy values
         print(f'Epoch: {epoch} Train Loss: {train_loss}  Val Loss: {val_loss} ')
-        # log metrics to wandb
-        wandb.log({"Train Loss": train_loss, "val_loss": val_loss})
+        if wandb_on:
+            # log metrics to wandb
+            wandb.log({"Train Loss": train_loss, "val_loss": val_loss})
+
+        if(best_val_loss < val_loss):
+            time_stamp = time.strftime("%d_%b_%Y_%H:%M", time.gmtime())
+            best_val_loss = val_loss
+            filename = str(epoch+1)+time_stamp + '.pt'
+            checkpoint_path = join(config.model_path,filename)
+            torch.save({
+                'epoch': epoch+1,
+                'model_state_dict': net.state_dict(),
+                'optimizer_state_dict': optimizer.state_dict(),
+                'loss': val_loss,
+                }, checkpoint_path)
 
     return train_losses, val_losses
 
 
-def test(net, config, test_loader,device='cpu'):
+def test(net, config, test_loader,device='cpu',wandb_on=0):
     # Define the loss function
     criterion = torch.nn.MSELoss()
 
@@ -140,12 +154,13 @@ def test(net, config, test_loader,device='cpu'):
             loss = criterion(outputs, targets)
             test_loss += loss.item()
         test_loss /= len(test_loader)
+        
 
     return test_loss
 
 
 
-def plot_losses(train_losses, val_losses=0,train=True):
+def plot_losses(train_losses, val_losses=[],train=True):
     
     if train:
         # Create a figure and axis
@@ -155,6 +170,7 @@ def plot_losses(train_losses, val_losses=0,train=True):
         ax.plot(train_losses, label='Training Loss')
         ax.plot(val_losses, label='Validation Loss')
         
+        
         # Add labels and a legend
         ax.set_xlabel('Epoch')
         ax.set_ylabel('Loss')
@@ -162,36 +178,6 @@ def plot_losses(train_losses, val_losses=0,train=True):
         
         # Show the plot
         plt.show()
-    else:
-        # Create a figure and axis
-        fig, ax = plt.subplots()
-        
-        # Plot the training and validation losses
-        ax.plot(train_losses, label='Test Loss')
-        
-        # Add labels and a legend
-        ax.set_xlabel('Epoch')
-        ax.set_ylabel('Loss')
-        ax.legend()
-        
-        # Show the plot
-        plt.show() 
-
-
-# Init global variablels
-
-def init(): 
-
-    global wandb_on 
-    wandb_on = 1 # (1 = True, 0 = False)
-
-    global device
-    device = torch.device("cuda" if torch.cuda.is_available() else 'cpu')
-    print(f'Device: {device}')
-
-    return
-
-
 
 if __name__== '__main__':
 
