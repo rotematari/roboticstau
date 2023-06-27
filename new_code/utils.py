@@ -44,7 +44,7 @@ def hidden_size_maker(config):
     return hidden_size
 
 
-def train(config, train_loader, val_loader,net):
+def train(config, train_loader, val_loader,net,device='cpu'):
     # Create an instance of the FullyConnected class using the configuration object
     # net = net(config)
 
@@ -66,6 +66,9 @@ def train(config, train_loader, val_loader,net):
 
         # Train on the training set
         for inputs, targets in train_loader:
+
+            inputs = inputs.to(device=device)
+            targets = targets.to(device=device)
             # Zero the gradients
             optimizer.zero_grad()
 
@@ -78,7 +81,6 @@ def train(config, train_loader, val_loader,net):
             optimizer.step()
 
             # Update the epoch loss and accuracy
-            #TODO: add train_accuracy
             train_loss += loss.item()
            
 
@@ -97,6 +99,10 @@ def train(config, train_loader, val_loader,net):
         # Evaluate on the validation set
         with torch.no_grad():
             for inputs, targets in val_loader:
+                
+                inputs = inputs.to(device=device)
+                targets = targets.to(device=device)
+
                 outputs = net(inputs)
                 loss = criterion(outputs, targets)
                 val_loss += loss.item()
@@ -110,12 +116,12 @@ def train(config, train_loader, val_loader,net):
         # Print the epoch loss and accuracy values
         print(f'Epoch: {epoch} Train Loss: {train_loss}  Val Loss: {val_loss} ')
         # log metrics to wandb
-        wandb.log({"Train Loss": train_loss, "Val Loss": val_loss})
+        wandb.log({"Train Loss": train_loss, "val_loss": val_loss})
 
     return train_losses, val_losses
 
 
-def test(net, config, test_loader):
+def test(net, config, test_loader,device='cpu'):
     # Define the loss function
     criterion = torch.nn.MSELoss()
 
@@ -126,6 +132,10 @@ def test(net, config, test_loader):
     # Evaluate on the test set
     with torch.no_grad():
         for inputs, targets in test_loader:
+
+            inputs = inputs.to(device=device)
+            targets = targets.to(device=device)
+
             outputs = net(inputs)
             loss = criterion(outputs, targets)
             test_loss += loss.item()
@@ -168,39 +178,19 @@ def plot_losses(train_losses, val_losses=0,train=True):
         plt.show() 
 
 
-# def sweepTune(config, train_loader, val_loader,net):
+# Init global variablels
 
-#     train_losses, val_losses = train(wandb.config, train_loader, val_loader,net)
-#     wandb.log({'Train Loss': train_losses, 'Val Loss': val_losses})
+def init(): 
 
+    global wandb_on 
+    wandb_on = 1 # (1 = True, 0 = False)
 
-#         # 2: Define the search space
-#     sweep_configuration =
-#     {
-#         'method': 'random',
-#         # project this sweep is part of 
-#         'project':'arm_Modeling' ,
-    
-        
-#         'metric': 
-#         {   'name': 'Val Loss',
-#             'goal': 'minimize',
-#             # 'target': 0.9 
-            
-#             },
-#         'parameters': 
-#         {
-#             'n_layer': {'max': 3, 'min': 30},
-#             'hidden_size': {'distribution': 'int_uniform', 'min': [50,50,50], 'max': [300,300,300]}},
-#             'dropout': {'values': [1, 3, 7]},
-#             'weight_decay': {'values': [1, 3, 7]},
-#             'learning_rate': {'values': [1, 3, 7]},
-#             'batch_size': {'values': [1, 3, 7]},
-#             'hidden_size': {'values': [1, 3, 7]},
-#             '': {'values': [1, 3, 7]},
-#         },
-# }
-    
+    global device
+    device = torch.device("cuda" if torch.cuda.is_available() else 'cpu')
+    print(f'Device: {device}')
+
+    return
+
 
 
 if __name__== '__main__':

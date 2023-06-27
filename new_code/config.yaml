@@ -9,12 +9,12 @@ input_size: 29
 num_labels : 12
 n_layer : 3
 hidden_size : [64, 64, 64] 
-dropout : [0.1, 0.1, 0.1] 
+dropout : 0.1
 multiplier : 2
 learning_rate : 0.001
 weight_decay : 0.0 
 num_epochs : 5 
-batch_size : 100 
+batch_size : 50 
 data_path : '/home/robotics20/Documents/rotem/new_code/data/data'
 test_size : 0.2
 val_size : 0.2
