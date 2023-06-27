@@ -158,8 +158,6 @@ def test(net, config, test_loader,device='cpu',wandb_on=0):
 
     return test_loss
 
-
-
 def plot_losses(train_losses, val_losses=[],train=True):
     
     if train:
