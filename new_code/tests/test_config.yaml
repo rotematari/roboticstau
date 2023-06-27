@@ -1,0 +1,19 @@
+
+---
+
+input_size: 3
+output_size: 4 
+
+
+mylist:
+  - item1
+  - item2
+
+
+my dict:
+  key1: val1
+
+multi-line-str:
+  hello 
+...
+
