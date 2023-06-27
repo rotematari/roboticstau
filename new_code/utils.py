@@ -51,7 +51,7 @@ def train(config, train_loader, val_loader,net,device='cpu',wandb_on=0):
     # net = net(config)
 
     # Define the loss function
-    criterion = torch.nn.MSELoss()
+    criterion = net.rmsleloss
 
     # Define the optimizer with weight decay
     optimizer = Adam(net.parameters(), lr=config.learning_rate, weight_decay=config.weight_decay)
@@ -137,7 +137,7 @@ def train(config, train_loader, val_loader,net,device='cpu',wandb_on=0):
 
 def test(net, config, test_loader,device='cpu',wandb_on=0):
     # Define the loss function
-    criterion = torch.nn.MSELoss()
+    criterion = net.rmsleloss
 
     # Initialize the test loss and accuracy
     test_loss = 0
