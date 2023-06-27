@@ -18,6 +18,12 @@ import utils
 import argparse
 import wandb
 
+import yaml
+
+with open('/home/robotics20/Documents/rotem/new_code/config.yaml', 'r') as f:
+    args = yaml.safe_load(f)
+
+config = argparse.Namespace(**args)
 # wandb 
 # start a new wandb run to track this script
 wandb.init(
@@ -31,46 +37,46 @@ wandb.init(
 parser = argparse.ArgumentParser(description='Train a neural network.')
 
 # Add arguments for the configuration options
-parser.add_argument('--input_size', type=int, default=29, help='The size of the input layer.')
-parser.add_argument('--num_labels', type=int, default=12, help='The number of output labels.')
-parser.add_argument('--n_layer', type=int, default=3, help='The number of hidden layers.')
-parser.add_argument('--hidden_size', nargs='+', type=int, default=[64, 64, 64], help='The size of each hidden layer.')
-parser.add_argument('--dropout', nargs='+', type=float, default=[0.1, 0.1, 0.1], help='The dropout rate for each hidden layer.')
+parser.add_argument('--input_size', type=int, default=config.input_size, help='The size of the input layer.')
+parser.add_argument('--num_labels', type=int, default=config.num_labels, help='The number of output labels.')
+parser.add_argument('--n_layer', type=int, default=config.n_layer, help='The number of hidden layers.')
+parser.add_argument('--hidden_size', nargs='+', type=int, default=config.hidden_size, help='The size of each hidden layer.')
+parser.add_argument('--dropout', nargs='+', type=float, default=config.dropout, help='The dropout rate for each hidden layer.')
 # Add arguments for the hyperparameters
-parser.add_argument('--learning_rate', type=float, default=0.001, help='The learning rate for the optimizer.')
-parser.add_argument('--num_epochs', type=int, default=100, help='The number of epochs to train for.')
-parser.add_argument('--weight_decay', type=float, default=0.0, help='The weight decay for the optimizer.')
-parser.add_argument('--batch_size', type=int, default=100, help='The size of batchs  .')
+parser.add_argument('--learning_rate', type=float, default=config.learning_rate, help='The learning rate for the optimizer.')
+parser.add_argument('--num_epochs', type=int, default=config.num_epochs, help='The number of epochs to train for.')
+parser.add_argument('--weight_decay', type=float, default=config.weight_decay, help='The weight decay for the optimizer.')
+parser.add_argument('--batch_size', type=int, default=config.batch_size, help='The size of batchs  .')
 
 #dit_path 
-parser.add_argument('--data_path', type=str, default='./data', help='The path to the training data.')
+parser.add_argument('--data_path', type=str, default=config.data_path, help='The path to the training data.')
 
 
 # split args 
-parser.add_argument('--test_size', type=float, default=0.2, help='The size of the test set.')
-parser.add_argument('--val_size', type=float, default=0.2, help='The size of the validation set.')
-parser.add_argument('--random_state', type=int, default=42, help='The random state for data splitting.')
+parser.add_argument('--test_size', type=float, default=config.test_size, help='The size of the test set.')
+parser.add_argument('--val_size', type=float, default=config.test_size, help='The size of the validation set.')
+parser.add_argument('--random_state', type=int, default=config.random_state, help='The random state for data splitting.')
 
 if __name__ == '__main__':
     # Parse the command-line arguments
     args = parser.parse_args()
 
-    # Create a configuration object from the parsed arguments
-    config = argparse.Namespace(
-        input_size=args.input_size,
-        num_labels=args.num_labels,
-        n_layer=args.n_layer,
-        hidden_size=args.hidden_size,
-        dropout=args.dropout,
-        batch_size = args.batch_size,
-        learning_rate=args.learning_rate,
-        num_epochs=args.num_epochs,
-        weight_decay=args.weight_decay,
-        data_path=args.data_path,
-        test_size=args.test_size,
-        val_size=args.val_size,
-        random_state=args.random_state,
-    )
+    # # Create a configuration object from the parsed arguments
+    # config = argparse.Namespace(
+    #     input_size=args.input_size,
+    #     num_labels=args.num_labels,
+    #     n_layer=args.n_layer,
+    #     hidden_size=args.hidden_size,
+    #     dropout=args.dropout,
+    #     batch_size = args.batch_size,
+    #     learning_rate=args.learning_rate,
+    #     num_epochs=args.num_epochs,
+    #     weight_decay=args.weight_decay,
+    #     data_path=args.data_path,
+    #     test_size=args.test_size,
+    #     val_size=args.val_size,
+    #     random_state=args.random_state,
+    # )
 
     #update wandb 
     wandb.config.update(args)
@@ -81,7 +87,14 @@ if __name__ == '__main__':
     
     # load data 
     data = data_proses.data_loder(config=config)
+    data = data[['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'S11',
+       'S12', 'S13', 'S14', 'S15', 'S16', 'S17', 'S18', 'S19', 'S20', 'S21',
+       'S22', 'S23', 'S24', 'S25', 'S26', 'S27', 'S28', 'S29', 'M1x', 'M1y',
+       'M1z', 'M2x', 'M2y', 'M2z', 'M3x', 'M3y', 'M3z', 'M4x', 'M4y', 'M4z',
+       'sesion_time_stamp']].dropna()
     fmg_df, _, label_df = data_proses.sepatare_data(data)
+
+    # fmg_df = fmg_df.iloc[:label_df.shape[0],:]
 
     # subtract bias 
     fmg_df = data_proses.subtract_bias(fmg_df)
@@ -91,6 +104,11 @@ if __name__ == '__main__':
     fmg_df = data_proses.std_division(fmg_df)
 
     # TODO: add here agmuntations 
+
+
+    #drop time stamp 
+    fmg_df = fmg_df.drop('sesion_time_stamp', axis=1)
+    label_df = label_df.drop('sesion_time_stamp', axis=1)
 
 
     # Split the data into training and test sets
@@ -105,15 +123,16 @@ if __name__ == '__main__':
 
 
     # Create TensorDatasets for the training, validation, and test sets
-    train_dataset = TensorDataset(train_fmg, train_label)
-    val_dataset = TensorDataset(val_fmg, val_label)
-    test_dataset = TensorDataset(test_fmg, test_label)
+    train_dataset = TensorDataset(torch.tensor(train_fmg.to_numpy()), torch.tensor(train_label.to_numpy()))
+    val_dataset = TensorDataset(torch.tensor(val_fmg.to_numpy()), torch.tensor(val_label.to_numpy()))
+    test_dataset = TensorDataset(torch.tensor(test_fmg.to_numpy()), torch.tensor(test_label.to_numpy()))
+
 
     # Create DataLoaders for the training, validation, and test sets
   
-    train_loader = DataLoader(train_dataset, batch_size=config.batch_size, shuffle=True)
-    val_loader = DataLoader(val_dataset, batch_size=config.batch_size)
-    test_loader = DataLoader(test_dataset, batch_size=config.batch_size)
+    train_loader = DataLoader(train_dataset, batch_size=config.batch_size, shuffle=True,drop_last=True)
+    val_loader = DataLoader(val_dataset, batch_size=config.batch_size,drop_last=True)
+    test_loader = DataLoader(test_dataset, batch_size=config.batch_size,drop_last=True)
 
     # train 
     train_losses, val_losses = utils.train(config=config,train_loader=train_loader

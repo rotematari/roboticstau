@@ -19,7 +19,7 @@ def data_loder(config):
         full_df = pd.concat([full_df,df],axis=0,ignore_index=True)
         full_df = full_df.replace(-np.inf, np.nan)
         full_df = full_df.replace(np.inf, np.nan)
-        full_df = full_df.iloc[1:,:-1].dropna(axis=0)
+        # full_df = full_df.iloc[1:,:-1].dropna(axis=0)
 
     return full_df
 
@@ -70,11 +70,11 @@ def find_std(df):
 
     for time_stamp in df['sesion_time_stamp'].unique():
 
-        temp_df = pd.DataFrame(df[df['sesion_time_stamp'] == time_stamp].drop('sesion_time_stamp',axis=1),dtype=float).std().to_frame().T
+        temp_df = df[df['sesion_time_stamp'] == time_stamp].drop('sesion_time_stamp',axis=1).std().T.copy()
         temp_df['sesion_time_stamp'] = time_stamp
-        std_df = pd.concat([std_df,temp_df],axis=0,ignore_index=False)
+        std_df = pd.concat([std_df,temp_df],axis=1,ignore_index=False)
 
-    return std_df
+    return std_df.T
 
 
 def subtract_bias(df):
@@ -87,12 +87,16 @@ def subtract_bias(df):
     # Iterate over each unique value of the sesion_time_stamp column
     for time_stamp in df['sesion_time_stamp'].unique():
         # Select the rows of df and bias_df corresponding to the current time stamp
-        df_rows = df[df['sesion_time_stamp'] == time_stamp]
-        bias_rows = bias_df[bias_df['sesion_time_stamp'] == time_stamp]
+        df_rows = df[df['sesion_time_stamp'] == time_stamp].copy()
+        bias_rows = bias_df[bias_df['sesion_time_stamp'] == time_stamp].copy()
+        
+        df_rows= df_rows.drop('sesion_time_stamp', axis=1).astype(float).copy()
+        bias_rows = bias_rows.drop('sesion_time_stamp', axis=1).astype(float).copy()
         
         # Subtract the bias from the data in df
-        temp_df = df_rows.drop('sesion_time_stamp', axis=1).astype(float) - bias_rows.drop('sesion_time_stamp', axis=1).astype(float)
+        temp_df = df_rows-bias_rows.to_numpy() 
         
+
         # Add back the sesion_time_stamp column
         temp_df['sesion_time_stamp'] = time_stamp
         
@@ -113,11 +117,16 @@ def std_division(df):
     # Iterate over each unique value of the sesion_time_stamp column
     for time_stamp in df['sesion_time_stamp'].unique():
         # Select the rows of df and std_df corresponding to the current time stamp
-        df_rows = df[df['sesion_time_stamp'] == time_stamp]
-        std_rows = std_df[std_df['sesion_time_stamp'] == time_stamp]
+        df_rows = df[df['sesion_time_stamp'] == time_stamp].copy()
+        std_rows = std_df[std_df['sesion_time_stamp'] == time_stamp].copy()
+        
+        df_rows= df_rows.drop('sesion_time_stamp', axis=1).astype(float).copy()
+        std_rows = std_rows.drop('sesion_time_stamp', axis=1).astype(float).copy()
+
+
         
         # Divide the data in df by the standard deviation
-        temp_df = df_rows.drop('sesion_time_stamp', axis=1).astype(float) / std_rows.drop('sesion_time_stamp', axis=1).astype(float)
+        temp_df = df_rows/ (std_rows.to_numpy()+1e-4)
         
         # Add back the sesion_time_stamp column
         temp_df['sesion_time_stamp'] = time_stamp

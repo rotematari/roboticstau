@@ -35,3 +35,9 @@
 ## 2,n,fmg+ fmg_std  
 # fmg (n_sampels,40/80/120)
 # fmg velosity
+
+
+
+## add loss for not normal valuse 
+
+

@@ -16,38 +16,40 @@ import torch
 from torch.optim import Adam
 
 import wandb
+import argparse
+import yaml
 
-PATH = os.path.join(os.path.dirname(__file__),"../")
-sys.path.insert(0,PATH)
+with open('/home/robotics20/Documents/rotem/new_code/config.yaml', 'r') as f:
+    args = yaml.safe_load(f)
 
-from main import config 
+config = argparse.Namespace(**args)
+
 
 def hidden_size_maker(config):
     hidden_size = []
     last_in = config.input_size
     up = int(config.n_layer/2)
     down = config.n_layer -up 
-    for layer in up:
+    multiplier = config.multiplier
+    for layer in range(up):
         
-        hidden_size.append(int(last_in*2))
-        last_in = int(last_in*2)
+        hidden_size.append(int(last_in*multiplier))
+        last_in = int(last_in*multiplier)
 
-    for layer in down:
+    for layer in range(down):
 
-        hidden_size.append(int(last_in/2))
-        last_in = int(last_in/2)
-
-
+        hidden_size.append(int(last_in/multiplier))
+        last_in = int(last_in/multiplier)
 
     return hidden_size
 
 
 def train(config, train_loader, val_loader,net):
     # Create an instance of the FullyConnected class using the configuration object
-    net = net(config)
+    # net = net(config)
 
     # Define the loss function
-    criterion = net.rmsleloss()
+    criterion = torch.nn.MSELoss()
 
     # Define the optimizer with weight decay
     optimizer = Adam(net.parameters(), lr=config.learning_rate, weight_decay=config.weight_decay)
@@ -115,7 +117,7 @@ def train(config, train_loader, val_loader,net):
 
 def test(net, config, test_loader):
     # Define the loss function
-    criterion = net.rmsleloss()
+    criterion = torch.nn.MSELoss()
 
     # Initialize the test loss and accuracy
     test_loss = 0
@@ -203,4 +205,6 @@ def plot_losses(train_losses, val_losses=0,train=True):
 
 if __name__== '__main__':
 
-    hidden = hidden_size_maker(config=config) 
+    hidden = hidden_size_maker(config=config)
+    print(hidden) 
+

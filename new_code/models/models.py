@@ -25,7 +25,7 @@ class fully_connected(nn.Module):
 
         fully = []
         self.input_size = args_config.input_size
-        self.relu1 = nn.ReLU()
+        # self.relu1 = nn.ReLU()
         assert args_config.n_layer == len(args_config.hidden_size) , "size of hidden size list is not equal to n_layer"
 
 
@@ -37,16 +37,16 @@ class fully_connected(nn.Module):
                 input_size = args_config.hidden_size[i-1]
 
             fully.extend([
-                nn.Linear(input_size, args_config.hidden_size[i]),
+                nn.Linear(input_size, args_config.hidden_size[i],dtype=torch.float64),
                 nn.ReLU(),
-                nn.BatchNorm1d(args_config.hidden_size[i]),
+                nn.BatchNorm1d(args_config.hidden_size[i],dtype=torch.float64),
                 nn.Dropout(args_config.dropout[i])
             ])
 
         self.fully = nn.Sequential(*fully)
 
         # Create the output layer
-        self.out_layer = nn.Linear(args_config.hidden_size[-1], args_config.num_labels)
+        self.out_layer = nn.Linear(args_config.hidden_size[-1], args_config.num_labels,dtype=torch.float64)
 
         # Define several loss functions
         self.mseloss = nn.MSELoss()
