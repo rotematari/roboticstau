@@ -5,7 +5,7 @@ from torch.utils.data import DataLoader, TensorDataset
 from sklearn.model_selection import train_test_split
 import sys
 import os
-
+import pandas as pd 
 
 PATH = os.path.join(os.path.dirname(__file__),"/models")
 sys.path.insert(0,PATH)
@@ -46,6 +46,7 @@ parser.add_argument('--num_labels', type=int, default=config.num_labels, help='T
 parser.add_argument('--n_layer', type=int, default=config.n_layer, help='The number of hidden layers.')
 parser.add_argument('--hidden_size', nargs='+', type=int, default=config.hidden_size, help='The size of each hidden layer.')
 parser.add_argument('--dropout', nargs='+', type=float, default=config.dropout, help='The dropout rate for each hidden layer.')
+parser.add_argument('--multiplier', nargs='+', type=float, default=config.multiplier, help='The multiplier gor hidden state.')
 # Add arguments for the hyperparameters
 parser.add_argument('--learning_rate', type=float, default=config.learning_rate, help='The learning rate for the optimizer.')
 parser.add_argument('--num_epochs', type=int, default=config.num_epochs, help='The number of epochs to train for.')
@@ -96,18 +97,20 @@ if __name__ == '__main__':
 
     # Create an instance of the FullyConnected class using the configuration object
     net = fc(config)
+    net= net.to(device=device)
 
     
     # load data 
     data = data_proses.data_loder(config=config)
     data = data[['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'S11',
-       'S12', 'S13', 'S14', 'S15', 'S16', 'S17', 'S18', 'S19', 'S20', 'S21',
-       'S22', 'S23', 'S24', 'S25', 'S26', 'S27', 'S28', 'S29', 'M1x', 'M1y',
+       'S12', 'S13', 'S14', 'S15', 'S16', 'M1x', 'M1y',
        'M1z', 'M2x', 'M2y', 'M2z', 'M3x', 'M3y', 'M3z', 'M4x', 'M4y', 'M4z',
        'sesion_time_stamp']].dropna()
-    fmg_df, _, label_df = data_proses.sepatare_data(data)
+    fmg_df, _, label_df = data_proses.sepatare_data(data,config=config,first=True)
 
-    # fmg_df = fmg_df.iloc[:label_df.shape[0],:]
+
+    # find zero axis 
+    label_df = data_proses.get_label_axis(label_df)
 
     # subtract bias 
     fmg_df = data_proses.subtract_bias(fmg_df)
@@ -118,7 +121,8 @@ if __name__ == '__main__':
 
     # TODO: add here agmuntations 
 
-
+    data = pd.concat([fmg_df,label_df],axis=1).drop_duplicates().reset_index(drop=True).dropna()
+    fmg_df,_,label_df = data_proses.sepatare_data(data,config=config,first=False)
     #drop time stamp 
     fmg_df = fmg_df.drop('sesion_time_stamp', axis=1)
     label_df = label_df.drop('sesion_time_stamp', axis=1)
@@ -149,18 +153,22 @@ if __name__ == '__main__':
 
     # train 
     train_losses, val_losses = utils.train(config=config,train_loader=train_loader
-                                                                             ,val_loader=val_loader,net=net )
+                                                                             ,val_loader=val_loader,net=net,device=device )
     
 
 
-    #test 
-    test_loss = utils.test(net=net,config=config,test_loader=test_loader)
+    #test
+    eval = utils.model_eval_metric(config,net,test_loader,device=device)
+    test_loss = utils.test(net=net,config=config,test_loader=test_loader,device=device)
+    print(f'eval_metric {eval}')
 
     if wandb_on:
-        wandb.log({'Test_loss':test_loss})
+        wandb.log({'eval_metric':eval,'Test_loss':test_loss})
 
     #plot train
     utils.plot_losses(train_losses, val_losses=val_losses)
+
+
 
 
     if wandb_on:

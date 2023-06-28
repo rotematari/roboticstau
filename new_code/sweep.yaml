@@ -27,7 +27,7 @@ parameters:
     min: 1.5
   n_layer:
     distribution: int_uniform
-    max: 15
+    max: 10
     min: 5
   weight_decay:
     distribution: uniform
