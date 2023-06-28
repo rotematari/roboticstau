@@ -157,6 +157,14 @@ def get_label_axis(labels):
 
 
 
+def calc_velocity(config,label_df):
+#['V2x','V2y','V2z','V3x','V3y','V3z','V4x','V4y','V4z']
+
+    label_df[['V2x','V2y','V2z','V3x','V3y','V3z','V4x','V4y','V4z']]= [0,0,0,0,0,0,0,0,0]
+    temp = label_df.loc[1:,['M2x','M2y','M2z','M3x','M3y','M3z','M4x','M4y','M4z']].reset_index(drop=True).copy()
+    
+    label_df.loc[:temp.shape[0]-1,['V2x','V2y','V2z','V3x','V3y','V3z','V4x','V4y','V4z']] = temp.values - label_df.loc[:temp.shape[0]-1,['M2x','M2y','M2z','M3x','M3y','M3z','M4x','M4y','M4z']].values
+    return label_df
 
 
 
