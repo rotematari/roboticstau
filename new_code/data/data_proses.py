@@ -30,7 +30,7 @@ def sepatare_data(full_df,config,first=True):
     """
     # # imu_index = ['Gx', 'Gy', 'Gz', 'Ax', 'Ay', 'Az', 'Mx', 'My', 'Mz']
     # fmg_index = ['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'S11', 'S12', 'S13', 'S14', 'S15', 'S16']
-    label_inedx = ['M1x','M1y','M1z','M2x','M2y','M2z','M3x','M3y','M3z','M4x','M4y','M4z']
+    label_inedx = config.first_positoin_label_inedx
     # sesion_time_stamp = ['sesion_time_stamp']
     if first:
         # sesion_time_stamp_df = full_df[config.sesion_time_stamp]
@@ -39,9 +39,10 @@ def sepatare_data(full_df,config,first=True):
         label_df = pd.concat([full_df[label_inedx],full_df[config.sesion_time_stamp]],axis=1,ignore_index=False)
     else:
 
+
         fmg_df = pd.concat([full_df[config.fmg_index],full_df[config.sesion_time_stamp]],axis=1,ignore_index=False)
         # imu_df = pd.concat([full_df[imu_index],full_df['sesion_time_stamp']],axis=1,ignore_index=True)
-        label_df = pd.concat([full_df[config.label_inedx],full_df[config.sesion_time_stamp]],axis=1,ignore_index=False)
+        label_df = pd.concat([full_df[config.positoin_label_inedx+config.velocity_label_inedx],full_df[config.sesion_time_stamp]],axis=1,ignore_index=False)
 
     assert isinstance(fmg_df, pd.DataFrame),f"{fmg_df} is not a DataFrame"
     assert isinstance(label_df, pd.DataFrame),f"{label_df} is not a DataFrame"
@@ -142,7 +143,7 @@ def std_division(df):
     return new_fmg_df
 
 
-def get_label_axis(labels):
+def get_label_axis(labels,config):
     #label_inedx = ['M1x','M1y','M1z','M2x','M2y','M2z','M3x','M3y','M3z','M4x','M4y','M4z']
     
     x  = labels[['M1x','M2x','M3x','M4x']].sub(labels['M1x'], axis=0)
@@ -153,17 +154,17 @@ def get_label_axis(labels):
 
     new_labels = pd.concat((x,y,z),axis=1)
     new_labels['sesion_time_stamp'] = labels['sesion_time_stamp']
-    return new_labels[['M2x','M2y','M2z','M3x','M3y','M3z','M4x','M4y','M4z']]
+    return new_labels[config.positoin_label_inedx]
 
 
 
 def calc_velocity(config,label_df):
 #['V2x','V2y','V2z','V3x','V3y','V3z','V4x','V4y','V4z']
 
-    label_df[['V2x','V2y','V2z','V3x','V3y','V3z','V4x','V4y','V4z']]= [0,0,0,0,0,0,0,0,0]
-    temp = label_df.loc[1:,['M2x','M2y','M2z','M3x','M3y','M3z','M4x','M4y','M4z']].reset_index(drop=True).copy()
+    label_df[config.velocity_label_inedx]= [0,0,0,0,0,0,0,0,0]
+    temp = label_df.loc[1:,config.positoin_label_inedx].reset_index(drop=True).copy()
     
-    label_df.loc[:temp.shape[0]-1,['V2x','V2y','V2z','V3x','V3y','V3z','V4x','V4y','V4z']] = temp.values - label_df.loc[:temp.shape[0]-1,['M2x','M2y','M2z','M3x','M3y','M3z','M4x','M4y','M4z']].values
+    label_df.loc[:temp.shape[0]-1,config.velocity_label_inedx] = temp.values - label_df.loc[:temp.shape[0]-1,config.positoin_label_inedx].values
     return label_df
 
 

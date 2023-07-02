@@ -104,16 +104,20 @@ def train(config, train_loader, val_loader,net,device='cpu',wandb_on=0):
 
         # Evaluate on the validation set
         with torch.no_grad():
-            for inputs, targets in val_loader:
+            for i,(inputs, targets) in enumerate(val_loader):
                 
                 inputs = inputs.to(device=device)
                 targets = targets.to(device=device)
 
                 outputs = net(inputs)
-                loss = criterion(outputs, targets)
-                val_loss += loss.item()
+                v_loss = criterion(outputs, targets)
+                val_loss += v_loss.item()
+                if v_loss.item()>1:
+                    print(v_loss.item())
                 
-            val_loss /= len(val_loader)
+                
+                
+            val_loss /= i
             
 
         # Save the validation loss and accuracy values

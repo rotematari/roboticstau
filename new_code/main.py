@@ -102,15 +102,12 @@ if __name__ == '__main__':
     
     # load data 
     data = data_proses.data_loder(config=config)
-    data = data[['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'S11',
-       'S12', 'S13', 'S14', 'S15', 'S16', 'M1x', 'M1y',
-       'M1z', 'M2x', 'M2y', 'M2z', 'M3x', 'M3y', 'M3z', 'M4x', 'M4y', 'M4z',
-       'sesion_time_stamp']].dropna()
+    data = data[config.fmg_index+config.first_positoin_label_inedx+config.sesion_time_stamp].dropna()
     fmg_df, _, label_df = data_proses.sepatare_data(data,config=config,first=True)
 
 
     # find zero axis 
-    label_df = data_proses.get_label_axis(label_df)
+    label_df = data_proses.get_label_axis(label_df,config=config)
 
     # subtract bias 
     fmg_df = data_proses.subtract_bias(fmg_df)
@@ -120,6 +117,8 @@ if __name__ == '__main__':
     fmg_df = data_proses.std_division(fmg_df)
 
     # TODO: add here agmuntations 
+    # add velocity 
+    label_df = data_proses.calc_velocity(config,label_df)
 
     data = pd.concat([fmg_df,label_df],axis=1).drop_duplicates().reset_index(drop=True).dropna()
     fmg_df,_,label_df = data_proses.sepatare_data(data,config=config,first=False)
