@@ -13,7 +13,7 @@ dirpath = '/home/robotics20/Documents/rotem/data'
 
 # dirs = [f for f in listdir(dirpath)]
 # make sure the 'COM#' is set according the Windows Device Manager /dev/ttyACM0
-ser = serial.Serial('COM10', 115200)
+ser = serial.Serial('COM3', 115200)
 
 
 # print format: t,Gx,Gy,Gz,Ax,Ay,Az,Mx,My,Mz,F1,F2,F3,F4,B1,B2,S1,S2,S3,S4,class
