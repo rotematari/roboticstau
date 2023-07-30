@@ -46,8 +46,8 @@ void loop()
    
     for(i=0; i<16; i++){
        selection(i);
-       delay(5);
-       for(j=1; j<2; j++)
+       delay(0.4);
+       for(j=0; j<2; j++)
     {
 
 

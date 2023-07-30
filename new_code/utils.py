@@ -112,8 +112,8 @@ def train(config, train_loader, val_loader,net,device='cpu',wandb_on=0):
                 outputs = net(inputs)
                 v_loss = criterion(outputs, targets)
                 val_loss += v_loss.item()
-                if v_loss.item()>1:
-                    print(v_loss.item())
+                # if v_loss.item()>1:
+                #     print(v_loss.item())
                 
                 
                 
@@ -236,6 +236,22 @@ def model_eval_metric(config,net,test_loader,device='cpu'):
 
 
 
+# normalization
+def normalize(data):
+    mean = data.mean(axis=0)
+    std = data.std(axis=0)
+
+
+    return (data - mean) / std
+
+def plot_data(config,data):
+    fig, (ax1, ax2) = plt.subplots(1, 2,figsize=(40,5))
+
+    ax1.plot(data.drop(['sesion_time_stamp'],axis=1)[config.positoin_label_inedx])
+    ax2.plot(data.drop(['sesion_time_stamp'],axis=1)[config.fmg_index])
+    ax1.legend()
+
+    plt.show() 
 
 if __name__== '__main__':
 

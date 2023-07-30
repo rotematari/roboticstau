@@ -164,9 +164,25 @@ def calc_velocity(config,label_df):
     label_df[config.velocity_label_inedx]= [0,0,0,0,0,0,0,0,0]
     temp = label_df.loc[1:,config.positoin_label_inedx].reset_index(drop=True).copy()
     
-    label_df.loc[:temp.shape[0]-1,config.velocity_label_inedx] = temp.values - label_df.loc[:temp.shape[0]-1,config.positoin_label_inedx].values
+    label_df.loc[:temp.shape[0]+2,config.velocity_label_inedx] = temp.values - label_df.loc[:temp.shape[0]+2,config.positoin_label_inedx].values
     return label_df
 
+def mask(data,config):
+
+    # create a mask that selects rows where the values in fmg_index columns are greater than 1024
+    mask1 = (data[config.fmg_index] > 1024).any(axis=1)
+
+    # create a mask that selects rows where the values in first_position_label_index columns are greater than 2
+    mask2 = (data[config.first_positoin_label_inedx] > 2).any(axis=1)
+
+    # combine the masks using the | (or) operator
+    mask = mask1 | mask2
+
+    # drop the rows from the DataFrame
+    data = data.drop(data[mask].index)
+
+
+    return data
 
 
 

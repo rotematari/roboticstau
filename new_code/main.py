@@ -75,25 +75,8 @@ if __name__ == '__main__':
     # Parse the command-line arguments
     args = parser.parse_args()
 
-    # # Create a configuration object from the parsed arguments
-    # config = argparse.Namespace(
-    #     input_size=args.input_size,
-    #     num_labels=args.num_labels,
-    #     n_layer=args.n_layer,
-    #     hidden_size=args.hidden_size,
-    #     dropout=args.dropout,
-    #     batch_size = args.batch_size,
-    #     learning_rate=args.learning_rate,
-    #     num_epochs=args.num_epochs,
-    #     weight_decay=args.weight_decay,
-    #     data_path=args.data_path,
-    #     test_size=args.test_size,
-    #     val_size=args.val_size,
-    #     random_state=args.random_state,
-    # )
-
     #update wandb 
-    # wandb.config.update(args)
+    wandb.config.update(args)
 
     # Create an instance of the FullyConnected class using the configuration object
     net = fc(config)
@@ -103,9 +86,16 @@ if __name__ == '__main__':
     # load data 
     data = data_proses.data_loder(config=config)
     data = data[config.fmg_index+config.first_positoin_label_inedx+config.sesion_time_stamp].dropna()
+
+
+    # drop bad data 
+    data = data_proses.mask(data,config)
+
+    # separate
     fmg_df, _, label_df = data_proses.sepatare_data(data,config=config,first=True)
 
-
+    
+    
     # find zero axis 
     label_df = data_proses.get_label_axis(label_df,config=config)
 
@@ -119,6 +109,10 @@ if __name__ == '__main__':
     # TODO: add here agmuntations 
     # add velocity 
     label_df = data_proses.calc_velocity(config,label_df)
+
+
+    #normalize labels 
+    label_df = utils.normalize(label_df)
 
     data = pd.concat([fmg_df,label_df],axis=1).drop_duplicates().reset_index(drop=True).dropna()
     fmg_df,_,label_df = data_proses.sepatare_data(data,config=config,first=False)
