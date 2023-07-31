@@ -184,5 +184,9 @@ def mask(data,config):
 
     return data
 
+def drop_nonnumber_val(data,config):
 
+
+
+    return data 
 
