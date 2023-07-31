@@ -3,7 +3,7 @@ import pandas as pd
 
 
 # Load the data from the CSV file
-data = pd.read_csv(r'/home/robotics20/Documents/rotem/new_code/data/data/30_Jul_2023_15_56.csv')
+data = pd.read_csv(r'new_code/data/data/30_Jul_2023_16_02.csv')
 
 data = data.dropna()
 

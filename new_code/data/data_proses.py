@@ -157,7 +157,6 @@ def get_label_axis(labels,config):
     return new_labels[config.positoin_label_inedx]
 
 
-
 def calc_velocity(config,label_df):
 #['V2x','V2y','V2z','V3x','V3y','V3z','V4x','V4y','V4z']
 
