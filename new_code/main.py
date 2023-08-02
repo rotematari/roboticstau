@@ -66,7 +66,7 @@ if __name__ == '__main__':
 
     init()
     # wandb 
-# start a new wandb run to track this script
+    # start a new wandb run to track this script
     wandb.init(project="armModeling",entity='fmgrobotics',config=config)
     config = wandb.config
     print(config)

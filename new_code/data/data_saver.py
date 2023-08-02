@@ -8,9 +8,18 @@ from NatNetClient import NatNetClient
 #import natnetclient as natnet
 
 import matplotlib.pyplot as plt 
+import yaml
+import argparse
+import pandas as pd
+import data_proses
+import utils
 
 dirpath = '/home/robotics20/Documents/rotem/data'
 
+with open('/home/robotics20/Documents/rotem/new_code/config.yaml', 'r') as f:
+    args = yaml.safe_load(f)
+
+config = argparse.Namespace(**args)
 # dirs = [f for f in listdir(dirpath)]
 # make sure the 'COM#' is set according the Windows Device Manager /dev/ttyACM0
 ser = serial.Serial('COM3', 115200)
@@ -129,3 +138,17 @@ if __name__ == '__main__':
     
     ser.close()
     print("finished")
+
+    ## checks data 
+    df = pd.read_csv(join(config.data_path,file_name))
+
+
+    not_numeric_vals = utils.print_not_numeric_vals(df)
+
+    if not_numeric_vals.shape[0] == 0:
+        utils.plot_data(config=config,data=df)
+
+    else :
+        print("clean data")
+
+

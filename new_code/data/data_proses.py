@@ -162,8 +162,10 @@ def calc_velocity(config,label_df):
 
     label_df[config.velocity_label_inedx]= [0,0,0,0,0,0,0,0,0]
     temp = label_df.loc[1:,config.positoin_label_inedx].reset_index(drop=True).copy()
+
+    label_df = label_df.loc[:temp.shape[0]] 
     
-    label_df.loc[:temp.shape[0]+2,config.velocity_label_inedx] = temp.values - label_df.loc[:temp.shape[0]+2,config.positoin_label_inedx].values
+    label_df.loc[:temp.shape[0]-1,config.velocity_label_inedx] = temp.values - label_df.loc[:temp.shape[0]-1,config.positoin_label_inedx].values
     return label_df
 
 def mask(data,config):
@@ -183,9 +185,20 @@ def mask(data,config):
 
     return data
 
-def drop_nonnumber_val(data,config):
+def is_not_numeric(x):
+    try:
+        float(x)
+        return False
+    except ValueError:
+        return True
+    
 
+def print_not_numeric_vals(df):
 
+    mask = df.drop(['sesion_time_stamp'],axis=1).applymap(is_not_numeric)
+    non_numeric_values = df[mask].stack().dropna()
+    print(non_numeric_values)
 
-    return data 
+    return non_numeric_values
+
 
