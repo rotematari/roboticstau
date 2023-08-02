@@ -1,0 +1,112 @@
+wandb_version: 1
+
+fmg_index:
+  desc: null
+  value:
+  - S1
+  - S2
+  - S3
+  - S4
+  - S5
+  - S6
+  - S7
+  - S8
+  - S9
+  - S10
+  - S11
+  - S12
+  - S13
+  - S14
+  - S15
+  - S16
+label_inedx:
+  desc: null
+  value:
+  - M2x
+  - M2y
+  - M2z
+  - M3x
+  - M3y
+  - M3z
+  - M4x
+  - M4y
+  - M4z
+sesion_time_stamp:
+  desc: null
+  value:
+  - sesion_time_stamp
+input_size:
+  desc: null
+  value: 16
+num_labels:
+  desc: null
+  value: 9
+n_layer:
+  desc: null
+  value: 7
+hidden_size:
+  desc: null
+  value:
+  - 64
+  - 64
+  - 64
+dropout:
+  desc: null
+  value: 0.1
+multiplier:
+  desc: null
+  value: 2
+learning_rate:
+  desc: null
+  value: 0.001
+weight_decay:
+  desc: null
+  value: 0.0
+num_epochs:
+  desc: null
+  value: 10
+batch_size:
+  desc: null
+  value: 20
+data_path:
+  desc: null
+  value: /home/robotics20/Documents/rotem/new_code/data/data
+model_path:
+  desc: null
+  value: /home/robotics20/Documents/rotem/new_code/models/saved_models
+test_size:
+  desc: null
+  value: 0.2
+val_size:
+  desc: null
+  value: 0.2
+random_state:
+  desc: null
+  value: 42
+_wandb:
+  desc: null
+  value:
+    python_version: 3.10.9
+    cli_version: 0.15.4
+    framework: torch
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    start_time: 1687963167.943028
+    t:
+      1:
+      - 1
+      - 5
+      - 53
+      - 55
+      2:
+      - 1
+      - 5
+      - 53
+      - 55
+      3:
+      - 16
+      - 23
+      4: 3.10.9
+      5: 0.15.4
+      8:
+      - 5

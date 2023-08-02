@@ -4,17 +4,24 @@
 
 
 # Add arguments for the configuration options
-
-input_size: 29
-num_labels : 12
-n_layer : 3
+fmg_index: ['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'S11',
+       'S12', 'S13', 'S14', 'S15', 'S16', 'S17', 'S18', 'S19', 'S20', 'S21',
+       'S22', 'S23', 'S24', 'S25', 'S26', 'S27', 'S28', 'S29', 'S30', 'S31',
+       'S32']
+first_positoin_label_inedx: ['M1x', 'M1y', 'M1z','M2x', 'M2y', 'M2z', 'M3x', 'M3y', 'M3z', 'M4x', 'M4y', 'M4z']
+positoin_label_inedx: ['M2x', 'M2y', 'M2z', 'M3x', 'M3y', 'M3z', 'M4x', 'M4y', 'M4z']
+velocity_label_inedx: ['V2x','V2y','V2z','V3x','V3y','V3z','V4x','V4y','V4z']
+sesion_time_stamp: ['sesion_time_stamp']
+input_size: 32
+num_labels : 18
+n_layer : 7
 hidden_size : [64, 64, 64] 
 dropout : 0.1
-multiplier : 2
-learning_rate : 0.001
-weight_decay : 0.0 
-num_epochs : 5 
-batch_size : 50 
+multiplier : 1.5
+learning_rate : 0.01
+weight_decay : 0.00001 
+num_epochs : 50 
+batch_size : 10
 data_path : '/home/robotics20/Documents/rotem/new_code/data/data'
 model_path: '/home/robotics20/Documents/rotem/new_code/models/saved_models'
 test_size : 0.2
