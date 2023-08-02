@@ -15,12 +15,12 @@ import os
 import torch
 from torch.optim import Adam
 
-import wandb
+# import wandb
 import argparse
-import yaml
+
 
 import time
-
+import yaml
 with open('/home/robotics20/Documents/rotem/new_code/config.yaml', 'r') as f:
     args = yaml.safe_load(f)
 
@@ -253,8 +253,7 @@ def plot_data(config,data):
 
     plt.show() 
 
-if __name__== '__main__':
+# if __name__== '__main__':
 
-    hidden = hidden_size_maker(config=config)
-    print(hidden) 
+    
 
