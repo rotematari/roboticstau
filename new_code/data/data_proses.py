@@ -174,7 +174,7 @@ def mask(data,config):
     mask1 = (data[config.fmg_index] > 1024).any(axis=1)
 
     # create a mask that selects rows where the values in first_position_label_index columns are greater than 2
-    mask2 = (data[config.first_positoin_label_inedx] > 2).any(axis=1)
+    mask2 = (data[config.first_positoin_label_inedx] > 3).any(axis=1)
 
     # combine the masks using the | (or) operator
     mask = mask1 | mask2
