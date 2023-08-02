@@ -81,6 +81,7 @@ if __name__ == '__main__':
     # Create an instance of the FullyConnected class using the configuration object
     net = fc(config)
     net= net.to(device=device)
+    print(net)
 
     
     # load data 
@@ -107,6 +108,9 @@ if __name__ == '__main__':
     fmg_df = data_proses.std_division(fmg_df)
 
     # TODO: add here agmuntations 
+
+    #avereg rolling window
+    fmg_df = utils.rollig_window(config=config, data=fmg_df)
     # add velocity 
     label_df = data_proses.calc_velocity(config,label_df)
 

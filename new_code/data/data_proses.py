@@ -165,7 +165,7 @@ def calc_velocity(config,label_df):
 
     label_df = label_df.loc[:temp.shape[0]] 
     
-    label_df.loc[:temp.shape[0]-1,config.velocity_label_inedx] = temp.values - label_df.loc[:temp.shape[0]-1,config.positoin_label_inedx].values
+    label_df.loc[:temp.shape[0],config.velocity_label_inedx] = temp.values - label_df.loc[:temp.shape[0],config.positoin_label_inedx].values
     return label_df
 
 def mask(data,config):

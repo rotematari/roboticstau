@@ -15,7 +15,7 @@ import os
 import torch
 from torch.optim import Adam
 
-# import wandb
+import wandb
 import argparse
 
 
@@ -38,8 +38,8 @@ def hidden_size_maker(config):
 
         size = last_in*multiplier
 
-        if size >= 300 :
-            size = 300
+        if size >= 1024 :
+            size = 1024
         hidden_size.append(int(size))
         last_in = int(last_in*multiplier)
 
@@ -253,6 +253,12 @@ def plot_data(config,data):
 
     plt.show() 
 
+def rollig_window(config,data):
+
+    data_avg =data.copy()
+    data_avg[config.fmg_index] = data_avg[config.fmg_index].rolling(window=config.window_size, axis=0).mean()
+
+    return data_avg 
 # if __name__== '__main__':
 
     

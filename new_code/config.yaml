@@ -16,12 +16,13 @@ input_size: 32
 num_labels : 18
 n_layer : 7
 hidden_size : [64, 64, 64] 
-dropout : 0.1
-multiplier : 1.5
-learning_rate : 0.01
+dropout : 0.2
+multiplier : 2
+learning_rate : 0.0001
 weight_decay : 0.00001 
-num_epochs : 50 
+num_epochs : 30 
 batch_size : 10
+window_size : 20
 data_path : '/home/robotics20/Documents/rotem/new_code/data/data'
 model_path: '/home/robotics20/Documents/rotem/new_code/models/saved_models'
 test_size : 0.2

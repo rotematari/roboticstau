@@ -1,5 +1,6 @@
 import torch.nn as nn
 import torch
+from utils import hidden_size_maker
 
 class RMSLELoss(nn.Module):
     def __init__(self):
@@ -11,29 +12,34 @@ class RMSLELoss(nn.Module):
     
 
 class fully_conected(nn.Module):
-    def __init__(self,args_config):
+    def __init__(self,config):
         super(fully_conected, self).__init__()
 
         fully = []
-        self.input_size = args_config.input_size
-        # self.relu1 = nn.ReLU()
+        self.input_size = config.input_size
 
-        for i in range(args_config.n_layer):
+        
+        # self.relu1 = nn.ReLU()
+        self.hidden_size = hidden_size_maker(config)
+        assert config.n_layer == len(self.hidden_size) , "size of hidden size list is not equal to n_layer"
+
+
+        for i in range(config.n_layer):
             if i==0:
-                input_size = args_config.input_size
+                input_size = self.input_size
             else :
-                input_size = args_config.hidden_size[i-1]
+                input_size = self.hidden_size[i-1]
 
             fully.extend[
-                nn.Linear(input_size, args_config.hidden_size[i],dtype=torch.float64),
+                nn.Linear(input_size, self.hidden_size[i],dtype=torch.float64),
                 nn.ReLU(),
-                nn.BatchNorm1d(args_config.hidden_size[i]),
-                nn.Dropout1d(args_config.dropout[i])
+                nn.BatchNorm1d(self.hidden_size[i]),
+                nn.Dropout1d(config.dropout[i])
             ]
 
         self.fully = nn.Sequential(*fully)
 
-        self.out_layer = nn.Linear(args_config.hidden_size[-1], args_config.num_labels,dtype=torch.float64)
+        self.out_layer = nn.Linear(self.hidden_size[-1], config.num_labels,dtype=torch.float64)
         self.mseloss = nn.MSELoss()
         self.huberloss = nn.HuberLoss()
         self.rmsleloss = RMSLELoss()
