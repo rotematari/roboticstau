@@ -111,6 +111,7 @@ if __name__ == '__main__':
 
     #avereg rolling window
     fmg_df = utils.rollig_window(config=config, data=fmg_df)
+
     # add velocity 
     label_df = data_proses.calc_velocity(config,label_df)
 
@@ -120,9 +121,12 @@ if __name__ == '__main__':
 
     data = pd.concat([fmg_df,label_df],axis=1).drop_duplicates().reset_index(drop=True).dropna()
     fmg_df,_,label_df = data_proses.sepatare_data(data,config=config,first=False)
+
     #drop time stamp 
     fmg_df = fmg_df.drop('sesion_time_stamp', axis=1)
     label_df = label_df.drop('sesion_time_stamp', axis=1)
+
+
 
 
     # Split the data into training and test sets
@@ -134,12 +138,24 @@ if __name__ == '__main__':
         train_fmg, train_label, test_size=config.val_size / (1 - config.test_size), random_state=config.random_state)
 
 
+     #make sequenced data
+     #tensors
+
+    
+
 
 
     # Create TensorDatasets for the training, validation, and test sets
-    train_dataset = TensorDataset(torch.tensor(train_fmg.to_numpy()), torch.tensor(train_label.to_numpy()))
-    val_dataset = TensorDataset(torch.tensor(val_fmg.to_numpy()), torch.tensor(val_label.to_numpy()))
-    test_dataset = TensorDataset(torch.tensor(test_fmg.to_numpy()), torch.tensor(test_label.to_numpy()))
+    train_dataset = TensorDataset(torch.tensor(train_fmg.to_numpy())[:train_fmg.shape[0]//config.seq_length*config.seq_length].reshape(-1,config.input_size*config.seq_length), torch.tensor(train_label.to_numpy())[:train_fmg.shape[0]//config.seq_length*config.seq_length].reshape(-1,config.input_size*config.seq_length))
+    val_dataset = TensorDataset(torch.tensor(val_fmg.to_numpy())[:val_fmg.shape[0]//config.seq_length*config.seq_length].reshape(-1,config.input_size*config.seq_length), torch.tensor(val_label.to_numpy())[:val_fmg.shape[0]//config.seq_length*config.seq_length].reshape(-1,config.input_size*config.seq_length))
+    test_dataset = TensorDataset(torch.tensor(test_fmg.to_numpy())[:test_fmg.shape[0]//config.seq_length*config.seq_length].reshape(-1,config.input_size*config.seq_length), torch.tensor(test_label.to_numpy())[:test_fmg.shape[0]//config.seq_length*config.seq_length].reshape(-1,config.input_size*config.seq_length))
+
+
+
+    
+
+
+
 
 
     # Create DataLoaders for the training, validation, and test sets

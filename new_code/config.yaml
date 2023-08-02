@@ -23,6 +23,7 @@ weight_decay : 0.00001
 num_epochs : 30 
 batch_size : 10
 window_size : 20
+seq_length: 10
 data_path : '/home/robotics20/Documents/rotem/new_code/data/data'
 model_path: '/home/robotics20/Documents/rotem/new_code/models/saved_models'
 test_size : 0.2
