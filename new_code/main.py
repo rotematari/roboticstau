@@ -3,22 +3,26 @@ from torch.optim import Adam
 from torch.utils.data import DataLoader, TensorDataset
 
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
+import matplotlib.pyplot as plt
 import sys
 import os
 import pandas as pd 
+
 
 PATH = os.path.join(os.path.dirname(__file__),"/models")
 sys.path.insert(0,PATH)
 
 
 import data.data_proses as data_proses
-from models.models import fully_connected as fc 
+from models.models import fully_conected as fc
 
 import utils
 import argparse
 import wandb
 
 import yaml
+
 
 with open('/home/robotics20/Documents/rotem/new_code/config.yaml', 'r') as f:
     args = yaml.safe_load(f)
@@ -99,70 +103,111 @@ if __name__ == '__main__':
     
     # find zero axis 
     label_df = data_proses.get_label_axis(label_df,config=config)
+    # add velocity 
+    label_df = data_proses.calc_velocity(config,label_df)
 
     # subtract bias 
     fmg_df = data_proses.subtract_bias(fmg_df)
 
 
+
+    # fig, (ax1, ax2) = plt.subplots(1, 2,figsize=(40,5))
+
+    # ax1.plot(fmg_df[5000:8000])
+
+    # ax2.plot(label_df[5000:8000])
+    # ax1.legend()
+
+    # plt.show() 
+
+
+    ## normalization 
+
+    # if config.norm == 'std':
+    #     # Standardize the data using StandardScaler
+    #     scaler_fmg = StandardScaler()
+    #     scaler_label = StandardScaler()
+    # elif config.norm == 'minmax':
+    #      scaler_fmg = MinMaxScaler()
+    #      scaler_label = MinMaxScaler()
+
+
+    # fmg_df = scaler_fmg.fit_transform(fmg_df.drop('sesion_time_stamp', axis=1))
+    # label_df = scaler_label.fit_transform(label_df)
+
+
     # std norm
-    fmg_df = data_proses.std_division(fmg_df)
+    # fmg_df = data_proses.std_division(fmg_df)
 
     # TODO: add here agmuntations 
 
+
+
+    fmg_df.loc[:,fmg_df.var(axis=0)>400] = 0
+
+    
+
+
+    #normalize 
+    label_df,label_max_val,label_min_val = utils.min_max_normalize(label_df)
+    fmg_df,fmg_max_val,fmg_min_val = utils.min_max_normalize(fmg_df)
+
+    
+    fmg_df = fmg_df.fillna(0)
     #avereg rolling window
     fmg_df = utils.rollig_window(config=config, data=fmg_df)
+    label_df = label_df.rolling(window=config.window_size, axis=0).mean()
 
-    # add velocity 
-    label_df = data_proses.calc_velocity(config,label_df)
+    
 
+    data = pd.concat([fmg_df,label_df],axis=1).drop_duplicates().dropna().reset_index(drop=True)
+    fmg_df = data[config.fmg_index]
+    label_df = data[config.positoin_label_inedx+config.velocity_label_inedx]
 
-    #normalize labels 
-    label_df = utils.normalize(label_df)
+    fig, (ax1, ax2) = plt.subplots(1, 2,figsize=(40,5))
 
-    data = pd.concat([fmg_df,label_df],axis=1).drop_duplicates().reset_index(drop=True).dropna()
-    fmg_df,_,label_df = data_proses.sepatare_data(data,config=config,first=False)
+    ax1.plot(fmg_df[800:2200])
 
-    #drop time stamp 
-    fmg_df = fmg_df.drop('sesion_time_stamp', axis=1)
-    label_df = label_df.drop('sesion_time_stamp', axis=1)
+    ax2.plot(label_df[800:2200])
+    ax1.legend()
 
+    plt.show() 
 
 
 
     # Split the data into training and test sets
     train_fmg, test_fmg, train_label, test_label = train_test_split(
-        fmg_df, label_df, test_size=config.test_size, random_state=config.random_state)
+        fmg_df, label_df, test_size=config.test_size, random_state=None)
 
     # Split the training data into training and validation sets
     train_fmg, val_fmg, train_label, val_label = train_test_split(
-        train_fmg, train_label, test_size=config.val_size / (1 - config.test_size), random_state=config.random_state)
+        train_fmg, train_label, test_size=config.val_size / (1 - config.test_size), random_state=None)
 
 
      #make sequenced data
-     #tensors
+    #seq maker 
+    seq_size = config.seq_length*config.input_size
+    label_seq_size = config.seq_length*config.num_labels
 
-    
 
-
+    train_fmg = torch.tensor(train_fmg.to_numpy())[:(train_fmg.shape[0]//seq_size)*seq_size].reshape(-1,seq_size)
+    train_label = torch.tensor(train_label.to_numpy())[:(train_label.shape[0]//label_seq_size)*label_seq_size].reshape(-1,label_seq_size)
+    val_fmg = torch.tensor(val_fmg.to_numpy())[:(val_fmg.shape[0]//seq_size)*seq_size].reshape(-1,seq_size)
+    val_label = torch.tensor(val_label.to_numpy())[:(val_label.shape[0]//label_seq_size)*label_seq_size].reshape(-1,label_seq_size)
+    test_fmg = torch.tensor(test_fmg.to_numpy())[:(test_fmg.shape[0]//seq_size)*seq_size].reshape(-1,seq_size)
+    test_label = torch.tensor(test_label.to_numpy())[:(test_label.shape[0]//label_seq_size)*label_seq_size].reshape(-1,label_seq_size)
 
     # Create TensorDatasets for the training, validation, and test sets
-    train_dataset = TensorDataset(torch.tensor(train_fmg.to_numpy())[:train_fmg.shape[0]//config.seq_length*config.seq_length].reshape(-1,config.input_size*config.seq_length), torch.tensor(train_label.to_numpy())[:train_fmg.shape[0]//config.seq_length*config.seq_length].reshape(-1,config.input_size*config.seq_length))
-    val_dataset = TensorDataset(torch.tensor(val_fmg.to_numpy())[:val_fmg.shape[0]//config.seq_length*config.seq_length].reshape(-1,config.input_size*config.seq_length), torch.tensor(val_label.to_numpy())[:val_fmg.shape[0]//config.seq_length*config.seq_length].reshape(-1,config.input_size*config.seq_length))
-    test_dataset = TensorDataset(torch.tensor(test_fmg.to_numpy())[:test_fmg.shape[0]//config.seq_length*config.seq_length].reshape(-1,config.input_size*config.seq_length), torch.tensor(test_label.to_numpy())[:test_fmg.shape[0]//config.seq_length*config.seq_length].reshape(-1,config.input_size*config.seq_length))
 
-
-
-    
-
-
-
-
+    train_dataset = TensorDataset(train_fmg[:train_label.shape[0],:], train_label)
+    val_dataset = TensorDataset(val_fmg[:val_label.shape[0],:], val_label)
+    test_dataset = TensorDataset(test_fmg[:test_label.shape[0],:], test_label)
 
     # Create DataLoaders for the training, validation, and test sets
   
-    train_loader = DataLoader(train_dataset, batch_size=config.batch_size, shuffle=True,drop_last=True)
-    val_loader = DataLoader(val_dataset, batch_size=config.batch_size,drop_last=True)
-    test_loader = DataLoader(test_dataset, batch_size=config.batch_size,drop_last=True)
+    train_loader = DataLoader(train_dataset, batch_size=config.batch_size, shuffle=False,drop_last=True)
+    val_loader = DataLoader(val_dataset, batch_size=config.batch_size, shuffle=False,drop_last=True)
+    test_loader = DataLoader(test_dataset, batch_size=config.batch_size, shuffle=False,drop_last=True)
 
     # train 
     train_losses, val_losses = utils.train(config=config,train_loader=train_loader
@@ -171,7 +216,8 @@ if __name__ == '__main__':
 
 
     #test
-    eval = utils.model_eval_metric(config,net,test_loader,device=device)
+    eval = utils.model_eval_metric(config,net,test_loader,label_max_val,label_min_val ,device=device)
+
     test_loss = utils.test(net=net,config=config,test_loader=test_loader,device=device)
     print(f'eval_metric {eval}')
 

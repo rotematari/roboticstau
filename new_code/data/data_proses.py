@@ -35,13 +35,12 @@ def sepatare_data(full_df,config,first=True):
     if first:
         # sesion_time_stamp_df = full_df[config.sesion_time_stamp]
         fmg_df = pd.concat([full_df[config.fmg_index],full_df[config.sesion_time_stamp]],axis=1,ignore_index=False)
-        # imu_df = pd.concat([full_df[imu_index],full_df['sesion_time_stamp']],axis=1,ignore_index=True)
         label_df = pd.concat([full_df[label_inedx],full_df[config.sesion_time_stamp]],axis=1,ignore_index=False)
     else:
 
 
         fmg_df = pd.concat([full_df[config.fmg_index],full_df[config.sesion_time_stamp]],axis=1,ignore_index=False)
-        # imu_df = pd.concat([full_df[imu_index],full_df['sesion_time_stamp']],axis=1,ignore_index=True)
+
         label_df = pd.concat([full_df[config.positoin_label_inedx+config.velocity_label_inedx],full_df[config.sesion_time_stamp]],axis=1,ignore_index=False)
 
     assert isinstance(fmg_df, pd.DataFrame),f"{fmg_df} is not a DataFrame"
@@ -103,8 +102,8 @@ def subtract_bias(df):
         temp_df = df_rows-bias_rows.to_numpy() 
         
 
-        # Add back the sesion_time_stamp column
-        temp_df['sesion_time_stamp'] = time_stamp
+        # # Add back the sesion_time_stamp column
+        # temp_df['sesion_time_stamp'] = time_stamp
         
         # Append the result to new_df
         new_df = pd.concat([new_df, temp_df], axis=0, ignore_index=False)

@@ -13,7 +13,7 @@
 int i, j, count ;
 float a_read;
 int S[4] = {14,15,16,17};
-int A[3] = {A4,A6,A7};
+int A[3] = {A4,A5,A6};
 int MUXtable[16][4] =
 {
   {0, 0, 0, 0}, {1, 0, 0, 0}, {0, 1, 0, 0}, {1, 1, 0, 0},
@@ -47,12 +47,16 @@ void loop()
     for(i=0; i<16; i++){
        selection(i);
        delay(0.4);
-       for(j=0; j<2; j++)
+       for(j=1; j<3; j++)
     {
 
 
           a_read =  analogRead(A[j]) ;
-          Serial.print(a_read);Serial.print(",");
+          count = (j-1)*16 +i ;
+            if(a_read>=100){
+            Serial.print(count);Serial.print(":");Serial.print(a_read);Serial.print(",");
+            }
+          
           
           
        

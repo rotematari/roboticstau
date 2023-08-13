@@ -27,9 +27,14 @@ with open('/home/robotics20/Documents/rotem/new_code/config.yaml', 'r') as f:
 config = argparse.Namespace(**args)
 
 
-def hidden_size_maker(config):
+def hidden_size_maker(config,seq=True):
     hidden_size = []
-    last_in = config.input_size
+    if seq:
+        last_in = config.seq_size
+    else :
+        last_in = config.input_size
+
+    
     up = int(config.n_layer/2)
     down = config.n_layer -up 
     multiplier = config.multiplier
@@ -38,13 +43,12 @@ def hidden_size_maker(config):
 
         size = last_in*multiplier
 
-        if size >= 1024 :
-            size = 1024
+        if size >= 2560 :
+            size = 2560
         hidden_size.append(int(size))
         last_in = int(last_in*multiplier)
 
     for layer in range(down):
-
         hidden_size.append(int(last_in/multiplier))
         last_in = int(last_in/multiplier)
 
@@ -211,7 +215,7 @@ def threePointDist(outputs,targets):
         dist = dist.reshape(-1,3)
     return dist.mean(axis=0)
 
-def model_eval_metric(config,net,test_loader,device='cpu'):
+def model_eval_metric(config,net,test_loader,label_max_val,label_min_val ,device='cpu'):
     # show distance between ground truth and prediction by 3d points [0,M2,M3,M4] 
 
     net = net.to(device=device)
@@ -221,19 +225,42 @@ def model_eval_metric(config,net,test_loader,device='cpu'):
 
         inputs = test_loader.dataset.tensors[0]
         targets = test_loader.dataset.tensors[1]
+        
+        # inputs = min_max_normalize(inputs.detach().numpy())
+        # input = 
+        # fmg_df = min_max_normalize(fmg_df)
 
         inputs = inputs.to(device=device)
         targets = targets.to(device=device)
 
         outputs = net(inputs)
 
+                # Create 10 series of shape (18,)
+        label_min_val = [label_min_val for _ in range(10)]
+        label_max_val = [label_max_val for _ in range(10)]
 
-        dist = threePointDist(outputs, targets)
+        # Concatenate the series to create a new series of shape (180,)
+        new_label_min_val = np.concatenate(label_min_val)
+        new_label_max_val = np.concatenate(label_max_val)
+
+
+
+        outputs = min_max_unnormalize(outputs.detach().cpu().numpy(),new_label_min_val,new_label_max_val)
+        outputs = torch.tensor(outputs)
+        dist = threePointDist(outputs.reshape(-1,18), targets.reshape(-1,18))
 
 
 
     return dist
 
+def min_max_unnormalize(data, min_val, max_val):
+    return data * (max_val - min_val) + min_val
+
+def min_max_normalize(data):
+    min_val = np.min(data, axis=0)
+    max_val = np.max(data, axis=0)
+    norm = (data - min_val) / (max_val - min_val)
+    return norm,max_val,min_val
 
 
 # normalization

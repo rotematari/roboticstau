@@ -14,15 +14,20 @@ velocity_label_inedx: ['V2x','V2y','V2z','V3x','V3y','V3z','V4x','V4y','V4z']
 sesion_time_stamp: ['sesion_time_stamp']
 input_size: 32
 num_labels : 18
+#config.seq_length*config.input_size
+seq_size : 320
+#config.seq_length*config.num_labels
+label_seq_size : 180
+norm : 'std'
 n_layer : 7
 hidden_size : [64, 64, 64] 
-dropout : 0.2
+dropout : 0.1
 multiplier : 2
-learning_rate : 0.0001
-weight_decay : 0.00001 
-num_epochs : 30 
+learning_rate : 0.001
+weight_decay : 0.0001 
+num_epochs : 20 
 batch_size : 10
-window_size : 20
+window_size : 50
 seq_length: 10
 data_path : '/home/robotics20/Documents/rotem/new_code/data/data'
 model_path: '/home/robotics20/Documents/rotem/new_code/models/saved_models'
