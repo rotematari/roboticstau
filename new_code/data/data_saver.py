@@ -29,7 +29,7 @@ ser = serial.Serial('COM3', 115200)
 # make new file names and locate them in the correct directory
 def write_first_line(f):
  
-    f.write("S1,S2,S3,S4,S5,S6,S7,S8,S9,S10,S11,S12,S13,S14,S15,S16,S17,S18,S19,S20,S21,S22,S23,S24,S25,S26,S27,S28,S29,S30,S31,S32")
+    f.write("S1,S2,S3,S4,S5,S6,S7,S8,S9,S10,S11,S12,S13,S14,S15,S16,S17,S18,S19,S20,S21,S22,S23,S24,S25,S26,S27,S28,S29,S30,S31,S32,")
     # f.write("S21,S22,S23,S24,S25,S26,S27,S28,S29,S30,S31,S32")
     f.write("M1x,M1y,M1z,M2x,M2y,M2z,M3x,M3y,M3z,M4x,M4y,M4z,")
     f.write("sesion_time_stamp,\n")
