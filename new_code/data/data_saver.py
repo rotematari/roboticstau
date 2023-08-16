@@ -119,6 +119,12 @@ def plot_data(config,data):
 
 
 if __name__ == '__main__':
+
+
+    for i in range(10):
+        ser.readline()
+
+
     
     t_start = t.time()
     sesion_time_stamp = t.strftime("%d_%b_%Y_%H_%M", t.gmtime())
@@ -132,7 +138,7 @@ if __name__ == '__main__':
     t.sleep(5)
     marker_data = NatNet.rigidBodyList
 
-    for i in range(10000):
+    for i in range(5000):
       
       marker_data = NatNet.rigidBodyList
 
