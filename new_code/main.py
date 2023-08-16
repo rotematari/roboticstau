@@ -72,7 +72,7 @@ if __name__ == '__main__':
     # wandb 
     # start a new wandb run to track this script
     wandb.init(project="armModeling",entity='fmgrobotics',config=config)
-    config = wandb.config
+    # config = wandb.config
     print(config)
 
 
@@ -80,34 +80,31 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     #update wandb 
-    wandb.config.update(args)
+    wandb.config.update(args,allow_val_change=True)
 
-    # Create an instance of the FullyConnected class using the configuration object
-    net = fc(config)
-    net= net.to(device=device)
-    print(net)
+
 
     
     # load data 
     data = data_proses.data_loder(config=config)
-    data = data[config.fmg_index+config.first_positoin_label_inedx+config.sesion_time_stamp].dropna()
+    data = data[config.fmg_index+config.first_positoin_label_inedx+config.sesion_time_stamp].dropna().reset_index(drop=True)
 
 
     # drop bad data 
     data = data_proses.mask(data,config)
 
     # separate
-    fmg_df, _, label_df = data_proses.sepatare_data(data,config=config,first=True)
+    # fmg_df, _, label_df = data_proses.sepatare_data(data,config=config,first=True)
 
     
     
     # find zero axis 
-    label_df = data_proses.get_label_axis(label_df,config=config)
+    data[config.positoin_label_inedx] = data_proses.get_label_axis(data[config.first_positoin_label_inedx],config=config)
     # add velocity 
-    label_df = data_proses.calc_velocity(config,label_df)
+    data[config.velocity_label_inedx] = data_proses.calc_velocity(config,data[config.first_positoin_label_inedx])
 
     # subtract bias 
-    fmg_df = data_proses.subtract_bias(fmg_df)
+    data[config.fmg_index] = data_proses.subtract_bias(data[config.fmg_index+config.sesion_time_stamp])
 
 
 
@@ -136,42 +133,43 @@ if __name__ == '__main__':
     # label_df = scaler_label.fit_transform(label_df)
 
 
-    # std norm
-    # fmg_df = data_proses.std_division(fmg_df)
+ 
 
     # TODO: add here agmuntations 
 
 
 
-    fmg_df.loc[:,fmg_df.var(axis=0)>400] = 0
+    config.fmg_index =data[config.fmg_index].loc[:,data[config.fmg_index].var(axis=0)>400].columns
 
+    config.input_size = len(config.fmg_index)
     
 
 
     #normalize 
-    label_df,label_max_val,label_min_val = utils.min_max_normalize(label_df)
-    fmg_df,fmg_max_val,fmg_min_val = utils.min_max_normalize(fmg_df)
+    data[config.positoin_label_inedx+config.velocity_label_inedx],label_max_val,label_min_val = utils.min_max_normalize(data[config.positoin_label_inedx+config.velocity_label_inedx])
+    data[config.fmg_index],fmg_max_val,fmg_min_val = utils.min_max_normalize(data[config.fmg_index])
 
     
-    fmg_df = fmg_df.fillna(0)
+    # fmg_df = fmg_df.fillna(0)
     #avereg rolling window
-    fmg_df = utils.rollig_window(config=config, data=fmg_df)
-    label_df = label_df.rolling(window=config.window_size, axis=0).mean()
+    data[config.fmg_index] = utils.rollig_window(config=config, data=data[config.fmg_index])
+    data[config.positoin_label_inedx+config.velocity_label_inedx] = data[config.positoin_label_inedx+config.velocity_label_inedx].rolling(window=config.window_size, axis=0).mean()
 
     
 
-    data = pd.concat([fmg_df,label_df],axis=1).drop_duplicates().dropna().reset_index(drop=True)
+    data = data.drop_duplicates().dropna().reset_index(drop=True)
     fmg_df = data[config.fmg_index]
     label_df = data[config.positoin_label_inedx+config.velocity_label_inedx]
 
     fig, (ax1, ax2) = plt.subplots(1, 2,figsize=(40,5))
 
-    ax1.plot(fmg_df[800:2200])
+    ax1.plot(fmg_df)
 
-    ax2.plot(label_df[800:2200])
+    ax2.plot(label_df)
     ax1.legend()
 
-    plt.show() 
+    plt.pause(0.001) 
+
 
 
 
@@ -186,16 +184,17 @@ if __name__ == '__main__':
 
      #make sequenced data
     #seq maker 
-    seq_size = config.seq_length*config.input_size
-    label_seq_size = config.seq_length*config.num_labels
+    config.seq_size = config.seq_length*config.input_size
+    config.label_seq_size = config.seq_length*config.num_labels
 
 
-    train_fmg = torch.tensor(train_fmg.to_numpy())[:(train_fmg.shape[0]//seq_size)*seq_size].reshape(-1,seq_size)
-    train_label = torch.tensor(train_label.to_numpy())[:(train_label.shape[0]//label_seq_size)*label_seq_size].reshape(-1,label_seq_size)
-    val_fmg = torch.tensor(val_fmg.to_numpy())[:(val_fmg.shape[0]//seq_size)*seq_size].reshape(-1,seq_size)
-    val_label = torch.tensor(val_label.to_numpy())[:(val_label.shape[0]//label_seq_size)*label_seq_size].reshape(-1,label_seq_size)
-    test_fmg = torch.tensor(test_fmg.to_numpy())[:(test_fmg.shape[0]//seq_size)*seq_size].reshape(-1,seq_size)
-    test_label = torch.tensor(test_label.to_numpy())[:(test_label.shape[0]//label_seq_size)*label_seq_size].reshape(-1,label_seq_size)
+
+    train_fmg = torch.tensor(train_fmg.to_numpy())[:(train_fmg.shape[0]//config.seq_size)*config.seq_size].reshape(-1,config.seq_size)
+    train_label = torch.tensor(train_label.to_numpy())[:(train_label.shape[0]//config.label_seq_size)*config.label_seq_size].reshape(-1,config.label_seq_size)
+    val_fmg = torch.tensor(val_fmg.to_numpy())[:(val_fmg.shape[0]//config.seq_size)*config.seq_size].reshape(-1,config.seq_size)
+    val_label = torch.tensor(val_label.to_numpy())[:(val_label.shape[0]//config.label_seq_size)*config.label_seq_size].reshape(-1,config.label_seq_size)
+    test_fmg = torch.tensor(test_fmg.to_numpy())[:(test_fmg.shape[0]//config.seq_size)*config.seq_size].reshape(-1,config.seq_size)
+    test_label = torch.tensor(test_label.to_numpy())[:(test_label.shape[0]//config.label_seq_size)*config.label_seq_size].reshape(-1,config.label_seq_size)
 
     # Create TensorDatasets for the training, validation, and test sets
 
@@ -208,6 +207,13 @@ if __name__ == '__main__':
     train_loader = DataLoader(train_dataset, batch_size=config.batch_size, shuffle=False,drop_last=True)
     val_loader = DataLoader(val_dataset, batch_size=config.batch_size, shuffle=False,drop_last=True)
     test_loader = DataLoader(test_dataset, batch_size=config.batch_size, shuffle=False,drop_last=True)
+
+
+    # Create an instance of the FullyConnected class using the configuration object
+    net = fc(config)
+    net= net.to(device=device)
+    print(net)
+
 
     # train 
     train_losses, val_losses = utils.train(config=config,train_loader=train_loader
