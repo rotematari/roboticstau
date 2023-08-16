@@ -53,7 +53,7 @@ def sepatare_data(full_df,config,first=True):
 ## will find bias for each time stamped sesion 
 def find_bias(df):
     """
-    Given a pandas dataframe containing FMG or IMU data, finds the bias for each time stamped session and returns a pandas dataframe.
+    Given a pandas dataframe containing FMG data, finds the bias for each time stamped session and returns a pandas dataframe.
     """
     bias_df = pd.DataFrame()
 
@@ -145,15 +145,11 @@ def std_division(df):
 def get_label_axis(labels,config):
     #label_inedx = ['M1x','M1y','M1z','M2x','M2y','M2z','M3x','M3y','M3z','M4x','M4y','M4z']
     
-    x  = labels[['M1x','M2x','M3x','M4x']].sub(labels['M1x'], axis=0)
-    y = labels[['M1y','M2y','M3y','M4y']].sub(labels['M1y'], axis=0)
-    z = labels[['M1z','M2z','M3z','M4z']].sub(labels['M1z'], axis=0)
-                    
-
-
-    new_labels = pd.concat((x,y,z),axis=1)
-    new_labels['sesion_time_stamp'] = labels['sesion_time_stamp']
-    return new_labels[config.positoin_label_inedx]
+   labels[['M1x','M2x','M3x','M4x']]  = labels[['M1x','M2x','M3x','M4x']].sub(labels['M1x'], axis=0)
+   labels[['M1y','M2y','M3y','M4y']] = labels[['M1y','M2y','M3y','M4y']].sub(labels['M1y'], axis=0)
+   labels[['M1z','M2z','M3z','M4z']] = labels[['M1z','M2z','M3z','M4z']].sub(labels['M1z'], axis=0)
+   
+   return labels[config.positoin_label_inedx]
 
 
 def calc_velocity(config,label_df):
@@ -162,10 +158,10 @@ def calc_velocity(config,label_df):
     label_df[config.velocity_label_inedx]= [0,0,0,0,0,0,0,0,0]
     temp = label_df.loc[1:,config.positoin_label_inedx].reset_index(drop=True).copy()
 
-    label_df = label_df.loc[:temp.shape[0]] 
-    
+    label_df = label_df.loc[:temp.shape[0]-10] 
+    temp = temp.loc[:temp.shape[0]-10]
     label_df.loc[:temp.shape[0],config.velocity_label_inedx] = temp.values - label_df.loc[:temp.shape[0],config.positoin_label_inedx].values
-    return label_df
+    return label_df[config.velocity_label_inedx]
 
 def mask(data,config):
 

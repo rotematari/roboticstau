@@ -14,6 +14,7 @@ import os
 
 import torch
 from torch.optim import Adam
+from torch.nn import L1Loss
 
 import wandb
 import argparse
@@ -45,12 +46,20 @@ def hidden_size_maker(config,seq=True):
 
         if size >= 2560 :
             size = 2560
+
+
+
         hidden_size.append(int(size))
         last_in = int(last_in*multiplier)
 
     for layer in range(down):
-        hidden_size.append(int(last_in/multiplier))
-        last_in = int(last_in/multiplier)
+        size = last_in/multiplier
+        
+        if size<=config.label_seq_size*2:
+            size = config.label_seq_size*2
+
+        hidden_size.append(int(size))
+        last_in = int(size)
 
     return hidden_size
 
@@ -60,7 +69,8 @@ def train(config, train_loader, val_loader,net,device='cpu',wandb_on=0):
     # net = net(config)
 
     # Define the loss function
-    criterion = net.mseloss
+    criterion = L1Loss() 
+
 
     # Define the optimizer with weight decay
     optimizer = Adam(net.parameters(), lr=config.learning_rate, weight_decay=config.weight_decay)
@@ -199,8 +209,9 @@ def threePointDist(outputs,targets):
         dist = []
         outputs = outputs.cpu()
         targets = targets.cpu()
-        M_predicted =np.array(outputs[:,0:0+3])
-        M = np.array(targets[:,0:0+3])
+
+        M_predicted =np.array(outputs[:,:3])
+        M = np.array(targets[:,:3])
 
         for i in range(2):
 
@@ -226,18 +237,15 @@ def model_eval_metric(config,net,test_loader,label_max_val,label_min_val ,device
         inputs = test_loader.dataset.tensors[0]
         targets = test_loader.dataset.tensors[1]
         
-        # inputs = min_max_normalize(inputs.detach().numpy())
-        # input = 
-        # fmg_df = min_max_normalize(fmg_df)
 
         inputs = inputs.to(device=device)
         targets = targets.to(device=device)
 
         outputs = net(inputs)
 
-                # Create 10 series of shape (18,)
-        label_min_val = [label_min_val for _ in range(10)]
-        label_max_val = [label_max_val for _ in range(10)]
+        # Create seq_length series of shape (seq_length*num_labels,)
+        label_min_val = [label_min_val for _ in range(config.seq_length)]
+        label_max_val = [label_max_val for _ in range(config.seq_length)]
 
         # Concatenate the series to create a new series of shape (180,)
         new_label_min_val = np.concatenate(label_min_val)

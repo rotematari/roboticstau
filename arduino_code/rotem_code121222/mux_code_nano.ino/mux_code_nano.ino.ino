@@ -53,9 +53,10 @@ void loop()
 
           a_read =  analogRead(A[j]) ;
           count = (j-1)*16 +i ;
-            if(a_read>=100){
-            Serial.print(count);Serial.print(":");Serial.print(a_read);Serial.print(",");
-            }
+//            if(a_read>=100){
+//            Serial.print(count);Serial.print(":");
+            Serial.print(a_read);Serial.print(",");
+//            }
           
           
           
