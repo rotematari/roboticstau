@@ -19,24 +19,29 @@ def data_loder(config):
         full_df = pd.concat([full_df,df],axis=0,ignore_index=True)
         full_df = full_df.replace(-np.inf, np.nan)
         full_df = full_df.replace(np.inf, np.nan)
-        full_df = full_df.iloc[1:,:-1].dropna(axis=0)
+        # full_df = full_df.iloc[1:,:-1].dropna(axis=0)
 
     return full_df
 
-def sepatare_data(full_df):
+def sepatare_data(full_df,config,first=True):
     """
     Given a pandas dataframe containing FMG, IMU and label data, separates the data into three pandas dataframes: 
     one for FMG data, one for IMU data and one for label data.
     """
-    # imu_index = ['Gx', 'Gy', 'Gz', 'Ax', 'Ay', 'Az', 'Mx', 'My', 'Mz']
-    fmg_index = ['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'S11', 'S12', 'S13', 'S14', 'S15', 'S16', 'S17', 'S18', 'S19', 'S20','S21', 'S22', 'S23', 'S24', 'S25', 'S26', 'S27', 'S28', 'S29']
-    label_inedx = ['M1x','M1y','M1z','M2x','M2y','M2z','M3x','M3y','M3z','M4x','M4y','M4z']
-    sesion_time_stamp = ['sesion_time_stamp']
+    # # imu_index = ['Gx', 'Gy', 'Gz', 'Ax', 'Ay', 'Az', 'Mx', 'My', 'Mz']
+    # fmg_index = ['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'S11', 'S12', 'S13', 'S14', 'S15', 'S16']
+    label_inedx = config.first_positoin_label_inedx
+    # sesion_time_stamp = ['sesion_time_stamp']
+    if first:
+        # sesion_time_stamp_df = full_df[config.sesion_time_stamp]
+        fmg_df = pd.concat([full_df[config.fmg_index],full_df[config.sesion_time_stamp]],axis=1,ignore_index=False)
+        label_df = pd.concat([full_df[label_inedx],full_df[config.sesion_time_stamp]],axis=1,ignore_index=False)
+    else:
 
-    sesion_time_stamp_df = full_df['sesion_time_stamp']
-    fmg_df = pd.concat([full_df[fmg_index],full_df['sesion_time_stamp']],axis=1,ignore_index=False)
-    # imu_df = pd.concat([full_df[imu_index],full_df['sesion_time_stamp']],axis=1,ignore_index=True)
-    label_df = pd.concat([full_df[label_inedx],full_df['sesion_time_stamp']],axis=1,ignore_index=False)
+
+        fmg_df = pd.concat([full_df[config.fmg_index],full_df[config.sesion_time_stamp]],axis=1,ignore_index=False)
+
+        label_df = pd.concat([full_df[config.positoin_label_inedx+config.velocity_label_inedx],full_df[config.sesion_time_stamp]],axis=1,ignore_index=False)
 
     assert isinstance(fmg_df, pd.DataFrame),f"{fmg_df} is not a DataFrame"
     assert isinstance(label_df, pd.DataFrame),f"{label_df} is not a DataFrame"
@@ -48,7 +53,7 @@ def sepatare_data(full_df):
 ## will find bias for each time stamped sesion 
 def find_bias(df):
     """
-    Given a pandas dataframe containing FMG or IMU data, finds the bias for each time stamped session and returns a pandas dataframe.
+    Given a pandas dataframe containing FMG data, finds the bias for each time stamped session and returns a pandas dataframe.
     """
     bias_df = pd.DataFrame()
 
@@ -70,11 +75,11 @@ def find_std(df):
 
     for time_stamp in df['sesion_time_stamp'].unique():
 
-        temp_df = pd.DataFrame(df[df['sesion_time_stamp'] == time_stamp].drop('sesion_time_stamp',axis=1),dtype=float).std().to_frame().T
+        temp_df = df[df['sesion_time_stamp'] == time_stamp].drop('sesion_time_stamp',axis=1).std().T.copy()
         temp_df['sesion_time_stamp'] = time_stamp
-        std_df = pd.concat([std_df,temp_df],axis=0,ignore_index=False)
+        std_df = pd.concat([std_df,temp_df],axis=1,ignore_index=False)
 
-    return std_df
+    return std_df.T
 
 
 def subtract_bias(df):
@@ -87,14 +92,18 @@ def subtract_bias(df):
     # Iterate over each unique value of the sesion_time_stamp column
     for time_stamp in df['sesion_time_stamp'].unique():
         # Select the rows of df and bias_df corresponding to the current time stamp
-        df_rows = df[df['sesion_time_stamp'] == time_stamp]
-        bias_rows = bias_df[bias_df['sesion_time_stamp'] == time_stamp]
+        df_rows = df[df['sesion_time_stamp'] == time_stamp].copy()
+        bias_rows = bias_df[bias_df['sesion_time_stamp'] == time_stamp].copy()
+        
+        df_rows= df_rows.drop('sesion_time_stamp', axis=1).astype(float).copy()
+        bias_rows = bias_rows.drop('sesion_time_stamp', axis=1).astype(float).copy()
         
         # Subtract the bias from the data in df
-        temp_df = df_rows.drop('sesion_time_stamp', axis=1).astype(float) - bias_rows.drop('sesion_time_stamp', axis=1).astype(float)
+        temp_df = df_rows-bias_rows.to_numpy() 
         
-        # Add back the sesion_time_stamp column
-        temp_df['sesion_time_stamp'] = time_stamp
+
+        # # Add back the sesion_time_stamp column
+        # temp_df['sesion_time_stamp'] = time_stamp
         
         # Append the result to new_df
         new_df = pd.concat([new_df, temp_df], axis=0, ignore_index=False)
@@ -113,11 +122,16 @@ def std_division(df):
     # Iterate over each unique value of the sesion_time_stamp column
     for time_stamp in df['sesion_time_stamp'].unique():
         # Select the rows of df and std_df corresponding to the current time stamp
-        df_rows = df[df['sesion_time_stamp'] == time_stamp]
-        std_rows = std_df[std_df['sesion_time_stamp'] == time_stamp]
+        df_rows = df[df['sesion_time_stamp'] == time_stamp].copy()
+        std_rows = std_df[std_df['sesion_time_stamp'] == time_stamp].copy()
+        
+        df_rows= df_rows.drop('sesion_time_stamp', axis=1).astype(float).copy()
+        std_rows = std_rows.drop('sesion_time_stamp', axis=1).astype(float).copy()
+
+
         
         # Divide the data in df by the standard deviation
-        temp_df = df_rows.drop('sesion_time_stamp', axis=1).astype(float) / std_rows.drop('sesion_time_stamp', axis=1).astype(float)
+        temp_df = df_rows/ (std_rows.to_numpy()+1e-4)
         
         # Add back the sesion_time_stamp column
         temp_df['sesion_time_stamp'] = time_stamp
@@ -128,9 +142,10 @@ def std_division(df):
     return new_fmg_df
 
 
-def get_label_axis(labels):
+def get_label_axis(labels,config):
     #label_inedx = ['M1x','M1y','M1z','M2x','M2y','M2z','M3x','M3y','M3z','M4x','M4y','M4z']
     
+<<<<<<< HEAD
    labels.loc[['M1x','M2x','M3x','M4x']]  = labels.loc[['M1x','M2x','M3x','M4x']].sub(labels.loc['M1x'], axis=0)
    labels.loc[['M1y','M2y','M3y','M4y']] = labels.loc[['M1y','M2y','M3y','M4y']].sub(labels.loc['M1y'], axis=0)
    labels.loc[['M1z','M2z','M3z','M4z']] = labels.loc[['M1z','M2z','M3z','M4z']].sub(labels.loc['M1z'], axis=0)
@@ -142,10 +157,57 @@ def get_label_axis(labels):
     new_labels = pd.concat((x,y,z),axis=1)
 
     return new_labels
+=======
+   labels[['M1x','M2x','M3x','M4x']]  = labels[['M1x','M2x','M3x','M4x']].sub(labels['M1x'], axis=0)
+   labels[['M1y','M2y','M3y','M4y']] = labels[['M1y','M2y','M3y','M4y']].sub(labels['M1y'], axis=0)
+   labels[['M1z','M2z','M3z','M4z']] = labels[['M1z','M2z','M3z','M4z']].sub(labels['M1z'], axis=0)
+   
+   return labels[config.positoin_label_inedx]
+>>>>>>> main
 
 
+def calc_velocity(config,label_df):
+#['V2x','V2y','V2z','V3x','V3y','V3z','V4x','V4y','V4z']
+
+    label_df[config.velocity_label_inedx]= [0,0,0,0,0,0,0,0,0]
+    temp = label_df.loc[1:,config.positoin_label_inedx].reset_index(drop=True).copy()
+
+    label_df = label_df.loc[:temp.shape[0]-10] 
+    temp = temp.loc[:temp.shape[0]-10]
+    label_df.loc[:temp.shape[0],config.velocity_label_inedx] = temp.values - label_df.loc[:temp.shape[0],config.positoin_label_inedx].values
+    return label_df[config.velocity_label_inedx]
+
+def mask(data,config):
+
+    # create a mask that selects rows where the values in fmg_index columns are greater than 1024
+    mask1 = (data[config.fmg_index] > 1024).any(axis=1)
+
+    # create a mask that selects rows where the values in first_position_label_index columns are greater than 2
+    mask2 = (data[config.first_positoin_label_inedx] > 3).any(axis=1)
+
+    # combine the masks using the | (or) operator
+    mask = mask1 | mask2
+
+    # drop the rows from the DataFrame
+    data = data.drop(data[mask].index)
 
 
+    return data
 
+def is_not_numeric(x):
+    try:
+        float(x)
+        return False
+    except ValueError:
+        return True
+    
+
+def print_not_numeric_vals(df):
+
+    mask = df.drop(['sesion_time_stamp'],axis=1).applymap(is_not_numeric)
+    non_numeric_values = df[mask].stack().dropna()
+    print(non_numeric_values)
+
+    return non_numeric_values
 
 

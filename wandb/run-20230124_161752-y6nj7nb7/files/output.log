@@ -1,8 +1,0 @@
-Traceback (most recent call last):
-  File "/home/robotics20/Documents/rotem/main.py", line 150, in <module>
-    main(args_config, device)
-  File "/home/robotics20/Documents/rotem/main.py", line 71, in main
-    train_data = data_loader.Data(args_config, train=True, dirpath=paramaters.parameters.dirpath,
-  File "/home/robotics20/Documents/rotem/data_loader.py", line 34, in __init__
-    filesanddir = [f for f in listdir(dirpath)]
-FileNotFoundError: [Errno 2] No such file or directory: '/home/roblab20/Documents/rotem/data'

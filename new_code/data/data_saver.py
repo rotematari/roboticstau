@@ -8,20 +8,29 @@ from NatNetClient import NatNetClient
 #import natnetclient as natnet
 
 import matplotlib.pyplot as plt 
+import yaml
+import argparse
+import pandas as pd
+from data_proses import print_not_numeric_vals 
 
-dirpath = '/home/robotics20/Documents/rotem/data'
 
+dirpath = r'/home/robotics20/Documents/rotem/data/data'
+
+with open(r'\Users\User\Desktop\Rotem\roboticstau-2\new_code\config.yaml', 'r') as f:
+    args = yaml.safe_load(f)
+
+config = argparse.Namespace(**args)
 # dirs = [f for f in listdir(dirpath)]
 # make sure the 'COM#' is set according the Windows Device Manager /dev/ttyACM0
-ser = serial.Serial('COM9', 115200)
+ser = serial.Serial('COM3', 115200)
 
 
 # print format: t,Gx,Gy,Gz,Ax,Ay,Az,Mx,My,Mz,F1,F2,F3,F4,B1,B2,S1,S2,S3,S4,class
 # make new file names and locate them in the correct directory
 def write_first_line(f):
  
-    f.write("S1,S2,S3,S4,S5,S6,S7,S8,S9,S10,S11,S12,S13,S14,S15,S16,S17,S18,S19,S20,")
-    f.write("S21,S22,S23,S24,S25,S26,S27,S28,S29,S30,S31,S32")
+    f.write("S1,S2,S3,S4,S5,S6,S7,S8,S9,S10,S11,S12,S13,S14,S15,S16,S17,S18,S19,S20,S21,S22,S23,S24,S25,S26,S27,S28,S29,S30,S31,S32")
+    # f.write("S21,S22,S23,S24,S25,S26,S27,S28,S29,S30,S31,S32")
     f.write("M1x,M1y,M1z,M2x,M2y,M2z,M3x,M3y,M3z,M4x,M4y,M4z,")
     f.write("sesion_time_stamp,\n")
 
@@ -96,9 +105,26 @@ def write_line(f,marker_data,sesion_time_stamp):
     # return sesion_time_stamp
 
 
+def plot_data(config,data):
+    fig, (ax1, ax2) = plt.subplots(1, 2,figsize=(40,5))
+
+    ax1.plot(data.drop(['sesion_time_stamp'],axis=1)[config.positoin_label_inedx])
+    ax2.plot(data.drop(['sesion_time_stamp'],axis=1)[config.fmg_index])
+    ax1.legend()
+
+    plt.show() 
+
+
+
 
 
 if __name__ == '__main__':
+
+
+    for i in range(10):
+        ser.readline()
+
+
     
     t_start = t.time()
     sesion_time_stamp = t.strftime("%d_%b_%Y_%H_%M", t.gmtime())
@@ -109,10 +135,10 @@ if __name__ == '__main__':
 
     write_first_line(f)
     NatNet.run()
-    t.sleep(0.5)
+    t.sleep(5)
     marker_data = NatNet.rigidBodyList
 
-    for i in range(200):
+    for i in range(5000):
       
       marker_data = NatNet.rigidBodyList
 
@@ -129,3 +155,17 @@ if __name__ == '__main__':
     
     ser.close()
     print("finished")
+
+    ## checks data 
+    df = pd.read_csv(join(r'C:\Users\User\Desktop\Rotem\roboticstau-2\new_code\data\data',file_name))
+    
+
+    not_numeric_vals = print_not_numeric_vals(df)
+
+    if not_numeric_vals.shape[0] == 0:
+        plot_data(config=config,data=df)
+
+    else :
+        print("clean data")
+
+
