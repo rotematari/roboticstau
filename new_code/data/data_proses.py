@@ -144,33 +144,11 @@ def std_division(df):
 
 def get_label_axis(labels,config):
     #label_inedx = ['M1x','M1y','M1z','M2x','M2y','M2z','M3x','M3y','M3z','M4x','M4y','M4z']
-    
-<<<<<<< Updated upstream
-<<<<<<< HEAD
-   labels.loc[['M1x','M2x','M3x','M4x']]  = labels.loc[['M1x','M2x','M3x','M4x']].sub(labels.loc['M1x'], axis=0)
-   labels.loc[['M1y','M2y','M3y','M4y']] = labels.loc[['M1y','M2y','M3y','M4y']].sub(labels.loc['M1y'], axis=0)
-   labels.loc[['M1z','M2z','M3z','M4z']] = labels.loc[['M1z','M2z','M3z','M4z']].sub(labels.loc['M1z'], axis=0)
-   
-   return labels[config.positoin_label_inedx]
-
-
-
-    new_labels = pd.concat((x,y,z),axis=1)
-
-    return new_labels
-=======
    labels[['M1x','M2x','M3x','M4x']]  = labels[['M1x','M2x','M3x','M4x']].sub(labels['M1x'], axis=0)
    labels[['M1y','M2y','M3y','M4y']] = labels[['M1y','M2y','M3y','M4y']].sub(labels['M1y'], axis=0)
    labels[['M1z','M2z','M3z','M4z']] = labels[['M1z','M2z','M3z','M4z']].sub(labels['M1z'], axis=0)
-=======
-   labels.loc[['M1x','M2x','M3x','M4x']]  = labels.loc[['M1x','M2x','M3x','M4x']].sub(labels.loc['M1x'], axis=0)
-   labels.loc[['M1y','M2y','M3y','M4y']] = labels.loc[['M1y','M2y','M3y','M4y']].sub(labels.loc['M1y'], axis=0)
-   labels.loc[['M1z','M2z','M3z','M4z']] = labels.loc[['M1z','M2z','M3z','M4z']].sub(labels.loc['M1z'], axis=0)
->>>>>>> Stashed changes
-   
-   return labels[config.positoin_label_inedx]
->>>>>>> main
 
+   return labels[config.positoin_label_inedx]
 
 def calc_velocity(config,label_df):
 #['V2x','V2y','V2z','V3x','V3y','V3z','V4x','V4y','V4z']

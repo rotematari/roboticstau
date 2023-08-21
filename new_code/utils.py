@@ -16,39 +16,18 @@ import torch
 from torch.optim import Adam
 from torch.nn import L1Loss
 
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-def train(config, train_loader, val_loader,net):
-=======
-=======
->>>>>>> main
+
 import wandb
 import argparse
 
 
 import time
-<<<<<<< Updated upstream
-<<<<<<< HEAD
 import sys
 sys.path.insert(0, r'new_code')
 import yaml
 
 
 with open(r'C:\Users\rotem\OneDrive\Desktop\main\roboticstau\new_code\config.yaml', 'r') as f:
-    
-=======
-import yaml
-with open('/home/robotics20/Documents/rotem/new_code/config.yaml', 'r') as f:
->>>>>>> main
-=======
-import sys
-sys.path.insert(0, r'new_code')
-import yaml
-
-
-with open(r'C:\Users\rotem\OneDrive\Desktop\main\roboticstau\new_code\config.yaml', 'r') as f:
-    
->>>>>>> Stashed changes
     args = yaml.safe_load(f)
 
 config = argparse.Namespace(**args)
@@ -91,10 +70,6 @@ def hidden_size_maker(config,seq=True):
 
 
 def train(config, train_loader, val_loader,net,device='cpu',wandb_on=0):
-<<<<<<< HEAD
->>>>>>> Stashed changes
-=======
->>>>>>> main
     # Create an instance of the FullyConnected class using the configuration object
     # net = net(config)
 
