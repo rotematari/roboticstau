@@ -131,11 +131,12 @@ def std_division(df):
 def get_label_axis(labels):
     #label_inedx = ['M1x','M1y','M1z','M2x','M2y','M2z','M3x','M3y','M3z','M4x','M4y','M4z']
     
-    x  = labels[['M1x','M2x','M3x','M4x']].sub(labels['M1x'], axis=0)
+   labels.loc[['M1x','M2x','M3x','M4x']]  = labels.loc[['M1x','M2x','M3x','M4x']].sub(labels.loc['M1x'], axis=0)
+   labels.loc[['M1y','M2y','M3y','M4y']] = labels.loc[['M1y','M2y','M3y','M4y']].sub(labels.loc['M1y'], axis=0)
+   labels.loc[['M1z','M2z','M3z','M4z']] = labels.loc[['M1z','M2z','M3z','M4z']].sub(labels.loc['M1z'], axis=0)
+   
+   return labels[config.positoin_label_inedx]
 
-    y = labels[['M1y','M2y','M3y','M4y']].sub(labels['M1y'], axis=0)
-    z = labels[['M1z','M2z','M3z','M4z']].sub(labels['M1z'], axis=0)
-                    
 
 
     new_labels = pd.concat((x,y,z),axis=1)

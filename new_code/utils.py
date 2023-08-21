@@ -14,7 +14,64 @@ import matplotlib.pyplot as plt
 import torch
 from torch.optim import Adam
 
+<<<<<<< Updated upstream
 def train(config, train_loader, val_loader,net):
+=======
+import wandb
+import argparse
+
+
+import time
+import sys
+sys.path.insert(0, r'new_code')
+import yaml
+
+
+with open(r'C:\Users\rotem\OneDrive\Desktop\main\roboticstau\new_code\config.yaml', 'r') as f:
+    
+    args = yaml.safe_load(f)
+
+config = argparse.Namespace(**args)
+
+
+def hidden_size_maker(config,seq=True):
+    hidden_size = []
+    if seq:
+        last_in = config.seq_size
+    else :
+        last_in = config.input_size
+
+    
+    up = int(config.n_layer/2)
+    down = config.n_layer -up 
+    multiplier = config.multiplier
+    for layer in range(up):
+        
+
+        size = last_in*multiplier
+
+        if size >= 2560 :
+            size = 2560
+
+
+
+        hidden_size.append(int(size))
+        last_in = int(last_in*multiplier)
+
+    for layer in range(down):
+        size = last_in/multiplier
+        
+        if size<=config.label_seq_size*2:
+            size = config.label_seq_size*2
+
+        hidden_size.append(int(size))
+        last_in = int(size)
+
+    return hidden_size
+
+
+def train(config, train_loader, val_loader,net,device='cpu',wandb_on=0):
+>>>>>>> Stashed changes
     # Create an instance of the FullyConnected class using the configuration object
     net = net(config)
 
