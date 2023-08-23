@@ -5,13 +5,13 @@
 
 # Add arguments for the configuration options
 fmg_index: ['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'S11',
-       'S12', 'S13', 'S14', 'S15', 'S16', 'S17', 'S18', 'S19', 'S20', 'S21',
-       'S22', 'S23', 'S24', 'S25', 'S26', 'S27', 'S28', 'S29', 'S30', 'S31',]
+       'S12', 'S13', 'S15', 'S16', 'S17', 'S18', 'S21',
+       'S22', 'S23', 'S24', 'S25', 'S26', 'S27', 'S28', 'S29', 'S31']
 first_positoin_label_inedx: ['M1x', 'M1y', 'M1z','M2x', 'M2y', 'M2z', 'M3x', 'M3y', 'M3z', 'M4x', 'M4y', 'M4z']
 positoin_label_inedx: ['M2x', 'M2y', 'M2z', 'M3x', 'M3y', 'M3z', 'M4x', 'M4y', 'M4z']
 velocity_label_inedx: ['V2x','V2y','V2z','V3x','V3y','V3z','V4x','V4y','V4z']
 sesion_time_stamp: ['sesion_time_stamp']
-input_size: 30
+input_size: 27
 num_labels : 18
 #config.seq_length*config.input_size
 seq_size : 50

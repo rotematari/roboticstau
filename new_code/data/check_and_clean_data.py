@@ -53,7 +53,7 @@ def clean_data(df,not_numeric_vals):
 if __name__== '__main__':
 
 
-    df = pd.read_csv(r'/home/robotics20/Documents/rotem/new_code/data/data/16_Aug_2023_13_09.csv')
+    df = pd.read_csv(r'/home/robotics20/Documents/rotem/new_code/data/data/16_Aug_2023_13_16.csv')
     df = df[config.fmg_index+config.first_positoin_label_inedx+config.sesion_time_stamp]   
 
     not_numeric_vals = print_not_numeric_vals(df)
@@ -71,4 +71,4 @@ if __name__== '__main__':
     x = input("to save press 1\n ")
 
     if x == '1' :
-        clean_df.to_csv(r'/home/robotics20/Documents/rotem/new_code/data/data/16_Aug_2023_13_09_clean.csv',index=False)
+        clean_df.to_csv(r'/home/robotics20/Documents/rotem/new_code/data/data/16_Aug_2023_13_16_clean.csv',index=False)
