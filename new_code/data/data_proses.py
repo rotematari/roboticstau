@@ -1,7 +1,7 @@
 
 import torch
 from torch.utils.data import Dataset, DataLoader
-
+from torch import Tensor
 import numpy as np
 import pandas as pd
 
@@ -197,3 +197,18 @@ def print_not_numeric_vals(df):
     return non_numeric_values
 
 
+def make_sequence(config,data: Tensor)->Tensor:
+
+    # Reshape data into sequences of length 20 with 9 features each
+    sequence_length = config.sequence_length
+    num_features = data.size(1)
+    num_samples = data.size(0)
+    num_sequences = num_samples // sequence_length
+
+    
+    # Reshape the data
+    sequenced = data[:num_sequences * sequence_length].view(num_sequences, sequence_length, num_features)
+
+
+
+    return sequenced

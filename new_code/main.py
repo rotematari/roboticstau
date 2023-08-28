@@ -16,6 +16,7 @@ sys.path.insert(0,PATH)
 
 import data.data_proses as data_proses
 from models.models import fully_conected as fc
+from models.models import LSTMModel 
 
 import utils
 import argparse
@@ -35,8 +36,9 @@ def init():
     wandb_on = 1 # (1 = True, 0 = False)
 
     global device
-    device = torch.device("cuda" if torch.cuda.is_available() else 'cpu')
-    print(f'Device: {device}')
+    # device = torch.device("cuda" if torch.cuda.is_available() else 'cpu')
+    # print(f'Device: {device}')
+    device = 'cpu'
 
     return
 
@@ -120,17 +122,7 @@ if __name__ == '__main__':
 
     ## normalization 
 
-    # if config.norm == 'std':
-    #     # Standardize the data using StandardScaler
-    #     scaler_fmg = StandardScaler()
-    #     scaler_label = StandardScaler()
-    # elif config.norm == 'minmax':
-    #      scaler_fmg = MinMaxScaler()
-    #      scaler_label = MinMaxScaler()
 
-
-    # fmg_df = scaler_fmg.fit_transform(fmg_df.drop('sesion_time_stamp', axis=1))
-    # label_df = scaler_label.fit_transform(label_df)
 
 
  
@@ -139,7 +131,7 @@ if __name__ == '__main__':
 
 
 
-    config.fmg_index =data[config.fmg_index].loc[:,data[config.fmg_index].var(axis=0)>400].columns
+    # config.fmg_index =data[config.fmg_index].loc[:,data[config.fmg_index].var(axis=0)>400].columns
 
     config.input_size = len(config.fmg_index)
     
@@ -171,7 +163,7 @@ if __name__ == '__main__':
     plt.pause(0.001) 
 
 
-
+  
 
     # Split the data into training and test sets
     train_fmg, test_fmg, train_label, test_label = train_test_split(
@@ -184,17 +176,24 @@ if __name__ == '__main__':
 
      #make sequenced data
     #seq maker 
-    config.seq_size = config.seq_length*config.input_size
-    config.label_seq_size = config.seq_length*config.num_labels
+    # config.seq_size = config.seq_length*config.input_size
+    # config.label_seq_size = config.seq_length*config.num_labels
+
+    train_fmg = data_proses.make_sequence(config=config,data=torch.tensor(train_fmg.to_numpy(),dtype=torch.float32))
+    train_label = data_proses.make_sequence(config=config,data=torch.tensor(train_label.to_numpy(),dtype=torch.float32))
+    val_fmg = data_proses.make_sequence(config=config,data=torch.tensor(val_fmg.to_numpy(),dtype=torch.float32))
+    val_label = data_proses.make_sequence(config=config,data=torch.tensor(val_label.to_numpy(),dtype=torch.float32))
+    test_fmg = data_proses.make_sequence(config=config,data=torch.tensor(test_fmg.to_numpy(),dtype=torch.float32))
+    test_label = data_proses.make_sequence(config=config,data=torch.tensor(test_label.to_numpy(),dtype=torch.float32))
+    
 
 
-
-    train_fmg = torch.tensor(train_fmg.to_numpy())[:(train_fmg.shape[0]//config.seq_size)*config.seq_size].reshape(-1,config.seq_size)
-    train_label = torch.tensor(train_label.to_numpy())[:(train_label.shape[0]//config.label_seq_size)*config.label_seq_size].reshape(-1,config.label_seq_size)
-    val_fmg = torch.tensor(val_fmg.to_numpy())[:(val_fmg.shape[0]//config.seq_size)*config.seq_size].reshape(-1,config.seq_size)
-    val_label = torch.tensor(val_label.to_numpy())[:(val_label.shape[0]//config.label_seq_size)*config.label_seq_size].reshape(-1,config.label_seq_size)
-    test_fmg = torch.tensor(test_fmg.to_numpy())[:(test_fmg.shape[0]//config.seq_size)*config.seq_size].reshape(-1,config.seq_size)
-    test_label = torch.tensor(test_label.to_numpy())[:(test_label.shape[0]//config.label_seq_size)*config.label_seq_size].reshape(-1,config.label_seq_size)
+    # train_fmg = torch.tensor(train_fmg.to_numpy())[:(train_fmg.shape[0]//config.seq_size)*config.seq_size].reshape(-1,config.seq_size)
+    # train_label = torch.tensor(train_label.to_numpy())[:(train_label.shape[0]//config.label_seq_size)*config.label_seq_size].reshape(-1,config.label_seq_size)
+    # val_fmg = torch.tensor(val_fmg.to_numpy())[:(val_fmg.shape[0]//config.seq_size)*config.seq_size].reshape(-1,config.seq_size)
+    # val_label = torch.tensor(val_label.to_numpy())[:(val_label.shape[0]//config.label_seq_size)*config.label_seq_size].reshape(-1,config.label_seq_size)
+    # test_fmg = torch.tensor(test_fmg.to_numpy())[:(test_fmg.shape[0]//config.seq_size)*config.seq_size].reshape(-1,config.seq_size)
+    # test_label = torch.tensor(test_label.to_numpy())[:(test_label.shape[0]//config.label_seq_size)*config.label_seq_size].reshape(-1,config.label_seq_size)
 
     # Create TensorDatasets for the training, validation, and test sets
 
@@ -210,7 +209,8 @@ if __name__ == '__main__':
 
 
     # Create an instance of the FullyConnected class using the configuration object
-    net = fc(config)
+    net = LSTMModel(config)
+    # net = fc(config)
     net= net.to(device=device)
     print(net)
 
