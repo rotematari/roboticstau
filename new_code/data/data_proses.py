@@ -205,10 +205,22 @@ def make_sequence(config,data: Tensor)->Tensor:
     num_samples = data.size(0)
     num_sequences = num_samples // sequence_length
 
-    
+ 
     # Reshape the data
     sequenced = data[:num_sequences * sequence_length].view(num_sequences, sequence_length, num_features)
 
 
 
     return sequenced
+
+def create_sliding_sequences(input_tensor, sequence_length):
+    sample_size, features = input_tensor.shape
+    new_sample_size = sample_size - sequence_length + 1
+
+    sequences = []
+    for i in range(new_sample_size):
+
+        sequence = input_tensor[i:i+sequence_length]
+        sequences.append(sequence)
+
+    return torch.stack(sequences)

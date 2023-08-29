@@ -176,15 +176,25 @@ if __name__ == '__main__':
 
      #make sequenced data
     #seq maker 
+    
+    train_fmg = data_proses.create_sliding_sequences(torch.tensor(train_fmg.to_numpy(),dtype=torch.float32),sequence_length=config.sequence_length)
+    train_label = data_proses.create_sliding_sequences(torch.tensor(train_label.to_numpy(),dtype=torch.float32),sequence_length=config.sequence_length)
+    val_fmg = data_proses.create_sliding_sequences(torch.tensor(val_fmg.to_numpy(),dtype=torch.float32),sequence_length=config.sequence_length)
+    val_label = data_proses.create_sliding_sequences(torch.tensor(val_label.to_numpy(),dtype=torch.float32),sequence_length=config.sequence_length)
+    test_fmg = data_proses.create_sliding_sequences(torch.tensor(test_fmg.to_numpy(),dtype=torch.float32),sequence_length=config.sequence_length)
+    test_label = data_proses.create_sliding_sequences(torch.tensor(test_label.to_numpy(),dtype=torch.float32),sequence_length=config.sequence_length)
+
+
+
     # config.seq_size = config.seq_length*config.input_size
     # config.label_seq_size = config.seq_length*config.num_labels
 
-    train_fmg = data_proses.make_sequence(config=config,data=torch.tensor(train_fmg.to_numpy(),dtype=torch.float32))
-    train_label = data_proses.make_sequence(config=config,data=torch.tensor(train_label.to_numpy(),dtype=torch.float32))
-    val_fmg = data_proses.make_sequence(config=config,data=torch.tensor(val_fmg.to_numpy(),dtype=torch.float32))
-    val_label = data_proses.make_sequence(config=config,data=torch.tensor(val_label.to_numpy(),dtype=torch.float32))
-    test_fmg = data_proses.make_sequence(config=config,data=torch.tensor(test_fmg.to_numpy(),dtype=torch.float32))
-    test_label = data_proses.make_sequence(config=config,data=torch.tensor(test_label.to_numpy(),dtype=torch.float32))
+    # train_fmg = data_proses.make_sequence(config=config,data=torch.tensor(train_fmg.to_numpy(),dtype=torch.float32))
+    # train_label = data_proses.make_sequence(config=config,data=torch.tensor(train_label.to_numpy(),dtype=torch.float32))
+    # val_fmg = data_proses.make_sequence(config=config,data=torch.tensor(val_fmg.to_numpy(),dtype=torch.float32))
+    # val_label = data_proses.make_sequence(config=config,data=torch.tensor(val_label.to_numpy(),dtype=torch.float32))
+    # test_fmg = data_proses.make_sequence(config=config,data=torch.tensor(test_fmg.to_numpy(),dtype=torch.float32))
+    # test_label = data_proses.make_sequence(config=config,data=torch.tensor(test_label.to_numpy(),dtype=torch.float32))
     
 
 
