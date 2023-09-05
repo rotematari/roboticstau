@@ -23,10 +23,10 @@ import argparse
 
 import time
 import yaml
-with open('/home/robotics20/Documents/rotem/new_code/config.yaml', 'r') as f:
-    args = yaml.safe_load(f)
+# with open('config.yaml', 'r') as f:
+#     args = yaml.safe_load(f)
 
-config = argparse.Namespace(**args)
+# config = argparse.Namespace(**args)
 
 
 def hidden_size_maker(config,seq=True):
@@ -65,7 +65,7 @@ def hidden_size_maker(config,seq=True):
     return hidden_size
 
 
-def train(config, train_loader, val_loader,net,device='cpu',wandb_on=0):
+def train(config, train_loader, val_loader,model,device='cpu',wandb_on=0):
     # Create an instance of the FullyConnected class using the configuration object
     # net = net(config)
 
@@ -74,7 +74,7 @@ def train(config, train_loader, val_loader,net,device='cpu',wandb_on=0):
 
 
     # Define the optimizer with weight decay
-    optimizer = Adam(net.parameters(), lr=config.learning_rate, weight_decay=config.weight_decay)
+    optimizer = Adam(model.parameters(), lr=config.learning_rate, weight_decay=config.weight_decay)
 
     # Create lists to store the training and validation loss 
     train_losses = []
@@ -95,7 +95,7 @@ def train(config, train_loader, val_loader,net,device='cpu',wandb_on=0):
             optimizer.zero_grad()
 
             # Forward pass
-            outputs = net(inputs)
+            outputs = model(inputs)
             loss = criterion(outputs, targets[:,-1:].squeeze())
 
             # Backward pass
@@ -124,7 +124,7 @@ def train(config, train_loader, val_loader,net,device='cpu',wandb_on=0):
                 inputs = inputs.to(device=device)
                 targets = targets.to(device=device)
 
-                outputs = net(inputs)
+                outputs = model(inputs)
                 v_loss = criterion(outputs, targets[:,-1:].squeeze())
                 val_loss += v_loss.item()
                 # if v_loss.item()>1:
@@ -151,7 +151,7 @@ def train(config, train_loader, val_loader,net,device='cpu',wandb_on=0):
             checkpoint_path = join(config.model_path,filename)
             torch.save({
                 'epoch': epoch+1,
-                'model_state_dict': net.state_dict(),
+                'model_state_dict': model.state_dict(),
                 'optimizer_state_dict': optimizer.state_dict(),
                 'loss': val_loss,
                 }, checkpoint_path)
@@ -159,13 +159,13 @@ def train(config, train_loader, val_loader,net,device='cpu',wandb_on=0):
     return train_losses, val_losses
 
 
-def test(net, config, test_loader,device='cpu',wandb_on=0):
+def test(model, config, test_loader,device='cpu',wandb_on=0):
     # Define the loss function
-    criterion = net.mseloss
+    criterion = model.mseloss
 
     # Initialize the test loss and accuracy
     test_loss = 0
-    net.eval()
+    model.eval()
 
     # Evaluate on the test set
     with torch.no_grad():
@@ -174,7 +174,7 @@ def test(net, config, test_loader,device='cpu',wandb_on=0):
             inputs = inputs.to(device=device)
             targets = targets.to(device=device)
 
-            outputs = net(inputs)
+            outputs = model(inputs)
             loss = criterion(outputs, targets[:,-1:].squeeze())
             test_loss += loss.item()
         test_loss /= len(test_loader)
@@ -230,30 +230,36 @@ def threePointDist(outputs,targets):
 
 def plot_results(preds,targets):
 
-        # Create a figure and a grid of subplots with 1 row and 2 columns
-    fig, axes = plt.subplots(1, 2, figsize=(10, 4))  # Adjust figsize as needed
+    # Create a figure and a grid of subplots with 1 row and 2 columns
+    fig, axes = plt.subplots(2, 2, figsize=(10, 4),sharex=True,sharey=True)  # Adjust figsize as needed
 
     # Plot data on the first subplot
-    axes[0].plot(preds)
-    axes[0].set_title('Plot of preds')
-    axes[0].legend()
+    axes[0,0].plot(preds[:,:9])
+    axes[0,0].set_title('Plot of preds location')
+    # axes[0,0].legend()
+    axes[0,1].plot(preds[:,9:])
+    axes[0,1].set_title('Plot of preds V ')
+    # axes[0,1].legend()
 
     # Plot data on the second subplot
-    axes[1].plot(targets)
-    axes[1].set_title('Plot of targets')
-    axes[1].legend()
+    axes[1,0].plot(targets[:,:9])
+    axes[1,0].set_title('Plot of targets location')
+    # axes[1,0].legend()
+    axes[1,1].plot(targets[:,9:])
+    axes[1,1].set_title('Plot of targets V')
+    # axes[1,1].legend()
 
     # Adjust layout to prevent overlap
     plt.tight_layout()
 
     # Show the plots
-    plt.pause(0.001)
+    plt.show()
 
-def model_eval_metric(config,net,test_loader,label_max_val,label_min_val ,device='cpu'):
+def model_eval_metric(config,model,test_loader,label_max_val,label_min_val ,device='cpu'):
     # show distance between ground truth and prediction by 3d points [0,M2,M3,M4] 
 
-    net = net.to(device=device)
-    net.eval()
+    model = model.to(device=device)
+    model.eval()
     # Evaluate on the test set
     with torch.no_grad():
 
@@ -264,30 +270,15 @@ def model_eval_metric(config,net,test_loader,label_max_val,label_min_val ,device
         inputs = inputs.to(device=device)
         targets = targets.to(device=device)
 
-        outputs = net(inputs)
-
-        # # Create seq_length series of shape (seq_length*num_labels,)
-        # label_min_val = [label_min_val for _ in range(config.seq_length)]
-        # label_max_val = [label_max_val for _ in range(config.seq_length)]
-
-        # # Concatenate the series to create a new series of shape (180,)
-        # new_label_min_val = np.concatenate(label_min_val)
-        # new_label_max_val = np.concatenate(label_max_val)
+        outputs = model(inputs)
 
         size = outputs.size(0)
         label_size = targets.size(2)
+        if config.norm_labels:
+            outputs = min_max_unnormalize(outputs.detach().cpu().numpy(),np.tile(label_min_val,(size,1)),np.tile(label_max_val,(size,1)))
+            targets = min_max_unnormalize(targets.detach().cpu().numpy(),np.tile(label_min_val,(targets.size(0),targets.size(1),1)),np.tile(label_max_val,(targets.size(0),targets.size(1),1)))
 
-        # new_label_min_val = np.tile(label_min_val,(size,1))
-
-        # new_label_max_val = np.tile(label_max_val,(size,1))
-
-
-        outputs = min_max_unnormalize(outputs.detach().cpu().numpy(),np.tile(label_min_val,(size,1)),np.tile(label_max_val,(size,1)))
-        targets = min_max_unnormalize(targets.detach().cpu().numpy(),np.tile(label_min_val,(targets.size(0),targets.size(1),1)),np.tile(label_max_val,(targets.size(0),targets.size(1),1)))
-        # targets = targets.view(-1,config.sequence_length,label_size)
         outputs = torch.tensor(outputs)
-
-        # dist = threePointDist(outputs.reshape(-1,18), targets.reshape(-1,18))
 
         plot_results(outputs[100:200].detach().numpy(),targets[100:200,-1:].squeeze())
         # plt.plot(targets[:,-1:].view(size,targets.size(2)).numpy())
@@ -301,13 +292,16 @@ def model_eval_metric(config,net,test_loader,label_max_val,label_min_val ,device
 
     return dist
 
-def min_max_unnormalize(data, min_val, max_val):
-    return data * (max_val - min_val) + min_val
+def min_max_unnormalize(data, min_val, max_val,bottom=-1, top=1):
+    return ((data-bottom)/(top-bottom)) * (max_val - min_val) + min_val
 
-def min_max_normalize(data):
+def min_max_normalize(data,bottom=-1, top=1):
+
     min_val = np.min(data, axis=0)
     max_val = np.max(data, axis=0)
-    norm = (data - min_val) / (max_val - min_val)
+
+    norm = bottom+(data - min_val) / (max_val - min_val)*(top-bottom)
+
     return norm,max_val,min_val
 
 
@@ -471,17 +465,27 @@ def std_division(df):
 
 def get_label_axis(labels,config):
     #label_inedx = ['M1x','M1y','M1z','M2x','M2y','M2z','M3x','M3y','M3z','M4x','M4y','M4z']
-    
-   labels[['M1x','M2x','M3x','M4x']]  = labels[['M1x','M2x','M3x','M4x']].sub(labels['M1x'], axis=0)
-   labels[['M1y','M2y','M3y','M4y']] = labels[['M1y','M2y','M3y','M4y']].sub(labels['M1y'], axis=0)
-   labels[['M1z','M2z','M3z','M4z']] = labels[['M1z','M2z','M3z','M4z']].sub(labels['M1z'], axis=0)
+    # Create a copy of the labels DataFrame slice
+    # labels_copy = labels[config.first_positoin_label_inedx].copy()
+    labels = labels.copy()
+    # Now perform the operations on the copy
+    labels.loc[:,['M1x','M2x','M3x','M4x']]  = labels[['M1x','M2x','M3x','M4x']].sub(labels['M1x'], axis=0)
+    labels.loc[:,['M1y','M2y','M3y','M4y']] = labels[['M1y','M2y','M3y','M4y']].sub(labels['M1y'], axis=0)
+    labels.loc[:,['M1z','M2z','M3z','M4z']] = labels[['M1z','M2z','M3z','M4z']].sub(labels['M1z'], axis=0)
+
+    # If you want to replace these columns in the original 'labels' DataFrame:
+    # labels.loc[:,config.first_positoin_label_inedx] = labels_copy
+
+#    labels[['M1x','M2x','M3x','M4x']]  = labels[['M1x','M2x','M3x','M4x']].sub(labels['M1x'], axis=0)
+#    labels[['M1y','M2y','M3y','M4y']] = labels[['M1y','M2y','M3y','M4y']].sub(labels['M1y'], axis=0)
+#    labels[['M1z','M2z','M3z','M4z']] = labels[['M1z','M2z','M3z','M4z']].sub(labels['M1z'], axis=0)
    
-   return labels[config.positoin_label_inedx]
+    return labels[config.positoin_label_inedx]
 
 
 def calc_velocity(config,label_df):
-#['V2x','V2y','V2z','V3x','V3y','V3z','V4x','V4y','V4z']
-
+    #['V2x','V2y','V2z','V3x','V3y','V3z','V4x','V4y','V4z']
+    label_df = label_df.copy()
     label_df[config.velocity_label_inedx]= [0,0,0,0,0,0,0,0,0]
     temp = label_df.loc[1:,config.positoin_label_inedx].reset_index(drop=True).copy()
 

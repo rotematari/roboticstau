@@ -6,13 +6,19 @@ from os import listdir
 from os.path import join
 from torch.utils.data import Dataset, DataLoader, TensorDataset
 import numpy as np
+import matplotlib.pyplot as plt 
+
 from sklearn.model_selection import train_test_split
-from utils.utils import data_loder,mask,get_label_axis,calc_velocity,subtract_bias,sepatare_data,create_sliding_sequences,min_max_normalize
+from utils.utils import data_loder,mask,get_label_axis,calc_velocity,subtract_bias,create_sliding_sequences,min_max_normalize
 
 class DataProcessor:
     def __init__(self, config):
         self.config = config
         self.data = None
+        self.label_max_val=None
+        self.label_min_val=None
+        self.fmg_max_val=None
+        self.fmg_min_val=None
 
 
     def load_data(self)-> Tensor:
@@ -34,14 +40,16 @@ class DataProcessor:
             self.data = self.data.drop_duplicates().dropna().reset_index(drop=True)
 
             #normalize 
-            self.data[self.config.positoin_label_inedx+self.config.velocity_label_inedx],label_max_val,label_min_val = min_max_normalize(self.data[self.config.positoin_label_inedx+self.config.velocity_label_inedx])
-            self.data[self.config.fmg_index],fmg_max_val,fmg_min_val = min_max_normalize(self.data[self.config.fmg_index])
+            if self.config.norm_labels:
+                self.data[self.config.positoin_label_inedx+self.config.velocity_label_inedx],self.label_max_val,self.label_min_val = min_max_normalize(self.data[self.config.positoin_label_inedx+self.config.velocity_label_inedx])
+            
+            self.data[self.config.fmg_index],self.fmg_max_val,self.fmg_min_val = min_max_normalize(self.data[self.config.fmg_index])
 
             #avereg rolling window
             self.data[self.config.fmg_index] = self.data[self.config.fmg_index].rolling(window=self.config.window_size, axis=0).mean()
             self.data[self.config.positoin_label_inedx+self.config.velocity_label_inedx] = self.data[self.config.positoin_label_inedx+self.config.velocity_label_inedx].rolling(window=self.config.window_size, axis=0).mean()
 
-
+            self.data = self.data.drop_duplicates().dropna().reset_index(drop=True)
 
     def get_data_loaders(self):
         if self.data is None:
@@ -71,3 +79,33 @@ class DataProcessor:
 
         return train_loader, val_loader, test_loader
     
+    def plot(self,from_indx=1000,to_indx=1500):
+
+        fmg_df = self.data[self.config.fmg_index]
+        label_positoin = self.data[self.config.positoin_label_inedx+self.config.velocity_label_inedx]
+        label_velocity = self.data[self.config.velocity_label_inedx]
+
+        # Create a figure and a grid of subplots with 1 row and 2 columns
+        fig, axes = plt.subplots(3, 1,sharex=True,sharey=True)  # Adjust figsize as needed
+
+            # Plot data on the second subplot
+        axes[0].plot(fmg_df[from_indx:to_indx])
+        axes[0].set_title('Plot of FMG')
+        # axes[1,0].legend()
+
+        axes[1].plot(label_positoin[from_indx:to_indx])
+        axes[1].set_title('Plot of label_positoin')
+        # axes[1,0].legend()
+
+        axes[2].plot(label_velocity[from_indx:to_indx])
+        axes[2].set_title('Plot of label_velocity')
+        # axes[1,0].legend()
+
+        # Adjust layout to prevent overlap
+        plt.tight_layout()
+
+        # Show the plots
+        plt.pause(0.001)
+
+        return
+         

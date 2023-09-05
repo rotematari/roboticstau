@@ -18,7 +18,7 @@ sequence_length : 20
 seq_size : 50
 #config.seq_length*config.num_labels
 label_seq_size : 180
-norm : 'std'
+norm : 'minmax'
 n_layer : 4
 hidden_size : 64
 lstm_hidden_size : 64
@@ -27,15 +27,17 @@ dropout : 0.0
 multiplier : 10
 learning_rate : 0.001
 weight_decay : 0.0001 
-num_epochs : 5 
+num_epochs : 1 
 batch_size : 5
 window_size : 30
 seq_length: 5
-data_path : '/home/robotics20/Documents/rotem/new_code/data/data'
-model_path: '/home/robotics20/Documents/rotem/new_code/models/saved_models'
+data_path : 'data/data'
+model_path: 'models/saved_models'
 test_size : 0.2
 val_size : 0.2
 random_state : 42 
+norm_labels: True
+plot_data : True
 
 
 
