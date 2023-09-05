@@ -5,8 +5,18 @@ import numpy as np
 
 import yaml
 
-from new_code.data.data_processing import mask
-with open(r'/home/robotics20/Documents/rotem/new_code/config.yaml', 'r') as f:
+from utils.utils import mask
+import os 
+# Get the current directory of the script being run
+current_directory = os.path.dirname(os.path.realpath(__file__))
+
+# Navigate up  directori
+parent_directory = os.path.abspath(os.path.join(current_directory, os.pardir))
+
+# Change the working directory
+os.chdir(parent_directory)
+
+with open(r'config.yaml', 'r') as f:
     args = yaml.safe_load(f)
 
 config = argparse.Namespace(**args)
@@ -53,7 +63,7 @@ def clean_data(df,not_numeric_vals):
 if __name__== '__main__':
 
 
-    df = pd.read_csv(r'/home/robotics20/Documents/rotem/new_code/data/data/16_Aug_2023_13_16.csv')
+    df = pd.read_csv(r'./data/data/16_Aug_2023_13_16.csv')
     df = df[config.fmg_index+config.first_positoin_label_inedx+config.sesion_time_stamp]   
 
     not_numeric_vals = print_not_numeric_vals(df)
@@ -71,4 +81,4 @@ if __name__== '__main__':
     x = input("to save press 1\n ")
 
     if x == '1' :
-        clean_df.to_csv(r'/home/robotics20/Documents/rotem/new_code/data/data/16_Aug_2023_13_16_clean.csv',index=False)
+        clean_df.to_csv(r'./data/data/16_Aug_2023_13_16_clean.csv',index=False)

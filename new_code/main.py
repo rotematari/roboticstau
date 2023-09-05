@@ -14,7 +14,7 @@ PATH = os.path.join(os.path.dirname(__file__),"/models")
 sys.path.insert(0,PATH)
 
 
-import data.data_proses as data_proses
+import new_code.data.data_processing as data_processing
 from models.models import fully_conected as fc
 from models.models import LSTMModel 
 
@@ -88,12 +88,12 @@ if __name__ == '__main__':
 
     
     # load data 
-    data = data_proses.data_loder(config=config)
+    data = data_processing.data_loder(config=config)
     data = data[config.fmg_index+config.first_positoin_label_inedx+config.sesion_time_stamp].dropna().reset_index(drop=True)
 
 
     # drop bad data 
-    data = data_proses.mask(data,config)
+    data = data_processing.mask(data,config)
 
     # separate
     # fmg_df, _, label_df = data_proses.sepatare_data(data,config=config,first=True)
@@ -101,12 +101,12 @@ if __name__ == '__main__':
     
     
     # find zero axis 
-    data[config.positoin_label_inedx] = data_proses.get_label_axis(data[config.first_positoin_label_inedx],config=config)
+    data[config.positoin_label_inedx] = data_processing.get_label_axis(data[config.first_positoin_label_inedx],config=config)
     # add velocity 
-    data[config.velocity_label_inedx] = data_proses.calc_velocity(config,data[config.first_positoin_label_inedx])
+    data[config.velocity_label_inedx] = data_processing.calc_velocity(config,data[config.first_positoin_label_inedx])
 
     # subtract bias 
-    data[config.fmg_index] = data_proses.subtract_bias(data[config.fmg_index+config.sesion_time_stamp])
+    data[config.fmg_index] = data_processing.subtract_bias(data[config.fmg_index+config.sesion_time_stamp])
 
 
 
@@ -121,11 +121,6 @@ if __name__ == '__main__':
 
 
     ## normalization 
-
-
-
-
- 
 
     # TODO: add here agmuntations 
 
@@ -153,14 +148,14 @@ if __name__ == '__main__':
     fmg_df = data[config.fmg_index]
     label_df = data[config.positoin_label_inedx+config.velocity_label_inedx]
 
-    fig, (ax1, ax2) = plt.subplots(1, 2,figsize=(40,5))
+    # fig, (ax1, ax2) = plt.subplots(1, 2,figsize=(40,5))
 
-    ax1.plot(fmg_df)
+    # ax1.plot(fmg_df)
 
-    ax2.plot(label_df)
-    ax1.legend()
+    # ax2.plot(label_df)
+    # ax1.legend()
 
-    plt.pause(0.001) 
+    # plt.pause(0.01) 
 
 
   
@@ -177,12 +172,12 @@ if __name__ == '__main__':
      #make sequenced data
     #seq maker 
     
-    train_fmg = data_proses.create_sliding_sequences(torch.tensor(train_fmg.to_numpy(),dtype=torch.float32),sequence_length=config.sequence_length)
-    train_label = data_proses.create_sliding_sequences(torch.tensor(train_label.to_numpy(),dtype=torch.float32),sequence_length=config.sequence_length)
-    val_fmg = data_proses.create_sliding_sequences(torch.tensor(val_fmg.to_numpy(),dtype=torch.float32),sequence_length=config.sequence_length)
-    val_label = data_proses.create_sliding_sequences(torch.tensor(val_label.to_numpy(),dtype=torch.float32),sequence_length=config.sequence_length)
-    test_fmg = data_proses.create_sliding_sequences(torch.tensor(test_fmg.to_numpy(),dtype=torch.float32),sequence_length=config.sequence_length)
-    test_label = data_proses.create_sliding_sequences(torch.tensor(test_label.to_numpy(),dtype=torch.float32),sequence_length=config.sequence_length)
+    train_fmg = data_processing.create_sliding_sequences(torch.tensor(train_fmg.to_numpy(),dtype=torch.float32),sequence_length=config.sequence_length)
+    train_label = data_processing.create_sliding_sequences(torch.tensor(train_label.to_numpy(),dtype=torch.float32),sequence_length=config.sequence_length)
+    val_fmg = data_processing.create_sliding_sequences(torch.tensor(val_fmg.to_numpy(),dtype=torch.float32),sequence_length=config.sequence_length)
+    val_label = data_processing.create_sliding_sequences(torch.tensor(val_label.to_numpy(),dtype=torch.float32),sequence_length=config.sequence_length)
+    test_fmg = data_processing.create_sliding_sequences(torch.tensor(test_fmg.to_numpy(),dtype=torch.float32),sequence_length=config.sequence_length)
+    test_label = data_processing.create_sliding_sequences(torch.tensor(test_label.to_numpy(),dtype=torch.float32),sequence_length=config.sequence_length)
 
 
 

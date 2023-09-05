@@ -12,11 +12,19 @@ import yaml
 import argparse
 import pandas as pd
 from new_code.data.data_processing import print_not_numeric_vals 
+import os 
+# Get the current directory of the script being run
+current_directory = os.path.dirname(os.path.realpath(__file__))
 
+# Navigate up  directori
+parent_directory = os.path.abspath(os.path.join(current_directory, os.pardir))
 
-dirpath = r'/home/robotics20/Documents/rotem/data/data'
+# Change the working directory
+os.chdir(parent_directory)
 
-with open(r'\Users\User\Desktop\Rotem\roboticstau-2\new_code\config.yaml', 'r') as f:
+data_dir = r'data/data'
+
+with open(r'config.yaml', 'r') as f:
     args = yaml.safe_load(f)
 
 config = argparse.Namespace(**args)
@@ -131,7 +139,7 @@ if __name__ == '__main__':
     file_name = sesion_time_stamp + '.csv'
     NatNet = init_natnetClient()
     print(file_name)
-    f = open(join('new_code/data/data', file_name), "w")
+    f = open(join(data_dir, file_name), "w")
 
     write_first_line(f)
     NatNet.run()
@@ -157,15 +165,15 @@ if __name__ == '__main__':
     print("finished")
 
     ## checks data 
-    df = pd.read_csv(join(r'C:\Users\User\Desktop\Rotem\roboticstau-2\new_code\data\data',file_name))
+    df = pd.read_csv(join(data_dir,file_name))
     
 
-    not_numeric_vals = print_not_numeric_vals(df)
+    # not_numeric_vals = print_not_numeric_vals(df)
 
-    if not_numeric_vals.shape[0] == 0:
-        plot_data(config=config,data=df)
+    # if not_numeric_vals.shape[0] == 0:
+    #     plot_data(config=config,data=df)
 
-    else :
-        print("clean data")
+    # else :
+    #     print("clean data")
 
 
