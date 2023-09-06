@@ -24,4 +24,3 @@ sweep_configuration ={
         'multiplier':{'distribution': 'uniform', 'min': 1.5, 'max': 5},
         
     },}
-    

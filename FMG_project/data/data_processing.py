@@ -34,7 +34,7 @@ class DataProcessor:
             # find zero axis 
             self.data[self.config.positoin_label_inedx] = get_label_axis(self.data[self.config.first_positoin_label_inedx], self.config)
             # adds vilocities to the labels
-            self.data[self.config.velocity_label_inedx] = calc_velocity(self.config, self.data[self.config.first_positoin_label_inedx])
+            self.data[self.config.first_positoin_label_inedx + self.config.velocity_label_inedx] = calc_velocity(self.config, self.data[self.config.first_positoin_label_inedx])
             # subtracts the bais on the FMG sensors 
             self.data[self.config.fmg_index] = subtract_bias(self.data[self.config.fmg_index+self.config.sesion_time_stamp])
             self.data = self.data.drop_duplicates().dropna().reset_index(drop=True)
@@ -64,10 +64,10 @@ class DataProcessor:
         label_sequences = create_sliding_sequences(torch.tensor(label_df.to_numpy(), dtype=torch.float32), self.config.sequence_length)
 
         # Split the data into training and test sets
-        train_fmg, test_fmg, train_label, test_label = train_test_split(fmg_sequences, label_sequences, test_size=self.config.test_size, random_state=None)
+        train_fmg, test_fmg, train_label, test_label = train_test_split(fmg_sequences, label_sequences, test_size=self.config.test_size, random_state=None,shuffle=False)
 
         # Split the training data into training and validation sets
-        train_fmg, val_fmg, train_label, val_label = train_test_split(train_fmg, train_label, test_size=self.config.val_size / (1 - self.config.test_size), random_state=None)
+        train_fmg, val_fmg, train_label, val_label = train_test_split(train_fmg, train_label, test_size=self.config.val_size / (1 - self.config.test_size), random_state=None,shuffle=False)
 
         train_dataset = TensorDataset(train_fmg[:train_label.shape[0],:], train_label)
         val_dataset = TensorDataset(val_fmg[:val_label.shape[0],:], val_label)
@@ -79,10 +79,10 @@ class DataProcessor:
 
         return train_loader, val_loader, test_loader
     
-    def plot(self,from_indx=1000,to_indx=1500):
+    def plot(self,from_indx=0,to_indx=1500):
 
         fmg_df = self.data[self.config.fmg_index]
-        label_positoin = self.data[self.config.positoin_label_inedx+self.config.velocity_label_inedx]
+        label_positoin = self.data[self.config.positoin_label_inedx]
         label_velocity = self.data[self.config.velocity_label_inedx]
 
         # Create a figure and a grid of subplots with 1 row and 2 columns
@@ -105,7 +105,7 @@ class DataProcessor:
         plt.tight_layout()
 
         # Show the plots
-        plt.pause(0.001)
+        plt.show()
 
         return
          

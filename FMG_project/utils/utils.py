@@ -28,6 +28,8 @@ import yaml
 
 # config = argparse.Namespace(**args)
 
+# Change the current working directory to the directory of the main script
+os.chdir(join(os.path.dirname(os.path.abspath(__file__)), os.pardir))
 
 def hidden_size_maker(config,seq=True):
     hidden_size = []
@@ -65,7 +67,7 @@ def hidden_size_maker(config,seq=True):
     return hidden_size
 
 
-def train(config, train_loader, val_loader,model,device='cpu',wandb_on=0):
+def train(config, train_loader, val_loader,model,device='cpu',wandb_run=None):
     # Create an instance of the FullyConnected class using the configuration object
     # net = net(config)
 
@@ -80,6 +82,7 @@ def train(config, train_loader, val_loader,model,device='cpu',wandb_on=0):
     train_losses = []
     val_losses = []
     best_val_loss = 0
+    print("training starts")
 
     # Train the network
     for epoch in range(config.num_epochs):
@@ -96,7 +99,7 @@ def train(config, train_loader, val_loader,model,device='cpu',wandb_on=0):
 
             # Forward pass
             outputs = model(inputs)
-            loss = criterion(outputs, targets[:,-1:].squeeze())
+            loss = criterion(outputs, targets[:,-1:,:].view(-1,config.num_labels))
 
             # Backward pass
             loss.backward()
@@ -134,20 +137,19 @@ def train(config, train_loader, val_loader,model,device='cpu',wandb_on=0):
                 
             val_loss /= i
             
-
         # Save the validation loss and accuracy values
         val_losses.append(val_loss)
         
         # Print the epoch loss and accuracy values
         print(f'Epoch: {epoch} Train Loss: {train_loss}  Val Loss: {val_loss} ')
-        if wandb_on:
+        if wandb_run is not None:
             # log metrics to wandb
-            wandb.log({"Train Loss": train_loss, "val_loss": val_loss})
+            wandb_run.log({"Train Loss": train_loss, "Val_loss": val_loss})
 
         if(best_val_loss < val_loss):
-            time_stamp = time.strftime("%d_%b_%Y_%H:%M", time.gmtime())
+            time_stamp = time.strftime("%d_%m_%Y_%H:%M", time.gmtime())
             best_val_loss = val_loss
-            filename = str(epoch+1)+time_stamp + '.pt'
+            filename = 'epoch'+str(epoch+1)+'_'+time_stamp + '.pt'
             checkpoint_path = join(config.model_path,filename)
             torch.save({
                 'epoch': epoch+1,
@@ -155,7 +157,17 @@ def train(config, train_loader, val_loader,model,device='cpu',wandb_on=0):
                 'optimizer_state_dict': optimizer.state_dict(),
                 'loss': val_loss,
                 }, checkpoint_path)
-
+            
+    time_stamp = time.strftime("%d_%m_%Y_%H:%M", time.gmtime())
+    filename = 'epoch'+str(epoch+1)+'_'+time_stamp + '.pt'
+    checkpoint_path = join(config.model_path,filename)
+    torch.save({
+        'epoch': epoch+1,
+        'model_state_dict': model.state_dict(),
+        'optimizer_state_dict': optimizer.state_dict(),
+        'loss': val_loss,
+        }, checkpoint_path)
+    
     return train_losses, val_losses
 
 
@@ -270,26 +282,21 @@ def model_eval_metric(config,model,test_loader,label_max_val,label_min_val ,devi
         inputs = inputs.to(device=device)
         targets = targets.to(device=device)
 
-        outputs = model(inputs)
+        outputs = model(inputs[:,-1:,:])
 
         size = outputs.size(0)
         label_size = targets.size(2)
+
         if config.norm_labels:
             outputs = min_max_unnormalize(outputs.detach().cpu().numpy(),np.tile(label_min_val,(size,1)),np.tile(label_max_val,(size,1)))
             targets = min_max_unnormalize(targets.detach().cpu().numpy(),np.tile(label_min_val,(targets.size(0),targets.size(1),1)),np.tile(label_max_val,(targets.size(0),targets.size(1),1)))
 
-        outputs = torch.tensor(outputs)
+        # outputs = torch.tensor(outputs)
 
-        plot_results(outputs[100:200].detach().numpy(),targets[100:200,-1:].squeeze())
-        # plt.plot(targets[:,-1:].view(size,targets.size(2)).numpy())
-        # plt.plot(outputs.detach().numpy())
+        if config.plot_pred:
+            plot_results(outputs[100:2000].cpu().detach().numpy(),targets[100:2000,-1:,:].view(-1,18).cpu().detach().numpy())
 
-        dist = np.sqrt(((outputs - targets[:,-1:].squeeze())**2).sum(axis=0)/size)
-
-        
-
-
-
+        dist = np.sqrt(((outputs.cpu().detach().numpy() - targets[:,-1:,:].view(-1,18).cpu().detach().numpy())**2).sum(axis=0)/size)
     return dist
 
 def min_max_unnormalize(data, min_val, max_val,bottom=-1, top=1):
@@ -305,7 +312,7 @@ def min_max_normalize(data,bottom=-1, top=1):
     return norm,max_val,min_val
 
 
-# normalization
+# normalization std
 def normalize(data):
     mean = data.mean(axis=0)
     std = data.std(axis=0)
@@ -322,6 +329,7 @@ def plot_data(config,data):
 
     plt.show() 
 
+# clould be deleted 
 def rollig_window(config,data):
 
     data_avg =data.copy()
@@ -333,6 +341,7 @@ def data_loder(config):
     """
     Given a directory path, loads all the csv files in the directory and returns a concatenated pandas dataframe.
     """
+    
     full_df = pd.DataFrame()
     for file in listdir(config.data_path):
 
@@ -494,6 +503,48 @@ def calc_velocity(config,label_df):
     label_df.loc[:temp.shape[0],config.velocity_label_inedx] = temp.values - label_df.loc[:temp.shape[0],config.positoin_label_inedx].values
     return label_df[config.velocity_label_inedx]
 
+def calc_velocity(config, label_df):
+    # Copy the dataframe to avoid SettingWithCopyWarning
+    label_df = label_df.copy()
+    
+    # Time interval in seconds, based on 60 Hz frequency
+    delta_t = 1 / config.sample_speed  
+    
+    # Columns corresponding to positions
+    position_cols = config.positoin_label_inedx
+    
+    # Columns corresponding to velocities
+    velocity_cols = config.velocity_label_inedx
+    
+    # Calculate velocity
+    velocity_df = label_df[position_cols].diff() / delta_t
+    velocity_df.columns = velocity_cols
+    # Update the original dataframe with the calculated velocities
+    label_df[velocity_cols] = velocity_df
+
+    #     # Plot the first 500 samples
+    # if len(label_df) >= 500:
+    #     fig, axes = plt.subplots(2, 1, figsize=(15, 10))
+
+    #     # Plot position data
+    #     axes[0].plot(label_df.iloc[:500][position_cols])
+    #     axes[0].set_title('Position Data')
+    #     axes[0].set_xlabel('Sample Index')
+    #     axes[0].set_ylabel('Position')
+    #     axes[0].legend(position_cols)
+
+    #     # Plot velocity data
+    #     axes[1].plot(label_df.iloc[:500][velocity_cols])
+    #     axes[1].set_title('Velocity Data')
+    #     axes[1].set_xlabel('Sample Index')
+    #     axes[1].set_ylabel('Velocity')
+    #     axes[1].legend(velocity_cols)
+
+    #     plt.tight_layout()
+    #     plt.show()
+
+    return label_df
+
 def mask(data,config):
 
     # create a mask that selects rows where the values in fmg_index columns are greater than 1024
@@ -555,3 +606,4 @@ def create_sliding_sequences(input_tensor, sequence_length):
         sequences.append(sequence)
 
     return torch.stack(sequences)
+

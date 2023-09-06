@@ -2,10 +2,10 @@ import os
 import torch 
 import argparse
 import yaml
+import wandb
 
 # Change the current working directory to the directory of the script
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
-
 
 from data.data_processing import DataProcessor
 from models.models import LSTMModel
@@ -15,6 +15,22 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Train a neural network.')
     parser.add_argument('--config', type=str,default=r'config.yaml', help='Path to the configuration file.')
     parser.add_argument('--label_norm', type=bool, help='if to normelize labels ')
+    # Add arguments for the configuration options
+    # parser.add_argument('--input_size', type=int, default=27, help='The size of the input layer.')
+    # parser.add_argument('--num_labels', type=int, default=18, help='The number of output labels.')
+    parser.add_argument('--n_layer', type=int, help='The number of hidden layers.')
+    parser.add_argument('--lstm_hidden_size', nargs='+', type=int, help='The size of each hidden layer.')
+    parser.add_argument('--lstm_num_layers', nargs='+', type=int, help='The number of layers.')
+    parser.add_argument('--dropout', nargs='+', type=float, help='The dropout rate for each hidden layer.')
+    # parser.add_argument('--multiplier', nargs='+', type=float, help='The multiplier gor hidden state.')
+    # Add arguments for the hyperparameters
+    parser.add_argument('--learning_rate', type=float, help='The learning rate for the optimizer.')
+    parser.add_argument('--num_epochs', type=int, help='The number of epochs to train for.')
+    parser.add_argument('--weight_decay', type=float, help='The weight decay for the optimizer.')
+    parser.add_argument('--batch_size', type=int, help='The size of batchs.')
+    parser.add_argument('--window_size', type=int, help='The size of batchs.')
+    parser.add_argument('--sequence_length', type=int, help='The sequence_length.')
+
     args = parser.parse_args()
 
     with open(args.config, 'r') as f:
@@ -32,6 +48,9 @@ def parse_args():
 
 if __name__ == '__main__':
 
+
+    
+
     # Check if CUDA is available
     if torch.cuda.is_available():
         # Set the device to the first available CUDA device
@@ -43,6 +62,12 @@ if __name__ == '__main__':
 
 
     config = parse_args()
+    if config.wandb_on:
+        run = wandb.init(project="FMG_LSTM",config=config)
+        config = wandb.config
+        # define a metric we are interested in the minimum of
+        wandb.define_metric("Val_loss", summary="min")
+        wandb.define_metric("Train_loss", summary="min")
 
     # Data Processing
     data_processor = DataProcessor(config)
@@ -50,7 +75,7 @@ if __name__ == '__main__':
     data_processor.preprocess_data()
     
     if config.plot_data:
-        data_processor.plot(from_indx=800,to_indx=1200)
+        data_processor.plot(from_indx=0,to_indx=1000)
     
     # Model Initialization
     model = LSTMModel(config)
@@ -61,19 +86,25 @@ if __name__ == '__main__':
     # Get DataLoaders
     train_loader, val_loader,test_loader = data_processor.get_data_loaders()
 
-    # Training and Validation
-    train_losses, val_losses = train(config=config,train_loader=train_loader
-                                    ,val_loader=val_loader,model=model,device=device )
+
+    if config.pre_trained:
+        model.load_state_dict(torch.load(config.best_model)['model_state_dict'])
+    else:
+        # Training and Validation
+        train_losses, val_losses = train(config=config,train_loader=train_loader
+                                        ,val_loader=val_loader,model=model,device=device,wandb_run=run)
 
 
     #test
     eval = model_eval_metric(config,model,test_loader,
                              data_processor.label_max_val,data_processor.label_min_val,
                              device=device)
-
+    
+    wandb.log({"eval_metric": eval})
     test_loss = test(model=model,config=config,
                      test_loader=test_loader,
                      device=device)
     
 
     print(f'eval_metric {eval}')
+   
