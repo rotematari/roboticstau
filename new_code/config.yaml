@@ -5,53 +5,38 @@
 
 # Add arguments for the configuration options
 fmg_index: ['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'S11',
-       'S12', 'S13', 'S14', 'S15', 'S16', 'S17', 'S18', 'S19', 'S20', 'S21',
-       'S22', 'S23', 'S24', 'S25', 'S26', 'S27', 'S28', 'S29', 'S30', 'S31',]
+       'S12', 'S13', 'S15', 'S16', 'S17', 'S18', 'S21',
+       'S22', 'S23', 'S24', 'S25', 'S26', 'S27', 'S28', 'S29', 'S31']
 first_positoin_label_inedx: ['M1x', 'M1y', 'M1z','M2x', 'M2y', 'M2z', 'M3x', 'M3y', 'M3z', 'M4x', 'M4y', 'M4z']
 positoin_label_inedx: ['M2x', 'M2y', 'M2z', 'M3x', 'M3y', 'M3z', 'M4x', 'M4y', 'M4z']
 velocity_label_inedx: ['V2x','V2y','V2z','V3x','V3y','V3z','V4x','V4y','V4z']
 sesion_time_stamp: ['sesion_time_stamp']
-input_size: 30
+input_size: 27
 num_labels : 18
+sequence_length : 20
 #config.seq_length*config.input_size
 seq_size : 50
 #config.seq_length*config.num_labels
 label_seq_size : 180
-norm : 'std'
+norm : 'minmax'
 n_layer : 4
-hidden_size : [64, 64, 64] 
+hidden_size : 64
+lstm_hidden_size : 64
+lstm_num_layers : 100
 dropout : 0.0
 multiplier : 10
 learning_rate : 0.001
 weight_decay : 0.0001 
-num_epochs : 1000 
+num_epochs : 5 
 batch_size : 5
 window_size : 30
 seq_length: 5
-data_path : '/home/robotics20/Documents/rotem/new_code/data/data'
-model_path: '/home/robotics20/Documents/rotem/new_code/models/saved_models'
+data_path : r'data/data'
+model_path: r'models/saved_models'
 test_size : 0.2
 val_size : 0.2
 random_state : 42 
-# parser.add_argument('--input_size', type=int, default=29, help='The size of the input layer.')
-# parser.add_argument('--num_labels', type=int, default=12, help='The number of output labels.')
-# parser.add_argument('--n_layer', type=int, default=3, help='The number of hidden layers.')
-# parser.add_argument('--hidden_size', nargs='+', type=int, default=[64, 64, 64], help='The size of each hidden layer.')
-# parser.add_argument('--dropout', nargs='+', type=float, default=[0.1, 0.1, 0.1], help='The dropout rate for each hidden layer.')
-# # Add arguments for the hyperparameters
-# parser.add_argument('--learning_rate', type=float, default=0.001, help='The learning rate for the optimizer.')
-# parser.add_argument('--num_epochs', type=int, default=100, help='The number of epochs to train for.')
-# parser.add_argument('--weight_decay', type=float, default=0.0, help='The weight decay for the optimizer.')
-# parser.add_argument('--batch_size', type=int, default=100, help='The size of batchs  .')
 
-# #dit_path 
-# parser.add_argument('--data_path', type=str, default='./data', help='The path to the training data.')
-
-
-# # split args 
-# parser.add_argument('--test_size', type=float, default=0.2, help='The size of the test set.')
-# parser.add_argument('--val_size', type=float, default=0.2, help='The size of the validation set.')
-# parser.add_argument('--random_state', type=int, default=42, help='The random state for data splitting.')
 
 
 ...

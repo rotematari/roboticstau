@@ -95,7 +95,7 @@ def train(config, train_loader, val_loader,net,device='cpu',wandb_on=0):
 
             # Forward pass
             outputs = net(inputs)
-            loss = criterion(outputs, targets)
+            loss = criterion(outputs, targets[:,-1:].squeeze())
 
             # Backward pass
             loss.backward()
@@ -124,7 +124,7 @@ def train(config, train_loader, val_loader,net,device='cpu',wandb_on=0):
                 targets = targets.to(device=device)
 
                 outputs = net(inputs)
-                v_loss = criterion(outputs, targets)
+                v_loss = criterion(outputs, targets[:,-1:].squeeze())
                 val_loss += v_loss.item()
                 # if v_loss.item()>1:
                 #     print(v_loss.item())
@@ -174,7 +174,7 @@ def test(net, config, test_loader,device='cpu',wandb_on=0):
             targets = targets.to(device=device)
 
             outputs = net(inputs)
-            loss = criterion(outputs, targets)
+            loss = criterion(outputs, targets[:,-1:].squeeze())
             test_loss += loss.item()
         test_loss /= len(test_loader)
         
@@ -226,6 +226,28 @@ def threePointDist(outputs,targets):
         dist = dist.reshape(-1,3)
     return dist.mean(axis=0)
 
+
+def plot_results(preds,targets):
+
+        # Create a figure and a grid of subplots with 1 row and 2 columns
+    fig, axes = plt.subplots(1, 2, figsize=(10, 4))  # Adjust figsize as needed
+
+    # Plot data on the first subplot
+    axes[0].plot(preds)
+    axes[0].set_title('Plot of preds')
+    axes[0].legend()
+
+    # Plot data on the second subplot
+    axes[1].plot(targets)
+    axes[1].set_title('Plot of targets')
+    axes[1].legend()
+
+    # Adjust layout to prevent overlap
+    plt.tight_layout()
+
+    # Show the plots
+    plt.pause(0.001)
+
 def model_eval_metric(config,net,test_loader,label_max_val,label_min_val ,device='cpu'):
     # show distance between ground truth and prediction by 3d points [0,M2,M3,M4] 
 
@@ -243,19 +265,36 @@ def model_eval_metric(config,net,test_loader,label_max_val,label_min_val ,device
 
         outputs = net(inputs)
 
-        # Create seq_length series of shape (seq_length*num_labels,)
-        label_min_val = [label_min_val for _ in range(config.seq_length)]
-        label_max_val = [label_max_val for _ in range(config.seq_length)]
+        # # Create seq_length series of shape (seq_length*num_labels,)
+        # label_min_val = [label_min_val for _ in range(config.seq_length)]
+        # label_max_val = [label_max_val for _ in range(config.seq_length)]
 
-        # Concatenate the series to create a new series of shape (180,)
-        new_label_min_val = np.concatenate(label_min_val)
-        new_label_max_val = np.concatenate(label_max_val)
+        # # Concatenate the series to create a new series of shape (180,)
+        # new_label_min_val = np.concatenate(label_min_val)
+        # new_label_max_val = np.concatenate(label_max_val)
+
+        size = outputs.size(0)
+        label_size = targets.size(2)
+
+        # new_label_min_val = np.tile(label_min_val,(size,1))
+
+        # new_label_max_val = np.tile(label_max_val,(size,1))
 
 
-
-        outputs = min_max_unnormalize(outputs.detach().cpu().numpy(),new_label_min_val,new_label_max_val)
+        outputs = min_max_unnormalize(outputs.detach().cpu().numpy(),np.tile(label_min_val,(size,1)),np.tile(label_max_val,(size,1)))
+        targets = min_max_unnormalize(targets.detach().cpu().numpy(),np.tile(label_min_val,(targets.size(0),targets.size(1),1)),np.tile(label_max_val,(targets.size(0),targets.size(1),1)))
+        # targets = targets.view(-1,config.sequence_length,label_size)
         outputs = torch.tensor(outputs)
-        dist = threePointDist(outputs.reshape(-1,18), targets.reshape(-1,18))
+
+        # dist = threePointDist(outputs.reshape(-1,18), targets.reshape(-1,18))
+
+        plot_results(outputs[100:200].detach().numpy(),targets[100:200,-1:].squeeze())
+        # plt.plot(targets[:,-1:].view(size,targets.size(2)).numpy())
+        # plt.plot(outputs.detach().numpy())
+
+        dist = np.sqrt(((outputs - targets[:,-1:].squeeze())**2).sum(axis=0)/size)
+
+        
 
 
 
