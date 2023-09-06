@@ -6,13 +6,13 @@ class LSTMModel(nn.Module):
     def __init__(self, config):
         super(LSTMModel, self).__init__()
 
-        input_size, hidden_size, num_layers, output_size = config.input_size,config.lstm_hidden_size,config.lstm_num_layers,config.num_labels
+        input_size, hidden_size, num_layers, output_size , dropout = config.input_size,config.lstm_hidden_size,config.lstm_num_layers,config.num_labels,config.dropout
 
         self.hidden_size = hidden_size
         self.num_layers = num_layers
         
         # LSTM layer
-        self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True)
+        self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True,dropout=dropout)
         
         # Fully connected layer
         self.fc = nn.Linear(hidden_size, output_size)

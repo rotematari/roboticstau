@@ -88,7 +88,7 @@ def train(config, train_loader, val_loader,model,device='cpu',wandb_run=None):
     for epoch in range(config.num_epochs):
         # Initialize the epoch loss and accuracy
         train_loss = 0
-
+        model.train()
         # Train on the training set
         for inputs, targets in train_loader:
 
@@ -122,6 +122,7 @@ def train(config, train_loader, val_loader,model,device='cpu',wandb_run=None):
 
         # Evaluate on the validation set
         with torch.no_grad():
+            model.eval()
             for i,(inputs, targets) in enumerate(val_loader):
                 
                 inputs = inputs.to(device=device)
