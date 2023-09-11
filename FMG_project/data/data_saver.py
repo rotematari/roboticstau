@@ -1,27 +1,26 @@
 from os import listdir
 from os.path import isfile, join
-import numpy as np
-import serial
-import time as t
-# import NatNet client
-from NatNetClient import NatNetClient
-#import natnetclient as natnet
-
-import matplotlib.pyplot as plt 
-import yaml
-import argparse
-import pandas as pd
-from new_code.data.data_processing import print_not_numeric_vals 
 import os 
 # Get the current directory of the script being run
 current_directory = os.path.dirname(os.path.realpath(__file__))
 
 # Navigate up  directori
 parent_directory = os.path.abspath(os.path.join(current_directory, os.pardir))
-
 # Change the working directory
 os.chdir(parent_directory)
 
+import numpy as np
+import serial
+import time as t
+
+from NatNetClient import NatNetClient
+
+import matplotlib.pyplot as plt 
+import yaml
+import argparse
+import pandas as pd
+
+# from FMG_project.utils.utils import print_not_numeric_vals
 data_dir = r'data/data'
 
 with open(r'config.yaml', 'r') as f:
@@ -31,6 +30,22 @@ config = argparse.Namespace(**args)
 # dirs = [f for f in listdir(dirpath)]
 # make sure the 'COM#' is set according the Windows Device Manager /dev/ttyACM0
 ser = serial.Serial('COM3', 115200)
+
+def is_not_numeric(x):
+    try:
+        float(x)
+        return False
+    except ValueError:
+        return True
+    
+
+def print_not_numeric_vals(df):
+
+    mask = df.drop(['sesion_time_stamp'],axis=1).applymap(is_not_numeric)
+    non_numeric_values = df[mask].stack().dropna()
+    print(non_numeric_values)
+
+    return non_numeric_values
 
 
 # print format: t,Gx,Gy,Gz,Ax,Ay,Az,Mx,My,Mz,F1,F2,F3,F4,B1,B2,S1,S2,S3,S4,class
@@ -132,11 +147,9 @@ if __name__ == '__main__':
     for i in range(10):
         ser.readline()
 
-
-    
     t_start = t.time()
     sesion_time_stamp = t.strftime("%d_%b_%Y_%H_%M", t.gmtime())
-    file_name = sesion_time_stamp + '.csv'
+    file_name = sesion_time_stamp + '_movment_2'+'.csv'
     NatNet = init_natnetClient()
     print(file_name)
     f = open(join(data_dir, file_name), "w")
@@ -146,7 +159,7 @@ if __name__ == '__main__':
     t.sleep(5)
     marker_data = NatNet.rigidBodyList
 
-    for i in range(5000):
+    for i in range(10000):
       
       marker_data = NatNet.rigidBodyList
 
@@ -165,7 +178,7 @@ if __name__ == '__main__':
     print("finished")
 
     ## checks data 
-    df = pd.read_csv(join(data_dir,file_name))
+    # df = pd.read_csv(join(data_dir,file_name))
     
 
     # not_numeric_vals = print_not_numeric_vals(df)
