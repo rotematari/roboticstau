@@ -14,7 +14,7 @@ import os
 
 import torch
 from torch.optim import Adam
-from torch.nn import L1Loss
+from torch.nn import L1Loss,MSELoss,HuberLoss
 from torch import Tensor
 
 import wandb
@@ -72,7 +72,7 @@ def train(config, train_loader, val_loader,model,device='cpu',wandb_run=None):
     # net = net(config)
 
     # Define the loss function
-    criterion = L1Loss() 
+    criterion = MSELoss() 
 
 
     # Define the optimizer with weight decay
@@ -99,7 +99,10 @@ def train(config, train_loader, val_loader,model,device='cpu',wandb_run=None):
 
             # Forward pass
             outputs = model(inputs)
-            loss = criterion(outputs, targets[:,-1:,:].view(-1,config.num_labels))
+            if config.sequence:
+                loss = criterion(outputs, targets[:,-1:,:].view(-1,config.num_labels))
+            else:
+                loss = criterion(outputs, targets)
 
             # Backward pass
             loss.backward()
@@ -129,16 +132,16 @@ def train(config, train_loader, val_loader,model,device='cpu',wandb_run=None):
                 targets = targets.to(device=device)
 
                 outputs = model(inputs)
-                v_loss = criterion(outputs, targets[:,-1:].squeeze())
+
+            if config.sequence:
+                v_loss = criterion(outputs, targets[:,-1:,:].view(-1,config.num_labels))
+            else:
+                v_loss = criterion(outputs, targets)
                 val_loss += v_loss.item()
-                # if v_loss.item()>1:
-                #     print(v_loss.item())
-                
-                
                 
             val_loss /= i
             
-        # Save the validation loss and accuracy values
+        # Save the validation loss 
         val_losses.append(val_loss)
         
         # Print the epoch loss and accuracy values
@@ -168,6 +171,8 @@ def train(config, train_loader, val_loader,model,device='cpu',wandb_run=None):
         'optimizer_state_dict': optimizer.state_dict(),
         'loss': val_loss,
         }, checkpoint_path)
+    
+    print(f"model {filename} saved ")
     
     return train_losses, val_losses
 
@@ -241,7 +246,7 @@ def threePointDist(outputs,targets):
     return dist.mean(axis=0)
 
 
-def plot_results(preds,targets):
+def plot_results(config,preds,targets,wandb_run=None):
 
     # Create a figure and a grid of subplots with 1 row and 2 columns
     fig, axes = plt.subplots(2, 2, figsize=(10, 4),sharex=True,sharey=True)  # Adjust figsize as needed
@@ -257,18 +262,22 @@ def plot_results(preds,targets):
     # Plot data on the second subplot
     axes[1,0].plot(targets[:,:9])
     axes[1,0].set_title('Plot of targets location')
-    # axes[1,0].legend()
-    axes[1,1].plot(targets[:,9:])
-    axes[1,1].set_title('Plot of targets V')
-    # axes[1,1].legend()
+
+    if config.with_velocity:
+        axes[1,1].plot(targets[:,9:])
+        axes[1,1].set_title('Plot of targets V')
+        
 
     # Adjust layout to prevent overlap
     plt.tight_layout()
+    if wandb_run is not None:
+        # Log the figure to wandb
+        wandb.log({"preds and targets": plt})
+    else:
+        # Show the plots
+        plt.show()
 
-    # Show the plots
-    plt.show()
-
-def model_eval_metric(config,model,test_loader,label_max_val,label_min_val ,device='cpu'):
+def model_eval_metric(config,model,test_loader,label_max_val,label_min_val ,device='cpu',wandb_run=None):
     # show distance between ground truth and prediction by 3d points [0,M2,M3,M4] 
 
     model = model.to(device=device)
@@ -282,26 +291,35 @@ def model_eval_metric(config,model,test_loader,label_max_val,label_min_val ,devi
 
         inputs = inputs.to(device=device)
         targets = targets.to(device=device)
+        if config.sequence:
+            outputs = model(inputs[:,-1:,:])
+            size = outputs.size(0)
+            
+            if config.norm_labels:
+                outputs = min_max_unnormalize(outputs.detach().cpu().numpy(),np.tile(label_min_val,(size,1)),np.tile(label_max_val,(size,1)))
+                targets = min_max_unnormalize(targets.detach().cpu().numpy(),np.tile(label_min_val,(targets.size(0),targets.size(1),1)),np.tile(label_max_val,(targets.size(0),targets.size(1),1)))
+           
+            if config.plot_pred:
+                plot_results(config,outputs[100:2000].cpu().detach().numpy(),targets[100:2000,-1:,:].view(-1,config.num_labels).cpu().detach().numpy(),wandb_run=wandb_run)
 
-        outputs = model(inputs[:,-1:,:])
+            dist = np.sqrt(((outputs.cpu().detach().numpy() - targets[:,-1:,:].view(-1,config.num_labels).cpu().detach().numpy())**2).sum(axis=0)/size)
+        else:
+            outputs = model(inputs[:2000])
+            size = outputs.size(0)
+            if config.norm_labels:
+                outputs = min_max_unnormalize(outputs.detach().cpu().numpy(),np.tile(label_min_val,(size,1)),np.tile(label_max_val,(size,1)))
+                targets = min_max_unnormalize(targets.detach().cpu().numpy(),np.tile(label_min_val,(targets.size(0),1)),np.tile(label_max_val,(targets.size(0),1)))
 
-        size = outputs.size(0)
-        label_size = targets.size(2)
+            if config.plot_pred:
+                plot_results(config,outputs[100:2000].cpu().detach().numpy(),targets[100:2000,:].view(-1,config.num_labels).cpu().detach().numpy(),wandb_run=wandb_run)
 
-        if config.norm_labels:
-            outputs = min_max_unnormalize(outputs.detach().cpu().numpy(),np.tile(label_min_val,(size,1)),np.tile(label_max_val,(size,1)))
-            targets = min_max_unnormalize(targets.detach().cpu().numpy(),np.tile(label_min_val,(targets.size(0),targets.size(1),1)),np.tile(label_max_val,(targets.size(0),targets.size(1),1)))
+            dist = np.sqrt(((outputs.cpu().detach().numpy() - targets[:size].cpu().detach().numpy())**2).sum(axis=0)/size)
 
-        # outputs = torch.tensor(outputs)
-
-        if config.plot_pred:
-            plot_results(outputs[100:2000].cpu().detach().numpy(),targets[100:2000,-1:,:].view(-1,18).cpu().detach().numpy())
-
-        dist = np.sqrt(((outputs.cpu().detach().numpy() - targets[:,-1:,:].view(-1,18).cpu().detach().numpy())**2).sum(axis=0)/size)
     return dist
 
 def min_max_unnormalize(data, min_val, max_val,bottom=-1, top=1):
-    return ((data-bottom)/(top-bottom)) * (max_val - min_val) + min_val
+
+    return torch.tensor(((data-bottom)/(top-bottom)) * (max_val - min_val) + min_val)
 
 def min_max_normalize(data,bottom=-1, top=1):
 

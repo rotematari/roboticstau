@@ -16,34 +16,37 @@ sesion_time_stamp: ['sesion_time_stamp']
 input_size: 27
 num_labels : 18
 sample_speed : 64
-
+input_dim : 1 
 #hypermeters 
-sequence_length : 20
+sequence_length : 60
 
-lstm_hidden_size : 64
+
+lstm_hidden_size : 128
 lstm_num_layers : 2
-dropout : 0.3
-learning_rate : 0.0001
+dropout : 0.0
+learning_rate : 0.003
 weight_decay : 0.00001 
-num_epochs : 5 
+num_epochs : 10 
 batch_size : 2
 window_size : 30
 
 #paths
 data_path : ./data/data
 model_path: ./models/saved_models
-best_model: ./models/saved_models/706_2023_11:49.pt
+best_model: ./models/saved_models/epoch10_11_09_2023_11:21.pt
 
 
 test_size : 0.2
 val_size : 0.2
-random_state : 42 
+random_state : 42
+shuffle_train : True 
 
-wandb_on: True
-norm_labels: False
-plot_data : False
-plot_pred : False
-pre_trained: False
-
+wandb_on: False
+norm_labels: True
+plot_data : True
+plot_pred : True
+pre_trained: True
+with_velocity : False
+sequence : False
 
 ...
