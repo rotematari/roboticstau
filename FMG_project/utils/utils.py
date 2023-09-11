@@ -31,42 +31,6 @@ import yaml
 # Change the current working directory to the directory of the main script
 os.chdir(join(os.path.dirname(os.path.abspath(__file__)), os.pardir))
 
-def hidden_size_maker(config,seq=True):
-    hidden_size = []
-    if seq:
-        last_in = config.seq_size
-    else :
-        last_in = config.input_size
-
-    
-    up = int(config.n_layer/2)
-    down = config.n_layer -up 
-    multiplier = config.multiplier
-    for layer in range(up):
-        
-
-        size = last_in*multiplier
-
-        if size >= 2560 :
-            size = 2560
-
-
-
-        hidden_size.append(int(size))
-        last_in = int(last_in*multiplier)
-
-    for layer in range(down):
-        size = last_in/multiplier
-        
-        if size<=config.label_seq_size*2:
-            size = config.label_seq_size*2
-
-        hidden_size.append(int(size))
-        last_in = int(size)
-
-    return hidden_size
-
-
 def train(config, train_loader, val_loader,model,device='cpu',wandb_run=None):
     # Create an instance of the FullyConnected class using the configuration object
     # net = net(config)
@@ -219,33 +183,6 @@ def plot_losses(train_losses, val_losses=[],train=True):
         # Show the plot
         plt.show()
 
-def threePointDist(outputs,targets):
-# show distance between ground truth and prediction by 3d points [0,M2,M3,M4] 
-# 'M1x', 'M1y','M1z', 'M2x', 'M2y', 'M2z', 'M3x', 'M3y', 'M3z', 'M4x', 'M4y', 'M4z',
-
-   
-    with torch.no_grad():
-        dist = []
-        outputs = outputs.cpu()
-        targets = targets.cpu()
-
-        M_predicted =np.array(outputs[:,:3])
-        M = np.array(targets[:,:3])
-
-        for i in range(2):
-
-            M = np.concatenate([M,np.array(targets[:,i+3:i+6])],axis =1)
-            M_predicted = np.concatenate([M_predicted,np.array(outputs[:,i+3:i+6])],axis =1)
-
-        dist = np.sqrt((M[:,0]-M_predicted[:,0])**2+(M[:,1]-M_predicted[:,1])**2+(M[:,2]-M_predicted[:,2])**2)
-        
-        for i in range(2):
-
-            dist = np.concatenate([dist,np.sqrt((M[:,i+3]-M_predicted[:,i+3])**2+(M[:,i+4]-M_predicted[:,i+4])**2+(M[:,i+5]-M_predicted[:,i+5])**2)],axis =0)
-        dist = dist.reshape(-1,3)
-    return dist.mean(axis=0)
-
-
 def plot_results(config,preds,targets,wandb_run=None):
 
     # Create a figure and a grid of subplots with 1 row and 2 columns
@@ -254,22 +191,27 @@ def plot_results(config,preds,targets,wandb_run=None):
     # Plot data on the first subplot
     axes[0,0].plot(preds[:,:9])
     axes[0,0].set_title('Plot of preds location')
-    # axes[0,0].legend()
+    axes[0,0].grid()
+
+
     axes[0,1].plot(preds[:,9:])
     axes[0,1].set_title('Plot of preds V ')
-    # axes[0,1].legend()
+    axes[0,1].grid()
 
     # Plot data on the second subplot
     axes[1,0].plot(targets[:,:9])
     axes[1,0].set_title('Plot of targets location')
-
+    axes[1,0].grid()
     if config.with_velocity:
         axes[1,1].plot(targets[:,9:])
         axes[1,1].set_title('Plot of targets V')
+        axes[1,1].grid()
         
 
     # Adjust layout to prevent overlap
     plt.tight_layout()
+
+
     if wandb_run is not None:
         # Log the figure to wandb
         wandb.log({"preds and targets": plt})
@@ -304,7 +246,7 @@ def model_eval_metric(config,model,test_loader,label_max_val,label_min_val ,devi
 
             dist = np.sqrt(((outputs.cpu().detach().numpy() - targets[:,-1:,:].view(-1,config.num_labels).cpu().detach().numpy())**2).sum(axis=0)/size)
         else:
-            outputs = model(inputs[:2000])
+            outputs = model(inputs[0:3000])
             size = outputs.size(0)
             if config.norm_labels:
                 outputs = min_max_unnormalize(outputs.detach().cpu().numpy(),np.tile(label_min_val,(size,1)),np.tile(label_max_val,(size,1)))
@@ -329,15 +271,6 @@ def min_max_normalize(data,bottom=-1, top=1):
     norm = bottom+(data - min_val) / (max_val - min_val)*(top-bottom)
 
     return norm,max_val,min_val
-
-
-# normalization std
-def normalize(data):
-    mean = data.mean(axis=0)
-    std = data.std(axis=0)
-
-
-    return (data - mean) / std
 
 def plot_data(config,data):
     fig, (ax1, ax2) = plt.subplots(1, 2,figsize=(40,5))
@@ -372,34 +305,6 @@ def data_loder(config):
 
     return full_df
 
-def sepatare_data(full_df,config,first=True):
-    """
-    Given a pandas dataframe containing FMG, IMU and label data, separates the data into three pandas dataframes: 
-    one for FMG data, one for IMU data and one for label data.
-    """
-    # # imu_index = ['Gx', 'Gy', 'Gz', 'Ax', 'Ay', 'Az', 'Mx', 'My', 'Mz']
-    # fmg_index = ['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'S11', 'S12', 'S13', 'S14', 'S15', 'S16']
-    label_inedx = config.first_positoin_label_inedx
-    # sesion_time_stamp = ['sesion_time_stamp']
-    if first:
-        # sesion_time_stamp_df = full_df[config.sesion_time_stamp]
-        fmg_df = pd.concat([full_df[config.fmg_index],full_df[config.sesion_time_stamp]],axis=1,ignore_index=False)
-        label_df = pd.concat([full_df[label_inedx],full_df[config.sesion_time_stamp]],axis=1,ignore_index=False)
-    else:
-
-
-        fmg_df = pd.concat([full_df[config.fmg_index],full_df[config.sesion_time_stamp]],axis=1,ignore_index=False)
-
-        label_df = pd.concat([full_df[config.positoin_label_inedx+config.velocity_label_inedx],full_df[config.sesion_time_stamp]],axis=1,ignore_index=False)
-
-    assert isinstance(fmg_df, pd.DataFrame),f"{fmg_df} is not a DataFrame"
-    assert isinstance(label_df, pd.DataFrame),f"{label_df} is not a DataFrame"
-    # assert isinstance(imu_df, pd.DataFrame),"imu_df is not pd.dataframe"
-    imu_df=0
-
-    return fmg_df,label_df 
-
-## will find bias for each time stamped sesion 
 def find_bias(df):
     """
     Given a pandas dataframe containing FMG data, finds the bias for each time stamped session and returns a pandas dataframe.
@@ -414,8 +319,6 @@ def find_bias(df):
 
     return bias_df
 
-
-
 def find_std(df):
     """
     Given a pandas dataframe containing FMG or IMU data, finds the standard deviation for each time stamped session and returns a pandas dataframe.
@@ -429,7 +332,6 @@ def find_std(df):
         std_df = pd.concat([std_df,temp_df],axis=1,ignore_index=False)
 
     return std_df.T
-
 
 def subtract_bias(df):
     # Compute the bias for each unique value of the sesion_time_stamp column
@@ -459,38 +361,6 @@ def subtract_bias(df):
     
     return new_df
 
-
-
-def std_division(df):
-    # Compute the standard deviation for each unique value of the sesion_time_stamp column
-    std_df = find_std(df)
-    
-    # Initialize an empty DataFrame to store the result
-    new_fmg_df = pd.DataFrame()
-    
-    # Iterate over each unique value of the sesion_time_stamp column
-    for time_stamp in df['sesion_time_stamp'].unique():
-        # Select the rows of df and std_df corresponding to the current time stamp
-        df_rows = df[df['sesion_time_stamp'] == time_stamp].copy()
-        std_rows = std_df[std_df['sesion_time_stamp'] == time_stamp].copy()
-        
-        df_rows= df_rows.drop('sesion_time_stamp', axis=1).astype(float).copy()
-        std_rows = std_rows.drop('sesion_time_stamp', axis=1).astype(float).copy()
-
-
-        
-        # Divide the data in df by the standard deviation
-        temp_df = df_rows/ (std_rows.to_numpy()+1e-4)
-        
-        # Add back the sesion_time_stamp column
-        temp_df['sesion_time_stamp'] = time_stamp
-        
-        # Append the result to new_fmg_df
-        new_fmg_df = pd.concat([new_fmg_df, temp_df], axis=0)
-    
-    return new_fmg_df
-
-
 def get_label_axis(labels,config):
     #label_inedx = ['M1x','M1y','M1z','M2x','M2y','M2z','M3x','M3y','M3z','M4x','M4y','M4z']
     # Create a copy of the labels DataFrame slice
@@ -500,27 +370,8 @@ def get_label_axis(labels,config):
     labels.loc[:,['M1x','M2x','M3x','M4x']]  = labels[['M1x','M2x','M3x','M4x']].sub(labels['M1x'], axis=0)
     labels.loc[:,['M1y','M2y','M3y','M4y']] = labels[['M1y','M2y','M3y','M4y']].sub(labels['M1y'], axis=0)
     labels.loc[:,['M1z','M2z','M3z','M4z']] = labels[['M1z','M2z','M3z','M4z']].sub(labels['M1z'], axis=0)
-
-    # If you want to replace these columns in the original 'labels' DataFrame:
-    # labels.loc[:,config.first_positoin_label_inedx] = labels_copy
-
-#    labels[['M1x','M2x','M3x','M4x']]  = labels[['M1x','M2x','M3x','M4x']].sub(labels['M1x'], axis=0)
-#    labels[['M1y','M2y','M3y','M4y']] = labels[['M1y','M2y','M3y','M4y']].sub(labels['M1y'], axis=0)
-#    labels[['M1z','M2z','M3z','M4z']] = labels[['M1z','M2z','M3z','M4z']].sub(labels['M1z'], axis=0)
    
     return labels[config.positoin_label_inedx]
-
-
-def calc_velocity(config,label_df):
-    #['V2x','V2y','V2z','V3x','V3y','V3z','V4x','V4y','V4z']
-    label_df = label_df.copy()
-    label_df[config.velocity_label_inedx]= [0,0,0,0,0,0,0,0,0]
-    temp = label_df.loc[1:,config.positoin_label_inedx].reset_index(drop=True).copy()
-
-    label_df = label_df.loc[:temp.shape[0]-10] 
-    temp = temp.loc[:temp.shape[0]-10]
-    label_df.loc[:temp.shape[0],config.velocity_label_inedx] = temp.values - label_df.loc[:temp.shape[0],config.positoin_label_inedx].values
-    return label_df[config.velocity_label_inedx]
 
 def calc_velocity(config, label_df):
     # Copy the dataframe to avoid SettingWithCopyWarning
@@ -540,28 +391,6 @@ def calc_velocity(config, label_df):
     velocity_df.columns = velocity_cols
     # Update the original dataframe with the calculated velocities
     label_df[velocity_cols] = velocity_df
-
-    #     # Plot the first 500 samples
-    # if len(label_df) >= 500:
-    #     fig, axes = plt.subplots(2, 1, figsize=(15, 10))
-
-    #     # Plot position data
-    #     axes[0].plot(label_df.iloc[:500][position_cols])
-    #     axes[0].set_title('Position Data')
-    #     axes[0].set_xlabel('Sample Index')
-    #     axes[0].set_ylabel('Position')
-    #     axes[0].legend(position_cols)
-
-    #     # Plot velocity data
-    #     axes[1].plot(label_df.iloc[:500][velocity_cols])
-    #     axes[1].set_title('Velocity Data')
-    #     axes[1].set_xlabel('Sample Index')
-    #     axes[1].set_ylabel('Velocity')
-    #     axes[1].legend(velocity_cols)
-
-    #     plt.tight_layout()
-    #     plt.show()
-
     return label_df
 
 def mask(data,config):
@@ -598,21 +427,7 @@ def print_not_numeric_vals(df):
     return non_numeric_values
 
 
-def make_sequence(config,data: Tensor)->Tensor:
 
-    # Reshape data into sequences of length 20 with 9 features each
-    sequence_length = config.sequence_length
-    num_features = data.size(1)
-    num_samples = data.size(0)
-    num_sequences = num_samples // sequence_length
-
- 
-    # Reshape the data
-    sequenced = data[:num_sequences * sequence_length].view(num_sequences, sequence_length, num_features)
-
-
-
-    return sequenced
 
 def create_sliding_sequences(input_tensor, sequence_length):
     sample_size, features = input_tensor.shape
@@ -626,3 +441,150 @@ def create_sliding_sequences(input_tensor, sequence_length):
 
     return torch.stack(sequences)
 
+
+
+"""
+def hidden_size_maker(config,seq=True):
+    hidden_size = []
+    if seq:
+        last_in = config.seq_size
+    else :
+        last_in = config.input_size
+
+    
+    up = int(config.n_layer/2)
+    down = config.n_layer -up 
+    multiplier = config.multiplier
+    for layer in range(up):
+        
+
+        size = last_in*multiplier
+
+        if size >= 2560 :
+            size = 2560
+
+
+
+        hidden_size.append(int(size))
+        last_in = int(last_in*multiplier)
+
+    for layer in range(down):
+        size = last_in/multiplier
+        
+        if size<=config.label_seq_size*2:
+            size = config.label_seq_size*2
+
+        hidden_size.append(int(size))
+        last_in = int(size)
+
+    return hidden_size
+# normalization std
+def normalize(data):
+    mean = data.mean(axis=0)
+    std = data.std(axis=0)
+
+
+    return (data - mean) / std
+        def sepatare_data(full_df,config,first=True):
+        
+        Given a pandas dataframe containing FMG, IMU and label data, separates the data into three pandas dataframes: 
+        one for FMG data, one for IMU data and one for label data.
+        
+        # # imu_index = ['Gx', 'Gy', 'Gz', 'Ax', 'Ay', 'Az', 'Mx', 'My', 'Mz']
+        # fmg_index = ['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'S11', 'S12', 'S13', 'S14', 'S15', 'S16']
+        label_inedx = config.first_positoin_label_inedx
+        # sesion_time_stamp = ['sesion_time_stamp']
+        if first:
+            # sesion_time_stamp_df = full_df[config.sesion_time_stamp]
+            fmg_df = pd.concat([full_df[config.fmg_index],full_df[config.sesion_time_stamp]],axis=1,ignore_index=False)
+            label_df = pd.concat([full_df[label_inedx],full_df[config.sesion_time_stamp]],axis=1,ignore_index=False)
+        else:
+
+
+            fmg_df = pd.concat([full_df[config.fmg_index],full_df[config.sesion_time_stamp]],axis=1,ignore_index=False)
+
+            label_df = pd.concat([full_df[config.positoin_label_inedx+config.velocity_label_inedx],full_df[config.sesion_time_stamp]],axis=1,ignore_index=False)
+
+        assert isinstance(fmg_df, pd.DataFrame),f"{fmg_df} is not a DataFrame"
+        assert isinstance(label_df, pd.DataFrame),f"{label_df} is not a DataFrame"
+        # assert isinstance(imu_df, pd.DataFrame),"imu_df is not pd.dataframe"
+        imu_df=0
+
+        return fmg_df,label_df
+    def std_division(df):
+        # Compute the standard deviation for each unique value of the sesion_time_stamp column
+        std_df = find_std(df)
+        
+        # Initialize an empty DataFrame to store the result
+        new_fmg_df = pd.DataFrame()
+        
+        # Iterate over each unique value of the sesion_time_stamp column
+        for time_stamp in df['sesion_time_stamp'].unique():
+            # Select the rows of df and std_df corresponding to the current time stamp
+            df_rows = df[df['sesion_time_stamp'] == time_stamp].copy()
+            std_rows = std_df[std_df['sesion_time_stamp'] == time_stamp].copy()
+            
+            df_rows= df_rows.drop('sesion_time_stamp', axis=1).astype(float).copy()
+            std_rows = std_rows.drop('sesion_time_stamp', axis=1).astype(float).copy()
+
+
+            
+            # Divide the data in df by the standard deviation
+            temp_df = df_rows/ (std_rows.to_numpy()+1e-4)
+            
+            # Add back the sesion_time_stamp column
+            temp_df['sesion_time_stamp'] = time_stamp
+            
+            # Append the result to new_fmg_df
+            new_fmg_df = pd.concat([new_fmg_df, temp_df], axis=0)
+        
+        return new_fmg_df
+
+    def make_sequence(config,data: Tensor)->Tensor:
+
+        # Reshape data into sequences of length 20 with 9 features each
+        sequence_length = config.sequence_length
+        num_features = data.size(1)
+        num_samples = data.size(0)
+        num_sequences = num_samples // sequence_length
+
+    
+        # Reshape the data
+        sequenced = data[:num_sequences * sequence_length].view(num_sequences, sequence_length, num_features)
+        return sequenced
+    def threePointDist(outputs,targets):
+    # show distance between ground truth and prediction by 3d points [0,M2,M3,M4] 
+    # 'M1x', 'M1y','M1z', 'M2x', 'M2y', 'M2z', 'M3x', 'M3y', 'M3z', 'M4x', 'M4y', 'M4z',
+
+    
+        with torch.no_grad():
+            dist = []
+            outputs = outputs.cpu()
+            targets = targets.cpu()
+
+            M_predicted =np.array(outputs[:,:3])
+            M = np.array(targets[:,:3])
+
+            for i in range(2):
+
+                M = np.concatenate([M,np.array(targets[:,i+3:i+6])],axis =1)
+                M_predicted = np.concatenate([M_predicted,np.array(outputs[:,i+3:i+6])],axis =1)
+
+            dist = np.sqrt((M[:,0]-M_predicted[:,0])**2+(M[:,1]-M_predicted[:,1])**2+(M[:,2]-M_predicted[:,2])**2)
+            
+            for i in range(2):
+
+                dist = np.concatenate([dist,np.sqrt((M[:,i+3]-M_predicted[:,i+3])**2+(M[:,i+4]-M_predicted[:,i+4])**2+(M[:,i+5]-M_predicted[:,i+5])**2)],axis =0)
+            dist = dist.reshape(-1,3)
+        return dist.mean(axis=0)
+    # def calc_velocity(config,label_df):
+    #     #['V2x','V2y','V2z','V3x','V3y','V3z','V4x','V4y','V4z']
+    #     label_df = label_df.copy()
+    #     label_df[config.velocity_label_inedx]= [0,0,0,0,0,0,0,0,0]
+    #     temp = label_df.loc[1:,config.positoin_label_inedx].reset_index(drop=True).copy()
+
+    #     label_df = label_df.loc[:temp.shape[0]-10] 
+    #     temp = temp.loc[:temp.shape[0]-10]
+    #     label_df.loc[:temp.shape[0],config.velocity_label_inedx] = temp.values - label_df.loc[:temp.shape[0],config.positoin_label_inedx].values
+    #     return label_df[config.velocity_label_inedx]
+"""
