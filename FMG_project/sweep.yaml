@@ -5,34 +5,38 @@ metric:
 parameters:
   batch_size:
     distribution: int_uniform
-    max: 15
+    max: 10
     min: 2
   learning_rate:
     distribution: uniform
-    max: 0.001
-    min: 0.00001
+    max: 0.01
+    min: 0.0005
   lstm_hidden_size:
     distribution: int_uniform
     max: 128
     min: 32
   lstm_num_layers:
     distribution: int_uniform
-    max: 6
+    max: 5
     min: 2
   num_epochs:
     distribution: int_uniform
     max: 20
-    min: 3
+    min: 5
   sequence_length:
     distribution: int_uniform
     max: 40
-    min: 10
+    min: 25
   weight_decay:
     distribution: uniform
-    max: 2e-05
-    min: 1e-06
+    max: 1e-04
+    min: 1e-05
   window_size:
     distribution: int_uniform
     max: 60
     min: 15
+  dropout:
+    distribution: uniform
+    max: 0.3
+    min: 0.0
 program: main.py
