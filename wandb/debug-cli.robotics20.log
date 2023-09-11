@@ -1,0 +1,44 @@
+2023-09-06 17:00:04 INFO Running runs: []
+2023-09-06 17:00:05 INFO Agent received command: run
+2023-09-06 17:00:05 INFO Agent starting run with config:
+	batch_size: 7
+	dropout: 0.5042271454095106
+	learning_rate: 1.011323106917144e-05
+	lstm_hidden_size: 61
+	lstm_num_layers: 2
+	num_epochs: 4
+	sequence_length: 15
+	weight_decay: 7.565653813817907e-06
+	window_size: 33
+2023-09-06 17:00:05 INFO About to run command: /usr/bin/env python main.py --batch_size=7 --dropout=0.5042271454095106 --learning_rate=1.011323106917144e-05 --lstm_hidden_size=61 --lstm_num_layers=2 --num_epochs=4 --sequence_length=15 --weight_decay=7.565653813817907e-06 --window_size=33
+2023-09-06 17:00:10 INFO Running runs: ['mh7wxtpw']
+2023-09-06 17:00:10 INFO Cleaning up finished run: mh7wxtpw
+2023-09-06 17:00:11 INFO Agent received command: run
+2023-09-06 17:00:11 INFO Agent starting run with config:
+	batch_size: 4
+	dropout: 0.23770430940784576
+	learning_rate: 0.0006289009660034879
+	lstm_hidden_size: 79
+	lstm_num_layers: 2
+	num_epochs: 8
+	sequence_length: 39
+	weight_decay: 3.3406310974497807e-06
+	window_size: 42
+2023-09-06 17:00:11 INFO About to run command: /usr/bin/env python main.py --batch_size=4 --dropout=0.23770430940784576 --learning_rate=0.0006289009660034879 --lstm_hidden_size=79 --lstm_num_layers=2 --num_epochs=8 --sequence_length=39 --weight_decay=3.3406310974497807e-06 --window_size=42
+2023-09-06 17:00:16 INFO Running runs: ['thba50mz']
+2023-09-06 17:00:16 INFO Cleaning up finished run: thba50mz
+2023-09-06 17:00:17 INFO Agent received command: run
+2023-09-06 17:00:17 INFO Agent starting run with config:
+	batch_size: 12
+	dropout: 0.4488228626827315
+	learning_rate: 0.00012433342259349803
+	lstm_hidden_size: 109
+	lstm_num_layers: 4
+	num_epochs: 16
+	sequence_length: 11
+	weight_decay: 5.324336450503639e-06
+	window_size: 18
+2023-09-06 17:00:17 INFO About to run command: /usr/bin/env python main.py --batch_size=12 --dropout=0.4488228626827315 --learning_rate=0.00012433342259349803 --lstm_hidden_size=109 --lstm_num_layers=4 --num_epochs=16 --sequence_length=11 --weight_decay=5.324336450503639e-06 --window_size=18
+2023-09-06 17:00:22 INFO Running runs: ['6nwfn39k']
+2023-09-06 17:00:22 ERROR Detected 3 failed runs in the first 60 seconds, shutting down.
+2023-09-06 17:00:22 INFO To disable this check set WANDB_AGENT_DISABLE_FLAPPING=true
