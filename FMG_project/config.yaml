@@ -31,7 +31,7 @@ batch_size : 2
 window_size : 30
 
 #paths
-data_path : ./data/data
+data_path : ./data/data/movment_2
 model_path: ./models/saved_models
 best_model: ./models/saved_models/epoch10_11_09_2023_11:21.pt
 
