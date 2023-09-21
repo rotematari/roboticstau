@@ -86,6 +86,7 @@ if __name__ == '__main__':
     model = CNN_LSTMModel(config)
 
     model= model.to(device=device)
+
     print(model)
 
     # Get DataLoaders
