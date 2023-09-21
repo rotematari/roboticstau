@@ -14,8 +14,9 @@ PATH = os.path.join(os.path.dirname(__file__),"/models")
 sys.path.insert(0,PATH)
 
 
-import data.data_proses as data_proses
+import new_code.data.data_processing as data_processing
 from models.models import fully_conected as fc
+from models.models import LSTMModel 
 
 import utils
 import argparse
@@ -35,8 +36,9 @@ def init():
     wandb_on = 1 # (1 = True, 0 = False)
 
     global device
-    device = torch.device("cuda" if torch.cuda.is_available() else 'cpu')
-    print(f'Device: {device}')
+    # device = torch.device("cuda" if torch.cuda.is_available() else 'cpu')
+    # print(f'Device: {device}')
+    device = 'cpu'
 
     return
 
@@ -86,12 +88,12 @@ if __name__ == '__main__':
 
     
     # load data 
-    data = data_proses.data_loder(config=config)
+    data = data_processing.data_loder(config=config)
     data = data[config.fmg_index+config.first_positoin_label_inedx+config.sesion_time_stamp].dropna().reset_index(drop=True)
 
 
     # drop bad data 
-    data = data_proses.mask(data,config)
+    data = data_processing.mask(data,config)
 
     # separate
     # fmg_df, _, label_df = data_proses.sepatare_data(data,config=config,first=True)
@@ -99,12 +101,12 @@ if __name__ == '__main__':
     
     
     # find zero axis 
-    data[config.positoin_label_inedx] = data_proses.get_label_axis(data[config.first_positoin_label_inedx],config=config)
+    data[config.positoin_label_inedx] = data_processing.get_label_axis(data[config.first_positoin_label_inedx],config=config)
     # add velocity 
-    data[config.velocity_label_inedx] = data_proses.calc_velocity(config,data[config.first_positoin_label_inedx])
+    data[config.velocity_label_inedx] = data_processing.calc_velocity(config,data[config.first_positoin_label_inedx])
 
     # subtract bias 
-    data[config.fmg_index] = data_proses.subtract_bias(data[config.fmg_index+config.sesion_time_stamp])
+    data[config.fmg_index] = data_processing.subtract_bias(data[config.fmg_index+config.sesion_time_stamp])
 
 
 
@@ -120,26 +122,11 @@ if __name__ == '__main__':
 
     ## normalization 
 
-    # if config.norm == 'std':
-    #     # Standardize the data using StandardScaler
-    #     scaler_fmg = StandardScaler()
-    #     scaler_label = StandardScaler()
-    # elif config.norm == 'minmax':
-    #      scaler_fmg = MinMaxScaler()
-    #      scaler_label = MinMaxScaler()
-
-
-    # fmg_df = scaler_fmg.fit_transform(fmg_df.drop('sesion_time_stamp', axis=1))
-    # label_df = scaler_label.fit_transform(label_df)
-
-
- 
-
     # TODO: add here agmuntations 
 
 
 
-    config.fmg_index =data[config.fmg_index].loc[:,data[config.fmg_index].var(axis=0)>400].columns
+    # config.fmg_index =data[config.fmg_index].loc[:,data[config.fmg_index].var(axis=0)>400].columns
 
     config.input_size = len(config.fmg_index)
     
@@ -161,17 +148,17 @@ if __name__ == '__main__':
     fmg_df = data[config.fmg_index]
     label_df = data[config.positoin_label_inedx+config.velocity_label_inedx]
 
-    fig, (ax1, ax2) = plt.subplots(1, 2,figsize=(40,5))
+    # fig, (ax1, ax2) = plt.subplots(1, 2,figsize=(40,5))
 
-    ax1.plot(fmg_df)
+    # ax1.plot(fmg_df)
 
-    ax2.plot(label_df)
-    ax1.legend()
+    # ax2.plot(label_df)
+    # ax1.legend()
 
-    plt.pause(0.001) 
+    # plt.pause(0.01) 
 
 
-
+  
 
     # Split the data into training and test sets
     train_fmg, test_fmg, train_label, test_label = train_test_split(
@@ -184,17 +171,34 @@ if __name__ == '__main__':
 
      #make sequenced data
     #seq maker 
-    config.seq_size = config.seq_length*config.input_size
-    config.label_seq_size = config.seq_length*config.num_labels
+    
+    train_fmg = data_processing.create_sliding_sequences(torch.tensor(train_fmg.to_numpy(),dtype=torch.float32),sequence_length=config.sequence_length)
+    train_label = data_processing.create_sliding_sequences(torch.tensor(train_label.to_numpy(),dtype=torch.float32),sequence_length=config.sequence_length)
+    val_fmg = data_processing.create_sliding_sequences(torch.tensor(val_fmg.to_numpy(),dtype=torch.float32),sequence_length=config.sequence_length)
+    val_label = data_processing.create_sliding_sequences(torch.tensor(val_label.to_numpy(),dtype=torch.float32),sequence_length=config.sequence_length)
+    test_fmg = data_processing.create_sliding_sequences(torch.tensor(test_fmg.to_numpy(),dtype=torch.float32),sequence_length=config.sequence_length)
+    test_label = data_processing.create_sliding_sequences(torch.tensor(test_label.to_numpy(),dtype=torch.float32),sequence_length=config.sequence_length)
 
 
 
-    train_fmg = torch.tensor(train_fmg.to_numpy())[:(train_fmg.shape[0]//config.seq_size)*config.seq_size].reshape(-1,config.seq_size)
-    train_label = torch.tensor(train_label.to_numpy())[:(train_label.shape[0]//config.label_seq_size)*config.label_seq_size].reshape(-1,config.label_seq_size)
-    val_fmg = torch.tensor(val_fmg.to_numpy())[:(val_fmg.shape[0]//config.seq_size)*config.seq_size].reshape(-1,config.seq_size)
-    val_label = torch.tensor(val_label.to_numpy())[:(val_label.shape[0]//config.label_seq_size)*config.label_seq_size].reshape(-1,config.label_seq_size)
-    test_fmg = torch.tensor(test_fmg.to_numpy())[:(test_fmg.shape[0]//config.seq_size)*config.seq_size].reshape(-1,config.seq_size)
-    test_label = torch.tensor(test_label.to_numpy())[:(test_label.shape[0]//config.label_seq_size)*config.label_seq_size].reshape(-1,config.label_seq_size)
+    # config.seq_size = config.seq_length*config.input_size
+    # config.label_seq_size = config.seq_length*config.num_labels
+
+    # train_fmg = data_proses.make_sequence(config=config,data=torch.tensor(train_fmg.to_numpy(),dtype=torch.float32))
+    # train_label = data_proses.make_sequence(config=config,data=torch.tensor(train_label.to_numpy(),dtype=torch.float32))
+    # val_fmg = data_proses.make_sequence(config=config,data=torch.tensor(val_fmg.to_numpy(),dtype=torch.float32))
+    # val_label = data_proses.make_sequence(config=config,data=torch.tensor(val_label.to_numpy(),dtype=torch.float32))
+    # test_fmg = data_proses.make_sequence(config=config,data=torch.tensor(test_fmg.to_numpy(),dtype=torch.float32))
+    # test_label = data_proses.make_sequence(config=config,data=torch.tensor(test_label.to_numpy(),dtype=torch.float32))
+    
+
+
+    # train_fmg = torch.tensor(train_fmg.to_numpy())[:(train_fmg.shape[0]//config.seq_size)*config.seq_size].reshape(-1,config.seq_size)
+    # train_label = torch.tensor(train_label.to_numpy())[:(train_label.shape[0]//config.label_seq_size)*config.label_seq_size].reshape(-1,config.label_seq_size)
+    # val_fmg = torch.tensor(val_fmg.to_numpy())[:(val_fmg.shape[0]//config.seq_size)*config.seq_size].reshape(-1,config.seq_size)
+    # val_label = torch.tensor(val_label.to_numpy())[:(val_label.shape[0]//config.label_seq_size)*config.label_seq_size].reshape(-1,config.label_seq_size)
+    # test_fmg = torch.tensor(test_fmg.to_numpy())[:(test_fmg.shape[0]//config.seq_size)*config.seq_size].reshape(-1,config.seq_size)
+    # test_label = torch.tensor(test_label.to_numpy())[:(test_label.shape[0]//config.label_seq_size)*config.label_seq_size].reshape(-1,config.label_seq_size)
 
     # Create TensorDatasets for the training, validation, and test sets
 
@@ -210,7 +214,8 @@ if __name__ == '__main__':
 
 
     # Create an instance of the FullyConnected class using the configuration object
-    net = fc(config)
+    net = LSTMModel(config)
+    # net = fc(config)
     net= net.to(device=device)
     print(net)
 

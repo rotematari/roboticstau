@@ -1,0 +1,52 @@
+---
+# Define the argument parse
+
+
+
+# data headers 
+fmg_index: ['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'S11',
+       'S12', 'S13', 'S15', 'S16', 'S17', 'S18', 'S21',
+       'S22', 'S23', 'S24', 'S25', 'S26', 'S27', 'S28', 'S29', 'S31']
+first_positoin_label_inedx: ['M1x', 'M1y', 'M1z','M2x', 'M2y', 'M2z', 'M3x', 'M3y', 'M3z', 'M4x', 'M4y', 'M4z']
+positoin_label_inedx: ['M2x', 'M2y', 'M2z', 'M3x', 'M3y', 'M3z', 'M4x', 'M4y', 'M4z']
+velocity_label_inedx: ['V2x','V2y','V2z','V3x','V3y','V3z','V4x','V4y','V4z']
+sesion_time_stamp: ['sesion_time_stamp']
+
+# data parameters 
+input_size: 27
+num_labels : 18
+sample_speed : 64
+input_dim : 1 
+#hypermeters 
+sequence_length : 60
+
+
+lstm_hidden_size : 128
+lstm_num_layers : 2
+dropout : 0.0
+learning_rate : 0.003
+weight_decay : 0.00001 
+num_epochs : 10 
+batch_size : 2
+window_size : 30
+
+#paths
+data_path : ./data/data
+model_path: ./models/saved_models
+best_model: ./models/saved_models/epoch10_11_09_2023_11:21.pt
+
+
+test_size : 0.2
+val_size : 0.2
+random_state : 42
+shuffle_train : True 
+
+wandb_on: False
+norm_labels: True
+plot_data : True
+plot_pred : True
+pre_trained: True
+with_velocity : False
+sequence : False
+
+...
