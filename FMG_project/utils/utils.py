@@ -246,14 +246,14 @@ def model_eval_metric(config,model,test_loader,label_max_val,label_min_val ,devi
 
             dist = np.sqrt(((outputs.cpu().detach().numpy() - targets[:,-1:,:].view(-1,config.num_labels).cpu().detach().numpy())**2).sum(axis=0)/size)
         else:
-            outputs = model(inputs[0:3000])
+            outputs = model(inputs[0:2000])
             size = outputs.size(0)
             if config.norm_labels:
                 outputs = min_max_unnormalize(outputs.detach().cpu().numpy(),np.tile(label_min_val,(size,1)),np.tile(label_max_val,(size,1)))
                 targets = min_max_unnormalize(targets.detach().cpu().numpy(),np.tile(label_min_val,(targets.size(0),1)),np.tile(label_max_val,(targets.size(0),1)))
 
             if config.plot_pred:
-                plot_results(config,outputs[100:2000].cpu().detach().numpy(),targets[100:2000,:].view(-1,config.num_labels).cpu().detach().numpy(),wandb_run=wandb_run)
+                plot_results(config,outputs[0:2000].cpu().detach().numpy(),targets[0:2000,:].view(-1,config.num_labels).cpu().detach().numpy(),wandb_run=wandb_run)
 
             dist = np.sqrt(((outputs.cpu().detach().numpy() - targets[:size].cpu().detach().numpy())**2).sum(axis=0)/size)
 
