@@ -17,3 +17,4 @@ sensor arrangment
 30|29|28|27
 token : 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
 
+imu doesnt give absulote data 
