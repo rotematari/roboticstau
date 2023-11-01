@@ -29,7 +29,7 @@ with open(r'config.yaml', 'r') as f:
 config = argparse.Namespace(**args)
 # dirs = [f for f in listdir(dirpath)]
 # make sure the 'COM#' is set according the Windows Device Manager /dev/ttyACM0
-ser = serial.Serial('COM3', 115200)
+# ser = serial.Serial('COM3', 115200)
 
 def is_not_numeric(x):
     try:
@@ -85,15 +85,13 @@ def init_natnetClient():
     shoulder = 2
     elbow = 3
     wrist = 4
+    return natnet
 
     # This dictionary matches the rigid body id (key) to it's name (value)
     motive_matcher = {chest: 'chest',
                         shoulder: 'shoulder',
                         shoulder: 'elbow',
                         elbow: 'wrist',}
-    return natnet
-
-
 
 
 def write_line(f,marker_data,sesion_time_stamp):
@@ -114,7 +112,7 @@ def write_line(f,marker_data,sesion_time_stamp):
 
     marker_string =[]
     for i in range(len(marker_data)):
-        
+
         marker_string += [str(j)for j in marker_data[i][1]] 
 
     marker_string = ''.join(str(s)+',' for s in marker_string)
@@ -136,55 +134,14 @@ def plot_data(config,data):
     plt.show() 
 
 
+if __name__=="__main__":
 
-
-
-if __name__ == '__main__':
-
-
-    for i in range(10):
-        ser.readline()
-
-    t_start = t.time()
-    sesion_time_stamp = t.strftime("%d_%b_%Y_%H_%M", t.gmtime())
-    file_name = sesion_time_stamp + '_movment_2'+'.csv'
     NatNet = init_natnetClient()
-    print(file_name)
-    f = open(join(data_dir, file_name), "w")
-
-    write_first_line(f)
     NatNet.run()
-    t.sleep(5)
     marker_data = NatNet.rigidBodyList
-
-    for i in range(10000):
-      
-      marker_data = NatNet.rigidBodyList
-
-      write_line(f,sesion_time_stamp=sesion_time_stamp ,marker_data=marker_data)
-
-      if i%100==0:
-          print(i)
-    
-    f.close()
+    for i in range(10):
+        
+        marker_data = NatNet.rigidBodyList
+        print(marker_data[1])
+        
     NatNet.stop()
-
-    t_end = t.time()
-    print(t_end-t_start-0.5)
-    
-    ser.close()
-    print("finished")
-
-    ## checks data 
-    # df = pd.read_csv(join(data_dir,file_name))
-    
-
-    # not_numeric_vals = print_not_numeric_vals(df)
-
-    # if not_numeric_vals.shape[0] == 0:
-    #     plot_data(config=config,data=df)
-
-    # else :
-    #     print("clean data")
-
-
