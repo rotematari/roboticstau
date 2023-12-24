@@ -8,3 +8,4 @@ wandb/latest-run
 FMG_project\models\saved_models
 *.pt
 
+.conda/
