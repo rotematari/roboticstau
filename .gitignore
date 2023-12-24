@@ -10,3 +10,5 @@ FMG_project\models\saved_models
 
 cuda-repo-ubuntu2204-12-3-local_12.3.1-545.23.08-1_amd64.deb
 FMG_project.zip
+
+.conda/
