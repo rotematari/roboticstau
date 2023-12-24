@@ -48,6 +48,9 @@ class CNN_LSTMModel(nn.Module):
         # cnn layer
         self.cnn = nn.Conv1d(in_channels=1, out_channels=hidden_size, kernel_size=1)
         
+        # TODO: add an option for more layers of CNN
+        # TODO: add max poll
+
         # LSTM layer
         self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True,dropout=dropout)
         
