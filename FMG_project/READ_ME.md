@@ -1,4 +1,32 @@
 
+
+
+
+# run test 
+## to run test on pre traind model change config.yaml file pre_trained: False to -> True 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 make shure to have gitignore file for the wandb directory
 
 sensor arrangment 
