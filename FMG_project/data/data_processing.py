@@ -45,7 +45,7 @@ class DataProcessor:
                 self.data[self.labal_index] = calc_velocity(self.config, self.data[self.config.first_positoin_label_inedx])
 
             
-            # subtracts the bais on the FMG sensors 
+            # subtracts the bais on the FMG sensors data 
             self.data[self.config.fmg_index] = subtract_bias(self.data[self.config.fmg_index+self.config.sesion_time_stamp])
             self.data = self.data.drop_duplicates().dropna().reset_index(drop=True)
 

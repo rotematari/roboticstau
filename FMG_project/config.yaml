@@ -45,7 +45,7 @@ wandb_on: False
 norm_labels: True
 plot_data : True
 plot_pred : True
-pre_trained: True
+pre_trained: False
 with_velocity : False
 sequence : False
 
