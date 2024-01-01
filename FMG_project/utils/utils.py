@@ -90,20 +90,21 @@ def train(config, train_loader, val_loader,model,device='cpu',wandb_run=None):
         # Evaluate on the validation set
         with torch.no_grad():
             model.eval()
-            for i,(inputs, targets) in enumerate(val_loader):
+            for inputs, targets in val_loader:
                 
                 inputs = inputs.to(device=device)
                 targets = targets.to(device=device)
 
                 outputs = model(inputs)
 
-            if config.sequence:
-                v_loss = criterion(outputs, targets[:,-1:,:].view(-1,config.num_labels))
-            else:
-                v_loss = criterion(outputs, targets)
+                if config.sequence:
+                    v_loss = criterion(outputs, targets[:,-1:,:].view(-1,config.num_labels))
+                else:
+                    v_loss = criterion(outputs, targets)
+            
                 val_loss += v_loss.item()
                 
-            val_loss /= i
+        val_loss /= len(val_loader)
             
         # Save the validation loss 
         val_losses.append(val_loss)
@@ -114,7 +115,7 @@ def train(config, train_loader, val_loader,model,device='cpu',wandb_run=None):
             # log metrics to wandb
             wandb_run.log({"Train Loss": train_loss, "Val_loss": val_loss})
 
-        if(best_val_loss < val_loss):
+        if epoch >=7 and (best_val_loss < val_loss):
             time_stamp = time.strftime("%d_%m_%Y_%H:%M", time.gmtime())
             best_val_loss = val_loss
             filename = 'epoch'+str(epoch+1)+'_'+time_stamp + '.pt'
