@@ -18,15 +18,15 @@ num_labels : 18
 sample_speed : 64
 input_dim : 1 
 #hypermeters 
-sequence_length : 60
+sequence_length : 100
 
 
 lstm_hidden_size : 128
-lstm_num_layers : 2
-dropout : 0.0
+lstm_num_layers : 5
+dropout : 0.2
 learning_rate : 0.003
 weight_decay : 0.00001 
-num_epochs : 3 
+num_epochs : 20 
 batch_size : 10
 window_size : 30
 
@@ -45,7 +45,7 @@ wandb_on: False
 norm_labels: True
 plot_data : True
 plot_pred : True
-pre_trained: True
+pre_trained: False
 with_velocity : False
 sequence : False
 

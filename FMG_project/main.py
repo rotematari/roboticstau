@@ -48,10 +48,6 @@ def parse_args():
 
 
 if __name__ == '__main__':
-
-
-    
-
     # Check if CUDA is available
     if torch.cuda.is_available():
         # Set the device to the first available CUDA device

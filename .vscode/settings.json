@@ -1,0 +1,19 @@
+{
+    "ros.distro": "humble",
+    "python.autoComplete.extraPaths": [
+        "/home/robotics20/franka_ros2_ws/build/urdf_publisher",
+        "/home/robotics20/franka_ros2_ws/install/urdf_publisher/lib/python3.10/site-packages",
+        "/home/robotics20/franka_ros2_ws/install/franka_gripper/local/lib/python3.10/dist-packages",
+        "/home/robotics20/franka_ros2_ws/install/franka_msgs/local/lib/python3.10/dist-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/robotics20/franka_ros2_ws/build/urdf_publisher",
+        "/home/robotics20/franka_ros2_ws/install/urdf_publisher/lib/python3.10/site-packages",
+        "/home/robotics20/franka_ros2_ws/install/franka_gripper/local/lib/python3.10/dist-packages",
+        "/home/robotics20/franka_ros2_ws/install/franka_msgs/local/lib/python3.10/dist-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ]
+}

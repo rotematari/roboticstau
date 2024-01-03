@@ -1,8 +1,14 @@
-wandb
-wandb/debug-internal.log
-wandb/debug.log
-wandb/latest-run
-wandb/debug-internal.log
-wandb/debug.log
-wandb/latest-run
-FMG_project\models\saved_models
+wandb/
+# wandb/debug-internal.log
+# wandb/debug.log
+# wandb/latest-run
+# wandb/debug-internal.log
+# wandb/debug.log
+# wandb/latest-run
+# *.pt
+*.zip
+# FMG_project.zip
+
+.conda/
+.vscode/
+.vscode/settings.json

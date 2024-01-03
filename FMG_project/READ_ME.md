@@ -1,4 +1,32 @@
 
+
+
+
+# run test 
+## to run test on pre traind model change config.yaml file pre_trained: False to -> True 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 make shure to have gitignore file for the wandb directory
 
 sensor arrangment 
@@ -16,4 +44,15 @@ sensor arrangment
 26|10|11
 30|29|28|27
 token : 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
+
+imu doesnt give absulote data 
+
+
+label array 
+
+
+M2 chest 
+M1 sholder 
+M4 elbow 
+M3 wrist 
 
