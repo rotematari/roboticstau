@@ -80,17 +80,6 @@ def init_natnetClient():
     # start natnet interface
     natnet = NatNetClient(rigidBodyListListener=receiveRigidBodyList,server="132.66.51.232")#rigidBodyListListener=receiveRigidBodyList)
 
-    keys = ['chest', 'shoulder', 'elbow', 'wrist']
-    chest = 1
-    shoulder = 2
-    elbow = 3
-    wrist = 4
-
-    # This dictionary matches the rigid body id (key) to it's name (value)
-    motive_matcher = {chest: 'chest',
-                        shoulder: 'shoulder',
-                        shoulder: 'elbow',
-                        elbow: 'wrist',}
     return natnet
 
 
@@ -99,16 +88,8 @@ def init_natnetClient():
 def write_line(f,marker_data,sesion_time_stamp):
 
     # sesion_time_stamp = t.strftime("%d_%b_%Y_%H:%M", t.gmtime())
-
-
-    line = ser.readline()  # read a byte
-    sensor_string = line.decode('utf-8')  # ('latin-1')  # convert the byte string to a unicode string
-    sensor_string = sensor_string.strip()
-    sensor_string.replace("'", '')
-    sensor_string.replace("[", '')
-    sensor_string.replace("]", '')
-
-
+    sensor_string = ser.readline().decode('utf-8').strip() 
+    # if len(sensor_string) == 
     #  # test 
     # sensor_string = ''.join(str(i)+',' for i in range(48))
 

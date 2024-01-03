@@ -65,11 +65,28 @@ if __name__ == '__main__':
         'shoulder':[],
         'elbow':[],
         'wrist':[],
-
     }
-    for i in range(10):
-        rigid_body = natnet.rigidBodyList
-        for j in range(len(rigid_body)):
-            locations[motive_matcher[rigid_body[j][0]]].append(rigid_body[j][1])
-        print(locations)
+    labels = "MCx,MCy,MCz,MSx,MSy,MSz,MEx,MEy,MEz,MWx,MWy,MWz"
+
+    rigid_body = natnet.rigidBodyList
+    if not os.path.exists(r'./data/data_labels/'):
+                os.mkdir(r'./data/data_labels/')
+
+    with open('./data/data_labels/labels.csv','w') as f:
+        f.write(labels +'\n')
+
+        for i in range(100):
+
+            for j in range(len(rigid_body)):
+                locations[motive_matcher[rigid_body[j][0]]].append(rigid_body[j][1])
+            # read serial line
+            locations_string = ','.join(map(str,locations['chest'][0]+locations['shoulder'][0]+locations['elbow'][0]+locations['wrist'][0]))
+            
+            
+
+            f.write(locations_string + '\n')
+
+
+
+        print(locations_string)
 
