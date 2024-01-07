@@ -1,0 +1,53 @@
+---
+# Define the argument parse
+
+
+
+# data headers 
+fmg_index: ['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'S11',
+       'S12', 'S13', 'S15', 'S16', 'S17', 'S18', 'S21',
+       'S22', 'S23', 'S24', 'S25', 'S26', 'S27', 'S28', 'S29', 'S31']
+first_position_label_index: ['M1x', 'M1y', 'M1z','M2x', 'M2y', 'M2z', 'M3x', 'M3y', 'M3z', 'M4x', 'M4y', 'M4z']
+position_label_index: ['M2x', 'M2y', 'M2z', 'M3x', 'M3y', 'M3z', 'M4x', 'M4y', 'M4z']
+velocity_label_inedx: ['V2x','V2y','V2z','V3x','V3y','V3z','V4x','V4y','V4z']
+session_time_stamp: ['sesion_time_stamp']
+
+# data parameters 
+input_size: 27
+num_labels : 9
+sample_speed : 64
+input_dim : 1 
+#hypermeters 
+sequence_length : 60
+num_channels: [27,27,10,10,9]
+
+
+lstm_hidden_size : 256
+lstm_num_layers : 3 
+dropout : 0.4
+learning_rate : 0.001
+weight_decay : 0.0005 
+num_epochs : 50 
+batch_size : 30
+window_size : 30
+
+#paths
+data_path : ./data/movment_2
+model_path: ./models/saved_models
+best_model: ./models/saved_models/epoch10_13_09_2023_10:11.pt
+
+
+test_size : 0.02
+val_size : 0.3
+random_state : 42
+shuffle_train : True 
+
+wandb_on: False
+norm_labels: True
+plot_data : False
+plot_pred : True
+pre_trained: False
+with_velocity : False
+sequence : False
+
+...

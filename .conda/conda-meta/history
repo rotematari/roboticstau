@@ -234,3 +234,10 @@
 +conda-forge/noarch::wcwidth-0.2.12-pyhd8ed1ab_0
 +conda-forge/noarch::zipp-3.17.0-pyhd8ed1ab_0
 # update specs: ['ipykernel']
+==> 2024-01-03 16:15:20 <==
+# cmd: /home/robotics20/anaconda3/anaconda3/bin/conda install -c anaconda pyserial
+# conda version: 23.11.0
+-conda-forge/noarch::certifi-2023.11.17-pyhd8ed1ab_0
++anaconda/linux-64::certifi-2023.11.17-py311h06a4308_0
++anaconda/linux-64::pyserial-3.5-py311h06a4308_0
+# update specs: ['pyserial']

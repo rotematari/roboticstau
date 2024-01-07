@@ -94,8 +94,8 @@ def init_natnetClient():
     # This dictionary matches the rigid body id (key) to it's name (value)
     motive_matcher = {chest: 'chest',
                         shoulder: 'shoulder',
-                        shoulder: 'elbow',
-                        elbow: 'wrist',}
+                        elbow: 'elbow',
+                        wrist: 'wrist',}
 
 
 def write_line(f,marker_data,sesion_time_stamp):

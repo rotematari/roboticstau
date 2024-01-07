@@ -26,14 +26,14 @@ lstm_num_layers : 5
 dropout : 0.2
 learning_rate : 0.003
 weight_decay : 0.00001 
-num_epochs : 20 
+num_epochs : 5 
 batch_size : 10
 window_size : 30
 
 #paths
 data_path : ./data/movment_2
 model_path: ./models/saved_models
-best_model: ./models/saved_models/epoch10_13_09_2023_10:11.pt
+best_model: ./models/saved_models/epoch20_01_01_2024_17:16.pt
 
 
 test_size : 0.02
@@ -45,7 +45,7 @@ wandb_on: False
 norm_labels: True
 plot_data : True
 plot_pred : True
-pre_trained: False
+pre_trained: True
 with_velocity : False
 sequence : False
 
