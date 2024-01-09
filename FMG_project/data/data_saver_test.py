@@ -75,7 +75,7 @@ if __name__ == '__main__':
     with open('./data/data_labels/labels.csv','w') as f:
         f.write(labels +'\n')
 
-        for i in range(100):
+        for i in range(1):
 
             for j in range(len(rigid_body)):
                 locations[motive_matcher[rigid_body[j][0]]].append(rigid_body[j][1])

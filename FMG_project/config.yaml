@@ -12,6 +12,21 @@ positoin_label_inedx: ['M2x', 'M2y', 'M2z', 'M3x', 'M3y', 'M3z', 'M4x', 'M4y', '
 velocity_label_inedx: ['V2x','V2y','V2z','V3x','V3y','V3z','V4x','V4y','V4z']
 sesion_time_stamp: ['sesion_time_stamp']
 
+motive_matcher: {
+       1: 'chest',
+       2: 'shoulder',
+       3: 'elbow',
+       4: 'wrist',
+       }
+
+# xyz 
+locations: {
+       'chest':[],
+       'shoulder':[],
+       'elbow':[],
+       'wrist':[],
+    }
+
 # data parameters 
 input_size: 27
 num_labels : 18
