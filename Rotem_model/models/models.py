@@ -67,18 +67,73 @@ class TemporalConvNet(nn.Module):
         self.network = nn.Sequential(*layers)
 
     def forward(self, x):
-        x = x.unsqueeze(0)
+        # x = x.flattn(1)
+        # x = x.unsqueeze(0)
         x = x.permute(0,2,1)
         x = self.network(x)
         x = x.permute(0,2,1)
-        x = x.squeeze(0)
+        # x = x.squeeze(0)
         return x
 
 
-class CNN_LSTMModel(nn.Module):
+class CNNLSTMModel(nn.Module):
     def __init__(self, config):
-        super(CNN_LSTMModel, self).__init__()
+        super(CNNLSTMModel, self).__init__()
         self.name = "CNN_LSTMModel"
+        self.config = config 
+        input_size, hidden_size, num_layers, output_size, dropout,sequence_length = (
+            config.input_size,
+            config.lstm_hidden_size,
+            config.lstm_num_layers,
+            config.num_labels,
+            config.dropout,
+            config.sequence_length
+        )
+
+        self.hidden_size = hidden_size
+        self.num_layers = num_layers
+        if not config.sequence:
+            sequence_length = 1
+        self.conv1 = nn.Conv1d(in_channels=sequence_length, out_channels=hidden_size, kernel_size=3, stride=1, padding=1)
+        self.conv2 = nn.Conv1d(in_channels=hidden_size, out_channels=hidden_size, kernel_size=3, stride=1, padding=1)
+        self.drop = nn.Dropout1d(dropout)
+        self.relu = nn.ReLU()
+        self.batch_norm = nn.BatchNorm1d(hidden_size)
+
+        self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True, dropout=dropout, bidirectional=True,
+                            )
+
+        self.fc = nn.Linear(hidden_size * 2, hidden_size)
+        self.fc2 = nn.Linear(hidden_size, int(hidden_size/2))
+        self.fc3 = nn.Linear(int(hidden_size/2), output_size)
+
+    def forward(self, x):
+
+
+        
+        h0 = torch.zeros(self.num_layers * 2, x.size(0), self.hidden_size, dtype=torch.float32).to(x.device)
+        c0 = torch.zeros(self.num_layers * 2, x.size(0), self.hidden_size, dtype=torch.float32).to(x.device)
+
+        if not self.config.sequence:
+            x = x.unsqueeze(1)
+        x = self.conv1(x)
+        x = self.relu(x)
+        x = self.batch_norm(x)
+        x = self.conv2(x)
+        x = self.relu(x)
+        x = self.batch_norm(x)
+
+        out, _ = self.lstm(x, (h0.detach(), c0.detach()))
+        out = self.fc(out[:, -1, :])
+        out = self.fc2(out)
+        out = self.fc3(out)
+
+        return out
+class CNN2DLSTMModel(nn.Module):
+    def __init__(self, config):
+        super(CNN2DLSTMModel, self).__init__()
+        self.name = "CNN2DLSTMModel"
+        self.config = config 
         input_size, hidden_size, num_layers, output_size, dropout = (
             config.input_size,
             config.lstm_hidden_size,
@@ -90,10 +145,16 @@ class CNN_LSTMModel(nn.Module):
         self.hidden_size = hidden_size
         self.num_layers = num_layers
 
-        self.conv1 = nn.Conv1d(in_channels=1, out_channels=hidden_size, kernel_size=3, stride=1, padding=1)
-        self.conv2 = nn.Conv1d(in_channels=hidden_size, out_channels=hidden_size, kernel_size=3, stride=1, padding=1)
+        self.conv1 = nn.Conv2d(in_channels=1, out_channels=hidden_size, kernel_size=3, stride=1, padding=1)
+        self.pool1 = nn.MaxPool2d(kernel_size=2, stride=2)
+        self.conv2 = nn.Conv2d(in_channels=hidden_size, out_channels=hidden_size, kernel_size=3, stride=1, padding=1)
+        self.pool2 = nn.MaxPool2d(kernel_size=2, stride=2)
+
         self.relu = nn.ReLU()
-        self.batch_norm = nn.BatchNorm1d(hidden_size)
+        self.batch_norm = nn.BatchNorm2d(hidden_size)
+        self.drop = nn.Dropout2d(dropout) 
+
+
 
         self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True, dropout=dropout, bidirectional=True,
                             # peephole=True
@@ -102,20 +163,35 @@ class CNN_LSTMModel(nn.Module):
         self.fc = nn.Linear(hidden_size * 2, output_size)
 
     def forward(self, x):
+
+        # if self.config.sequence:
+        #     x = x.flatten(1)
+        
         h0 = torch.zeros(self.num_layers * 2, x.size(0), self.hidden_size, dtype=torch.float32).to(x.device)
         c0 = torch.zeros(self.num_layers * 2, x.size(0), self.hidden_size, dtype=torch.float32).to(x.device)
 
+        # if self.config.sequence:
+        #     x = x.flatten(1)
+        # x = x.permute(1,0,2)
         x = self.conv1(x.unsqueeze(1))
         x = self.relu(x)
+        ב
         x = self.batch_norm(x)
+        # x = self.pool1(x)
         x = self.conv2(x)
         x = self.relu(x)
+        x = self.drop(x)
         x = self.batch_norm(x)
+        # x = self.pool2(x)
+        # x = x.squeeze(1)
+        # x = x.permute(1,0,2)
+
+        # x = x.flatten(1)
 
         out, _ = self.lstm(x, (h0.detach(), c0.detach()))
         out = self.fc(out[:, -1, :])
-        return out
 
+        return out
 
 class TransformerModel(nn.Module):
     def __init__(self, config):
@@ -141,7 +217,8 @@ class TransformerModel(nn.Module):
 
     def forward(self, x):
         x = self.embedding(x)
-        x = x.unsqueeze(1)
+        if not self.config.sequence:
+            x = x.unsqueeze(1)
         x = x.permute(1, 0, 2)  # Change the sequence length to be the first dimension
         x = self.transformer_encoder(x)
         x = x.permute(1, 0, 2)  # Change it back to the original shape

@@ -8,7 +8,7 @@ import os
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 from data.data_processing import DataProcessor
-from models.models import CNN_LSTMModel , TransformerModel, TemporalConvNet
+from models.models import CNNLSTMModel , TransformerModel, TemporalConvNet, CNN2DLSTMModel
 from utils.utils import train, model_eval_metric, test
 
 
@@ -69,7 +69,7 @@ def main():
     if config.plot_data:
         data_processor.plot(from_indx=0, to_indx=1000)
 
-    model = TemporalConvNet(config).to(device)
+    model = CNNLSTMModel(config).to(device)
     print(model)
 
     train_loader, val_loader, test_loader = data_processor.get_data_loaders()

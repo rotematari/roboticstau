@@ -18,29 +18,29 @@ num_labels : 9
 sample_speed : 64
 input_dim : 1 
 #hypermeters 
-sequence_length : 60
+sequence_length : 50
 num_channels: [27,27,10,10,9]
 
 
-lstm_hidden_size : 256
-lstm_num_layers : 3 
-dropout : 0.4
-learning_rate : 0.001
+lstm_hidden_size : 128
+lstm_num_layers : 2 
+dropout : 0.3
+learning_rate : 0.0003
 weight_decay : 0.0005 
-num_epochs : 50 
-batch_size : 30
+num_epochs : 3 
+batch_size : 20
 window_size : 30
 
 #paths
 data_path : ./data/movment_2
 model_path: ./models/saved_models
-best_model: ./models/saved_models/epoch10_13_09_2023_10:11.pt
+best_model: ./models/saved_models/epoch10_09_01_2024_13:53.pt
 
 
 test_size : 0.02
 val_size : 0.3
 random_state : 42
-shuffle_train : True 
+shuffle_train : False
 
 wandb_on: False
 norm_labels: True
@@ -48,6 +48,6 @@ plot_data : False
 plot_pred : True
 pre_trained: False
 with_velocity : False
-sequence : False
+sequence : True
 
 ...

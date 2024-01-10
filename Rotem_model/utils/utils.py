@@ -53,7 +53,10 @@ def train(config, train_loader, val_loader,model,device='cpu',wandb_run=None):
             # Forward pass
             outputs = model(inputs)
             if config.sequence:
-                loss = criterion(outputs, targets[:,-1:,:].view(-1,config.num_labels))
+                if outputs.dim() == 3:
+                    loss = criterion(outputs[:,-1:,:].squeeze(), targets[:,-1:,:].squeeze())
+                else:
+                    loss = criterion(outputs, targets[:,-1,:])
             else:
                 loss = criterion(outputs, targets)
 
@@ -83,9 +86,11 @@ def train(config, train_loader, val_loader,model,device='cpu',wandb_run=None):
                 targets = targets.to(device=device)
 
                 outputs = model(inputs)
-
                 if config.sequence:
-                    v_loss = criterion(outputs, targets[:,-1:,:].view(-1,config.num_labels))
+                    if outputs.dim() == 3:
+                        v_loss = criterion(outputs[:,-1:,:].squeeze(), targets[:,-1:,:].squeeze())
+                    else:
+                        v_loss = criterion(outputs, targets[:,-1,:])
                 else:
                     v_loss = criterion(outputs, targets)
 
@@ -95,8 +100,6 @@ def train(config, train_loader, val_loader,model,device='cpu',wandb_run=None):
 
             
             val_loss /= len(val_loader)
-
-
             avg_iter_time = total_time/len(val_loader)
             
         # Save the validation loss 
@@ -109,9 +112,9 @@ def train(config, train_loader, val_loader,model,device='cpu',wandb_run=None):
             wandb_run.log({"Train Loss": train_loss, "Val_loss": val_loss})
 
         if(best_val_loss < val_loss):
-            time_stamp = time.strftime("%d_%m_%Y_%H:%M", time.gmtime())
+            time_stamp = time.strftime("%d_%m", time.gmtime())
             best_val_loss = val_loss
-            filename = 'epoch'+str(epoch+1)+'_'+time_stamp + '.pt'
+            filename = model.name + '_epoch_' +str(epoch+1)+'_date_'+time_stamp + '.pt'
             checkpoint_path = join(config.model_path,filename)
             torch.save({
                 'epoch': epoch+1,
@@ -120,15 +123,6 @@ def train(config, train_loader, val_loader,model,device='cpu',wandb_run=None):
                 'loss': val_loss,
                 }, checkpoint_path)
             
-    time_stamp = time.strftime("%d_%m_%Y_%H:%M", time.gmtime())
-    filename = 'epoch'+str(epoch+1)+'_'+time_stamp + '.pt'
-    checkpoint_path = join(config.model_path,filename)
-    torch.save({
-        'epoch': epoch+1,
-        'model_state_dict': model.state_dict(),
-        'optimizer_state_dict': optimizer.state_dict(),
-        'loss': val_loss,
-        }, checkpoint_path)
     
     print(f"model {filename} saved ")
     
@@ -228,7 +222,9 @@ def model_eval_metric(config,model,test_loader,label_max_val,label_min_val ,devi
         inputs = inputs.to(device=device)
         targets = targets.to(device=device)
         if config.sequence:
-            outputs = model(inputs[:,-1:,:])
+            outputs = model(inputs)
+            if outputs.dim() == 3:
+                outputs = outputs[:,-1,:]
             size = outputs.size(0)
             
             if config.norm_labels:
@@ -236,7 +232,7 @@ def model_eval_metric(config,model,test_loader,label_max_val,label_min_val ,devi
                 targets = min_max_unnormalize(targets.detach().cpu().numpy(),np.tile(label_min_val,(targets.size(0),targets.size(1),1)),np.tile(label_max_val,(targets.size(0),targets.size(1),1)))
            
             if config.plot_pred:
-                plot_results(config,outputs[100:2000].cpu().detach().numpy(),targets[100:2000,-1:,:].view(-1,config.num_labels).cpu().detach().numpy(),wandb_run=wandb_run)
+                plot_results(config,outputs[100:2000].cpu().detach().numpy(),targets[100:2000,-1,:].cpu().detach().numpy(),wandb_run=wandb_run)
 
             dist = np.sqrt(((outputs.cpu().detach().numpy() - targets[:,-1:,:].view(-1,config.num_labels).cpu().detach().numpy())**2).sum(axis=0)/size)
         else:
