@@ -12,3 +12,4 @@ wandb/
 .conda/
 .vscode/
 .vscode/settings.json
+.conda/conda-meta/history
