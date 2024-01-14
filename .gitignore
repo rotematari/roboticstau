@@ -7,3 +7,5 @@ wandb/debug.log
 wandb/latest-run
 FMG_project\models\saved_models
 .conda/
+
+__pycache__/
