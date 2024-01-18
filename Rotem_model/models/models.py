@@ -9,38 +9,53 @@ class CNNLSTMModel(nn.Module):
         super(CNNLSTMModel, self).__init__()
         self.name = "CNN_LSTMModel"
         self.config = config 
-        input_size, hidden_size, num_layers, output_size, dropout,sequence_length = (
+        input_size, lstm_hidden_size, lstm_num_layers, output_size, dropout,sequence_length,num_labels = (
             config.input_size,
             config.lstm_hidden_size,
             config.lstm_num_layers,
             config.num_labels,
             config.dropout,
-            config.sequence_length
+            config.sequence_length,
+            config.num_labels
         )
 
-        self.hidden_size = hidden_size
-        self.num_layers = num_layers
+
         if not config.sequence:
             sequence_length = 1
-        self.conv1 = nn.Conv1d(in_channels=sequence_length, out_channels=hidden_size, kernel_size=3, stride=1, padding=1)
-        self.conv2 = nn.Conv1d(in_channels=hidden_size, out_channels=hidden_size, kernel_size=3, stride=1, padding=1)
+
+        self.lstm_num_layers = lstm_num_layers
+        self.lstm_hidden_size = lstm_hidden_size
+        self.conv1 = nn.Conv1d(in_channels=sequence_length, out_channels=lstm_hidden_size, kernel_size=3, stride=1, padding=1)
+        self.conv2 = nn.Conv1d(in_channels=lstm_hidden_size, out_channels=lstm_hidden_size, kernel_size=3, stride=1, padding=1)
         self.drop = nn.Dropout1d(dropout)
         self.relu = nn.ReLU()
-        self.batch_norm = nn.BatchNorm1d(hidden_size)
+        self.batch_norm = nn.BatchNorm1d(lstm_hidden_size)
 
-        self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True, dropout=dropout, bidirectional=True,
+        self.lstm = nn.LSTM(input_size, lstm_hidden_size, lstm_num_layers, batch_first=True, dropout=dropout, bidirectional=True,
                             )
+        fully_connected = []
+        current_size = lstm_hidden_size*2
+        while current_size//3 > num_labels:
+            hidden_size = current_size//3
+            fully_connected.append(nn.Linear(current_size, hidden_size))
+            fully_connected.append(nn.ReLU())
+            fully_connected.append(nn.Dropout(dropout))
 
-        self.fc = nn.Linear(hidden_size * 2, hidden_size)
-        self.fc2 = nn.Linear(hidden_size, int(hidden_size/2))
-        self.fc3 = nn.Linear(int(hidden_size/2), output_size)
+            current_size = hidden_size
+        
+        fully_connected.append(nn.Linear(current_size, num_labels))
+        self.fully_connected = nn.Sequential(*fully_connected)
+
+        # self.fc = nn.Linear(hidden_size * 2, hidden_size)
+        # self.fc2 = nn.Linear(hidden_size, int(hidden_size/2))
+        # self.fc3 = nn.Linear(int(hidden_size/2), output_size)
 
     def forward(self, x):
 
 
         
-        h0 = torch.zeros(self.num_layers * 2, x.size(0), self.hidden_size, dtype=torch.float32).to(x.device)
-        c0 = torch.zeros(self.num_layers * 2, x.size(0), self.hidden_size, dtype=torch.float32).to(x.device)
+        h0 = torch.zeros(self.lstm_num_layers * 2, x.size(0), self.lstm_hidden_size, dtype=torch.float32).to(x.device)
+        c0 = torch.zeros(self.lstm_num_layers * 2, x.size(0), self.lstm_hidden_size, dtype=torch.float32).to(x.device)
 
         if not self.config.sequence:
             x = x.unsqueeze(1)
@@ -51,10 +66,9 @@ class CNNLSTMModel(nn.Module):
         x = self.relu(x)
         x = self.batch_norm(x)
 
-        out, _ = self.lstm(x, (h0.detach(), c0.detach()))
-        out = self.fc(out[:, -1, :])
-        out = self.fc2(out)
-        out = self.fc3(out)
+        out,_ = self.lstm(x, (h0.detach(), c0.detach()))
+
+        out = self.fully_connected(out[:, -1, :])
 
         return out
 
