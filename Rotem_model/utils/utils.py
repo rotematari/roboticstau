@@ -10,6 +10,7 @@ import torch
 from torch.optim import Adam
 from torch.nn import MSELoss
 from torch.nn.utils import clip_grad_norm_
+from sklearn.preprocessing import MinMaxScaler
 
 import wandb
 import time
@@ -121,6 +122,7 @@ def train(config, train_loader, val_loader,model,device='cpu',wandb_run=None):
                 'model_state_dict': model.state_dict(),
                 'optimizer_state_dict': optimizer.state_dict(),
                 'loss': val_loss,
+                'config': config,
                 }, checkpoint_path)
             
     
@@ -207,7 +209,10 @@ def plot_results(config,preds,targets,wandb_run=None):
         # Show the plots
         plt.show()
 
-def model_eval_metric(config,model,test_loader,label_max_val,label_min_val ,device='cpu',wandb_run=None):
+def model_eval_metric(config,model,test_loader,
+                    #   label_max_val,label_min_val ,
+                    data_processor,
+                    device='cpu',wandb_run=None):
     # show distance between ground truth and prediction by 3d points [0,M2,M3,M4] 
 
     model = model.to(device=device)
@@ -228,9 +233,11 @@ def model_eval_metric(config,model,test_loader,label_max_val,label_min_val ,devi
             size = outputs.size(0)
             
             if config.norm_labels:
-                outputs = min_max_unnormalize(outputs.detach().cpu().numpy(),np.tile(label_min_val,(size,1)),np.tile(label_max_val,(size,1)))
-                targets = min_max_unnormalize(targets.detach().cpu().numpy(),np.tile(label_min_val,(targets.size(0),targets.size(1),1)),np.tile(label_max_val,(targets.size(0),targets.size(1),1)))
-           
+                outputs = data_processor.label_scaler.inverse_transform(outputs)
+                targets = data_processor.label_scaler.inverse_transform(targets)
+                # outputs = min_max_unnormalize(outputs.detach().cpu().numpy(),np.tile(label_min_val,(size,1)),np.tile(label_max_val,(size,1)))
+                # targets = min_max_unnormalize(targets.detach().cpu().numpy(),np.tile(label_min_val,(targets.size(0),targets.size(1),1)),np.tile(label_max_val,(targets.size(0),targets.size(1),1)))
+            
             if config.plot_pred:
                 plot_results(config,outputs[100:2000].cpu().detach().numpy(),targets[100:2000,-1,:].cpu().detach().numpy(),wandb_run=wandb_run)
 
@@ -239,8 +246,10 @@ def model_eval_metric(config,model,test_loader,label_max_val,label_min_val ,devi
             outputs = model(inputs[0:2000])
             size = outputs.size(0)
             if config.norm_labels:
-                outputs = min_max_unnormalize(outputs.detach().cpu().numpy(),np.tile(label_min_val,(size,1)),np.tile(label_max_val,(size,1)))
-                targets = min_max_unnormalize(targets.detach().cpu().numpy(),np.tile(label_min_val,(targets.size(0),1)),np.tile(label_max_val,(targets.size(0),1)))
+                outputs = data_processor.label_scaler.inverse_transform(outputs)
+                targets = data_processor.label_scaler.inverse_transform(targets)
+                # outputs = min_max_unnormalize(outputs.detach().cpu().numpy(),np.tile(label_min_val,(size,1)),np.tile(label_max_val,(size,1)))
+                # targets = min_max_unnormalize(targets.detach().cpu().numpy(),np.tile(label_min_val,(targets.size(0),1)),np.tile(label_max_val,(targets.size(0),1)))
 
             if config.plot_pred:
                 plot_results(config,outputs[0:2000].cpu().detach().numpy(),targets[0:2000,:].view(-1,config.num_labels).cpu().detach().numpy(),wandb_run=wandb_run)
@@ -249,10 +258,12 @@ def model_eval_metric(config,model,test_loader,label_max_val,label_min_val ,devi
 
     return dist
 
+# depricated
 def min_max_unnormalize(data, min_val, max_val,bottom=-1, top=1):
 
     return torch.tensor(((data-bottom)/(top-bottom)) * (max_val - min_val) + min_val)
 
+#depricated 
 def min_max_normalize(data,bottom=-1, top=1):
 
     min_val = np.min(data, axis=0)

@@ -9,11 +9,10 @@ class CNNLSTMModel(nn.Module):
         super(CNNLSTMModel, self).__init__()
         self.name = "CNN_LSTMModel"
         self.config = config 
-        input_size, lstm_hidden_size, lstm_num_layers, output_size, dropout,sequence_length,num_labels = (
+        input_size, lstm_hidden_size, lstm_num_layers, dropout,sequence_length, output_size = (
             config.input_size,
             config.lstm_hidden_size,
             config.lstm_num_layers,
-            config.num_labels,
             config.dropout,
             config.sequence_length,
             config.num_labels
@@ -35,7 +34,7 @@ class CNNLSTMModel(nn.Module):
                             )
         fully_connected = []
         current_size = lstm_hidden_size*2
-        while current_size//3 > num_labels:
+        while current_size//3 > output_size:
             hidden_size = current_size//3
             fully_connected.append(nn.Linear(current_size, hidden_size))
             fully_connected.append(nn.ReLU())
@@ -43,7 +42,7 @@ class CNNLSTMModel(nn.Module):
 
             current_size = hidden_size
         
-        fully_connected.append(nn.Linear(current_size, num_labels))
+        fully_connected.append(nn.Linear(current_size, output_size))
         self.fully_connected = nn.Sequential(*fully_connected)
 
         # self.fc = nn.Linear(hidden_size * 2, hidden_size)

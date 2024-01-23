@@ -7,7 +7,7 @@ from torch.utils.data import Dataset, DataLoader, TensorDataset
 import numpy as np
 import matplotlib.pyplot as plt
 import os 
-
+from sklearn.preprocessing import MinMaxScaler,StandardScaler
 # # Change the current working directory to the directory of the main script
 # os.chdir(join(os.path.dirname(os.path.abspath(__file__)), os.pardir))
 
@@ -31,6 +31,13 @@ class DataProcessor:
             self.label_index = config.position_label_index
             self.label_size = len(config.position_label_index)
 
+        if config.norm == 'minmax':
+            self.feature_scaler = MinMaxScaler(feature_range=(-1,1))
+            self.label_scaler = MinMaxScaler(feature_range=(-1,1))
+        elif config.norm == 'std':
+            self.feature_scaler = StandardScaler()
+            self.label_scaler =StandardScaler()
+
     def load_data(self) -> Tensor:
         config = self.config
         self.data = data_loader(config)
@@ -51,10 +58,16 @@ class DataProcessor:
         self.data = self.data.drop_duplicates().dropna().reset_index(drop=True)
 
         # normalize
+        self.feature_scaler.fit(self.data[self.config.fmg_index])
+        self.data[self.config.fmg_index] = self.feature_scaler.transform(self.data[self.config.fmg_index])
+        #TODO: change to sikitlearn methode
         if self.config.norm_labels:
-            self.data[self.label_index], self.label_max_val, self.label_min_val = min_max_normalize(self.data[self.label_index])
+            self.label_scaler.fit(self.data[self.label_index])
+            # self.data[self.label_index], self.label_max_val, self.label_min_val = min_max_normalize(self.data[self.label_index])
+            self.data[self.label_index] = self.label_scaler.transform(self.data[self.label_index])
+            
 
-        self.data[self.config.fmg_index], self.fmg_max_val, self.fmg_min_val = min_max_normalize(self.data[self.config.fmg_index])
+        # self.data[self.config.fmg_index], self.fmg_max_val, self.fmg_min_val = min_max_normalize(self.data[self.config.fmg_index])
 
         # average rolling window
         self.data[self.config.fmg_index] = self.data[self.config.fmg_index].rolling(window=self.config.window_size, axis=0).mean()
