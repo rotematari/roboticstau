@@ -29,7 +29,7 @@ with open(r'config.yaml', 'r') as f:
 config = argparse.Namespace(**args)
 # dirs = [f for f in listdir(dirpath)]
 # make sure the 'COM#' is set according the Windows Device Manager /dev/ttyACM0
-ser = serial.Serial('COM3', 115200)
+ser = serial.Serial('/dev/ttyACM0', 115200)
 
 def is_not_numeric(x):
     try:
@@ -41,21 +41,19 @@ def is_not_numeric(x):
 
 def print_not_numeric_vals(df):
 
-    mask = df.drop(['sesion_time_stamp'],axis=1).applymap(is_not_numeric)
+    mask = df.drop(['sesion_time_stamp'],axis=1).map(is_not_numeric)
     non_numeric_values = df[mask].stack().dropna()
     print(non_numeric_values)
 
     return non_numeric_values
 
 
-# print format: t,Gx,Gy,Gz,Ax,Ay,Az,Mx,My,Mz,F1,F2,F3,F4,B1,B2,S1,S2,S3,S4,class
-# make new file names and locate them in the correct directory
-def write_first_line(f):
- 
-    f.write("S1,S2,S3,S4,S5,S6,S7,S8,S9,S10,S11,S12,S13,S14,S15,S16,S17,S18,S19,S20,S21,S22,S23,S24,S25,S26,S27,S28,S29,S30,S31,S32,")
-    # f.write("S21,S22,S23,S24,S25,S26,S27,S28,S29,S30,S31,S32")
-    f.write("M1x,M1y,M1z,M2x,M2y,M2z,M3x,M3y,M3z,M4x,M4y,M4z,")
-    f.write("sesion_time_stamp,\n")
+def write_first_line(f,config):
+    sensor_headers = ','.join(config.fmg_index)
+    label_headers = ','.join(config.label_index)
+    f.write(sensor_headers+',')
+    f.write(label_headers+',')
+    f.write(config.session_time_stamp[0]+'\n')
 
 
 def receiveNewFrame( frameNumber, markerSetCount, unlabeledMarkersCount, rigidBodyCount, skeletonCount,
@@ -100,38 +98,43 @@ def init_natnetClient():
 
 def write_line(f,marker_data,sesion_time_stamp):
 
-    # sesion_time_stamp = t.strftime("%d_%b_%Y_%H:%M", t.gmtime())
+    locations = {
+        'chest':[],
+        
+        'shoulder':[],
+        'elbow':[],
+        'wrist':[],
+    }
 
-
-    line = ser.readline()  # read a byte
-    sensor_string = line.decode('utf-8')  # ('latin-1')  # convert the byte string to a unicode string
-    sensor_string = sensor_string.strip()
-    sensor_string.replace("'", '')
-    sensor_string.replace("[", '')
-    sensor_string.replace("]", '')
-
-
-    #  # test 
-    # sensor_string = ''.join(str(i)+',' for i in range(48))
-
+    line = ser.readline().decode("utf-8").rstrip(',\r\n') # Read a line from the serial port
+    line = line.split(',')
+    
+    sensor_string = [line[i] for i in config.sensor_location ]
+    sensor_string = ','.join(sensor_string)
+    
     marker_string =[]
-    for i in range(len(marker_data)):
+    for j in range(len(marker_data)):
+        locations[motive_matcher[marker_data[j][0]]].append(marker_data[j][1])
+    # read serial line
+    locations_string = ','.join(map(str,locations['chest'][0]+locations['shoulder'][0]+locations['elbow'][0]+locations['wrist'][0]))
+    # for i in range(len(marker_data)):
 
-        marker_string += [str(j)for j in marker_data[i][1]] 
+    #     marker_string += [str(j)for j in marker_data[i][1]] 
 
-    marker_string = ''.join(str(s)+',' for s in marker_string)
+    # marker_string = ''.join(str(s)+',' for s in marker_string)
 
     # sensor_string , marker_string , sesion_time_stamp
-    f.write(f'{sensor_string}' +f'{marker_string}'+ f'{sesion_time_stamp}' + '\n')
+    f.write(f'{sensor_string}' + ',' + f'{locations_string}' + f'{sesion_time_stamp}' + '\n')
 
 
     # return sesion_time_stamp
 
 
 def plot_data(config,data):
+
     fig, (ax1, ax2) = plt.subplots(1, 2,figsize=(40,5))
 
-    ax1.plot(data.drop(['sesion_time_stamp'],axis=1)[config.positoin_label_inedx])
+    ax1.plot(data.drop(['sesion_time_stamp'],axis=1)[config.label_index])
     ax2.plot(data.drop(['sesion_time_stamp'],axis=1)[config.fmg_index])
     ax1.legend()
 
@@ -147,46 +150,59 @@ if __name__ == '__main__':
     for i in range(10):
         ser.readline()
 
-    t_start = t.time()
+    print("make sure the assets set to xyz")
+    keys = ['chest', 'shoulder', 'elbow', 'wrist']
+    chest = 1
+    shoulder = 2
+    elbow = 3
+    wrist = 4
+    motive_matcher = {chest: 'chest',
+                        shoulder: 'shoulder',
+                        elbow: 'elbow',
+                        wrist: 'wrist',
+                    }
+    
+
+    
     sesion_time_stamp = t.strftime("%d_%b_%Y_%H_%M", t.gmtime())
-    file_name = sesion_time_stamp + '_movment_2'+'.csv'
+    file_name = sesion_time_stamp + '_full_movment'+'.csv'
     NatNet = init_natnetClient()
     print(file_name)
     f = open(join(data_dir, file_name), "w")
 
-    write_first_line(f)
+    write_first_line(f,config=config)
     NatNet.run()
-    t.sleep(5)
+    t.sleep(10)
     marker_data = NatNet.rigidBodyList
+    t_start = t.time()
+    num_of_sampls = 20000
+    for i in range(num_of_sampls):
+        
+        marker_data = NatNet.rigidBodyList
+        write_line(f,sesion_time_stamp=sesion_time_stamp ,marker_data=marker_data)
 
-    for i in range(10000):
-      
-      marker_data = NatNet.rigidBodyList
-
-      write_line(f,sesion_time_stamp=sesion_time_stamp ,marker_data=marker_data)
-
-      if i%100==0:
-          print(i)
+        if i%100==0:
+            print(i)
     
     f.close()
     NatNet.stop()
 
     t_end = t.time()
-    print(t_end-t_start-0.5)
+    print(f'time it took for {num_of_sampls} = {t_end-t_start} sec')
     
     ser.close()
     print("finished")
 
-    ## checks data 
-    # df = pd.read_csv(join(data_dir,file_name))
-    
+    # checks data 
+    df = pd.read_csv(join(data_dir,file_name))
+    plot_data(config=config,data=df)
 
-    # not_numeric_vals = print_not_numeric_vals(df)
+    not_numeric_vals = print_not_numeric_vals(df)
 
-    # if not_numeric_vals.shape[0] == 0:
-    #     plot_data(config=config,data=df)
+    if not_numeric_vals.shape[0] == 0:
+        plot_data(config=config,data=df)
 
-    # else :
-    #     print("clean data")
+    else :
+        print("clean data")
 
 

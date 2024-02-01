@@ -42,3 +42,347 @@
 2023-09-06 17:00:22 INFO Running runs: ['6nwfn39k']
 2023-09-06 17:00:22 ERROR Detected 3 failed runs in the first 60 seconds, shutting down.
 2023-09-06 17:00:22 INFO To disable this check set WANDB_AGENT_DISABLE_FLAPPING=true
+2024-02-01 14:20:00 INFO Running runs: []
+2024-02-01 14:20:00 INFO Agent received command: run
+2024-02-01 14:20:00 INFO Agent starting run with config:
+	batch_size: 100
+	learning_rate: 0.0003772158958241935
+	lstm_hidden_size: 136
+	lstm_num_layers: 9
+	model: TransformerModel
+	norm: std
+	num_epochs: 16
+	sequence_length: 2
+	weight_decay: 0.0015801663935712605
+	window_size: 12
+2024-02-01 14:20:00 INFO About to run command: /usr/bin/env python train.py --batch_size=100 --learning_rate=0.0003772158958241935 --lstm_hidden_size=136 --lstm_num_layers=9 --model=TransformerModel --norm=std --num_epochs=16 --sequence_length=2 --weight_decay=0.0015801663935712605 --window_size=12
+2024-02-01 14:20:06 INFO Running runs: ['6y7e9jop']
+2024-02-01 14:20:06 INFO Cleaning up finished run: 6y7e9jop
+2024-02-01 14:20:07 INFO Agent received command: run
+2024-02-01 14:20:07 INFO Agent starting run with config:
+	batch_size: 64
+	learning_rate: 0.0006242589505372557
+	lstm_hidden_size: 72
+	lstm_num_layers: 8
+	model: CNN_LSTMModel
+	norm: std
+	num_epochs: 33
+	sequence_length: 63
+	weight_decay: 0.007684034299365739
+	window_size: 40
+2024-02-01 14:20:07 INFO About to run command: /usr/bin/env python train.py --batch_size=64 --learning_rate=0.0006242589505372557 --lstm_hidden_size=72 --lstm_num_layers=8 --model=CNN_LSTMModel --norm=std --num_epochs=33 --sequence_length=63 --weight_decay=0.007684034299365739 --window_size=40
+2024-02-01 14:21:40 INFO Running runs: []
+2024-02-01 14:21:41 INFO Agent received command: run
+2024-02-01 14:21:41 INFO Agent starting run with config:
+	batch_size: 31
+	learning_rate: 0.00026053656784241893
+	lstm_hidden_size: 70
+	lstm_num_layers: 4
+	model: TransformerModel
+	norm: std
+	num_epochs: 33
+	sequence_length: 31
+	weight_decay: 0.006772120412755676
+	window_size: 37
+2024-02-01 14:21:41 INFO About to run command: /usr/bin/env python Rotem_model/main.py --batch_size=31 --learning_rate=0.00026053656784241893 --lstm_hidden_size=70 --lstm_num_layers=4 --model=TransformerModel --norm=std --num_epochs=33 --sequence_length=31 --weight_decay=0.006772120412755676 --window_size=37
+2024-02-01 14:21:46 INFO Running runs: ['mqacz677']
+2024-02-01 14:21:46 INFO Cleaning up finished run: mqacz677
+2024-02-01 14:23:01 INFO Running runs: []
+2024-02-01 14:23:01 INFO Agent received command: run
+2024-02-01 14:23:01 INFO Agent starting run with config:
+	batch_size: 47
+	learning_rate: 0.0004872293473482493
+	lstm_hidden_size: 237
+	lstm_num_layers: 7
+	model: TransformerModel
+	norm: minmax
+	num_epochs: 41
+	sequence_length: 13
+	weight_decay: 0.004847886105055036
+	window_size: 47
+2024-02-01 14:23:01 INFO About to run command: /usr/bin/env python Rotem_model/main.py --batch_size=47 --learning_rate=0.0004872293473482493 --lstm_hidden_size=237 --lstm_num_layers=7 --model=TransformerModel --norm=minmax --num_epochs=41 --sequence_length=13 --weight_decay=0.004847886105055036 --window_size=47
+2024-02-01 14:23:06 INFO Running runs: ['12c2rlmg']
+2024-02-01 14:23:06 INFO Cleaning up finished run: 12c2rlmg
+2024-02-01 14:23:07 INFO Agent received command: run
+2024-02-01 14:23:07 INFO Agent starting run with config:
+	batch_size: 91
+	learning_rate: 0.000984959987339061
+	lstm_hidden_size: 122
+	lstm_num_layers: 2
+	model: CNN_LSTMModel
+	norm: minmax
+	num_epochs: 31
+	sequence_length: 62
+	weight_decay: 0.0086231129179657
+	window_size: 47
+2024-02-01 14:23:07 INFO About to run command: /usr/bin/env python Rotem_model/main.py --batch_size=91 --learning_rate=0.000984959987339061 --lstm_hidden_size=122 --lstm_num_layers=2 --model=CNN_LSTMModel --norm=minmax --num_epochs=31 --sequence_length=62 --weight_decay=0.0086231129179657 --window_size=47
+2024-02-01 14:23:26 INFO Running runs: []
+2024-02-01 14:23:27 INFO Agent received command: run
+2024-02-01 14:23:27 INFO Agent starting run with config:
+	batch_size: 96
+	learning_rate: 0.0008224776375840081
+	lstm_hidden_size: 69
+	lstm_num_layers: 4
+	model: TransformerModel
+	norm: minmax
+	num_epochs: 8
+	sequence_length: 75
+	weight_decay: 0.0060122559331257965
+	window_size: 23
+2024-02-01 14:23:27 INFO About to run command: /usr/bin/env python Rotem_model/main.py --batch_size=96 --learning_rate=0.0008224776375840081 --lstm_hidden_size=69 --lstm_num_layers=4 --model=TransformerModel --norm=minmax --num_epochs=8 --sequence_length=75 --weight_decay=0.0060122559331257965 --window_size=23
+2024-02-01 14:23:32 INFO Running runs: ['opa5wmaf']
+2024-02-01 14:23:37 INFO Cleaning up finished run: opa5wmaf
+2024-02-01 14:33:44 INFO Running runs: []
+2024-02-01 14:33:44 INFO Agent received command: run
+2024-02-01 14:33:44 INFO Agent starting run with config:
+	batch_size: 93
+	learning_rate: 0.0008056840374997203
+	lstm_hidden_size: 179
+	lstm_num_layers: 9
+	model: TransformerModel
+	n_head: 21
+	norm: std
+	num_epochs: 35
+	sequence_length: 49
+	weight_decay: 0.0005342527021522231
+	window_size: 36
+2024-02-01 14:33:44 INFO About to run command: /usr/bin/env python Rotem_model/main.py --batch_size=93 --learning_rate=0.0008056840374997203 --lstm_hidden_size=179 --lstm_num_layers=9 --model=TransformerModel --n_head=21 --norm=std --num_epochs=35 --sequence_length=49 --weight_decay=0.0005342527021522231 --window_size=36
+2024-02-01 14:33:49 INFO Running runs: ['cn8e9h0p']
+2024-02-01 14:36:16 INFO Running runs: []
+2024-02-01 14:36:22 INFO Agent received command: run
+2024-02-01 14:36:22 INFO Agent starting run with config:
+	batch_size: 65
+	dropout: 0.3785571371253803
+	learning_rate: 0.0006960132932596398
+	lstm_hidden_size: 191
+	lstm_num_layers: 4
+	model: CNN_LSTMModel
+	n_head: 27
+	norm: std
+	num_epochs: 2
+	sequence_length: 80
+	weight_decay: 0.007389072733848015
+	window_size: 30
+2024-02-01 14:36:22 INFO About to run command: /usr/bin/env python Rotem_model/main.py --batch_size=65 --dropout=0.3785571371253803 --learning_rate=0.0006960132932596398 --lstm_hidden_size=191 --lstm_num_layers=4 --model=CNN_LSTMModel --n_head=27 --norm=std --num_epochs=2 --sequence_length=80 --weight_decay=0.007389072733848015 --window_size=30
+2024-02-01 14:36:27 INFO Running runs: ['wu2qs428']
+2024-02-01 14:56:44 INFO Cleaning up finished run: wu2qs428
+2024-02-01 14:56:53 INFO Agent received command: run
+2024-02-01 14:56:53 INFO Agent starting run with config:
+	batch_size: 68
+	dropout: 0.48237427895190527
+	learning_rate: 0.0004907232736344586
+	lstm_hidden_size: 113
+	lstm_num_layers: 9
+	model: CNN_LSTMModel
+	n_head: 5
+	norm: std
+	num_epochs: 27
+	sequence_length: 48
+	weight_decay: 0.003856787408553542
+	window_size: 45
+2024-02-01 14:56:53 INFO About to run command: /usr/bin/env python Rotem_model/main.py --batch_size=68 --dropout=0.48237427895190527 --learning_rate=0.0004907232736344586 --lstm_hidden_size=113 --lstm_num_layers=9 --model=CNN_LSTMModel --n_head=5 --norm=std --num_epochs=27 --sequence_length=48 --weight_decay=0.003856787408553542 --window_size=45
+2024-02-01 14:56:58 INFO Running runs: ['uhc8tnky']
+2024-02-01 15:24:09 INFO Running runs: []
+2024-02-01 15:24:09 INFO Agent received command: run
+2024-02-01 15:24:09 INFO Agent starting run with config:
+	batch_size: 38
+	dropout: 0.2483308292623175
+	learning_rate: 0.0009486729132938568
+	lstm_hidden_size: 243
+	lstm_num_layers: 4
+	model: CNN_LSTMModel
+	n_head: 19
+	norm: std
+	num_epochs: 10
+	sequence_length: 70
+	weight_decay: 0.0033857991800125263
+	window_size: 18
+2024-02-01 15:24:09 INFO About to run command: /usr/bin/env python Rotem_model/main.py --batch_size=38 --dropout=0.2483308292623175 --learning_rate=0.0009486729132938568 --lstm_hidden_size=243 --lstm_num_layers=4 --model=CNN_LSTMModel --n_head=19 --norm=std --num_epochs=10 --sequence_length=70 --weight_decay=0.0033857991800125263 --window_size=18
+2024-02-01 15:24:14 INFO Running runs: ['rz7owzm2']
+2024-02-01 15:24:19 INFO Cleaning up finished run: rz7owzm2
+2024-02-01 15:24:28 INFO Agent received command: run
+2024-02-01 15:24:28 INFO Agent starting run with config:
+	batch_size: 5
+	dropout: 0.4544982397677771
+	learning_rate: 0.00015248965070991034
+	lstm_hidden_size: 66
+	lstm_num_layers: 10
+	model: TransformerModel
+	n_head: 24
+	norm: minmax
+	num_epochs: 11
+	sequence_length: 71
+	weight_decay: 0.007993034066283633
+	window_size: 45
+2024-02-01 15:24:28 INFO About to run command: /usr/bin/env python Rotem_model/main.py --batch_size=5 --dropout=0.4544982397677771 --learning_rate=0.00015248965070991034 --lstm_hidden_size=66 --lstm_num_layers=10 --model=TransformerModel --n_head=24 --norm=minmax --num_epochs=11 --sequence_length=71 --weight_decay=0.007993034066283633 --window_size=45
+2024-02-01 15:24:33 INFO Running runs: ['lkjtgsir']
+2024-02-01 15:48:15 INFO Running runs: []
+2024-02-01 15:48:15 INFO Agent received command: run
+2024-02-01 15:48:15 INFO Agent starting run with config:
+	batch_size: 12
+	dropout: 0.2054465715235552
+	learning_rate: 0.0005626157606913269
+	lstm_hidden_size: 88
+	lstm_num_layers: 5
+	model: CNN_LSTMModel
+	n_head: 25
+	norm: std
+	num_epochs: 22
+	sequence_length: 55
+	weight_decay: 0.008059685097786566
+	window_size: 34
+2024-02-01 15:48:15 INFO About to run command: /usr/bin/env python Rotem_model/main.py --batch_size=12 --dropout=0.2054465715235552 --learning_rate=0.0005626157606913269 --lstm_hidden_size=88 --lstm_num_layers=5 --model=CNN_LSTMModel --n_head=25 --norm=std --num_epochs=22 --sequence_length=55 --weight_decay=0.008059685097786566 --window_size=34
+2024-02-01 15:48:20 INFO Running runs: ['z5ezfeq4']
+2024-02-01 16:32:47 INFO Running runs: []
+2024-02-01 16:32:52 INFO Agent received command: run
+2024-02-01 16:32:52 INFO Agent starting run with config:
+	batch_size: 35
+	dropout: 0.217454632158752
+	learning_rate: 0.0005317258640796895
+	lstm_hidden_size: 92
+	lstm_num_layers: 6
+	model: TransformerModel
+	n_head: 19
+	norm: std
+	num_epochs: 42
+	sequence_length: 66
+	weight_decay: 0.0030286895305133422
+	window_size: 16
+2024-02-01 16:32:52 INFO About to run command: /usr/bin/env python Rotem_model/main.py --batch_size=35 --dropout=0.217454632158752 --learning_rate=0.0005317258640796895 --lstm_hidden_size=92 --lstm_num_layers=6 --model=TransformerModel --n_head=19 --norm=std --num_epochs=42 --sequence_length=66 --weight_decay=0.0030286895305133422 --window_size=16
+2024-02-01 16:32:57 INFO Running runs: ['hfjj2xo8']
+2024-02-01 17:52:51 INFO Cleaning up finished run: hfjj2xo8
+2024-02-01 17:52:53 INFO Agent received command: run
+2024-02-01 17:52:53 INFO Agent starting run with config:
+	batch_size: 37
+	dropout: 0.39873320996634665
+	learning_rate: 0.0008311860036635793
+	lstm_hidden_size: 170
+	lstm_num_layers: 4
+	model: TransformerModel
+	n_head: 8
+	norm: std
+	num_epochs: 34
+	sequence_length: 16
+	weight_decay: 0.0034934683751820586
+	window_size: 29
+2024-02-01 17:52:53 INFO About to run command: /usr/bin/env python Rotem_model/main.py --batch_size=37 --dropout=0.39873320996634665 --learning_rate=0.0008311860036635793 --lstm_hidden_size=170 --lstm_num_layers=4 --model=TransformerModel --n_head=8 --norm=std --num_epochs=34 --sequence_length=16 --weight_decay=0.0034934683751820586 --window_size=29
+2024-02-01 17:52:58 INFO Running runs: ['jn23stm6']
+2024-02-01 17:53:29 INFO Cleaning up finished run: jn23stm6
+2024-02-01 17:53:30 INFO Agent received command: run
+2024-02-01 17:53:30 INFO Agent starting run with config:
+	batch_size: 94
+	dropout: 0.3085433634099114
+	learning_rate: 0.0009423576723067132
+	lstm_hidden_size: 210
+	lstm_num_layers: 8
+	model: TransformerModel
+	n_head: 27
+	norm: std
+	num_epochs: 39
+	sequence_length: 85
+	weight_decay: 0.003074851786984468
+	window_size: 47
+2024-02-01 17:53:30 INFO About to run command: /usr/bin/env python Rotem_model/main.py --batch_size=94 --dropout=0.3085433634099114 --learning_rate=0.0009423576723067132 --lstm_hidden_size=210 --lstm_num_layers=8 --model=TransformerModel --n_head=27 --norm=std --num_epochs=39 --sequence_length=85 --weight_decay=0.003074851786984468 --window_size=47
+2024-02-01 17:53:35 INFO Running runs: ['ea7ixztx']
+2024-02-01 17:57:13 INFO Cleaning up finished run: ea7ixztx
+2024-02-01 17:57:14 INFO Agent received command: run
+2024-02-01 17:57:14 INFO Agent starting run with config:
+	batch_size: 90
+	dropout: 0.3732525867895369
+	learning_rate: 0.0005063879870806048
+	lstm_hidden_size: 70
+	lstm_num_layers: 5
+	model: CNN_LSTMModel
+	n_head: 8
+	norm: std
+	num_epochs: 44
+	sequence_length: 70
+	weight_decay: 0.001400425813819314
+	window_size: 19
+2024-02-01 17:57:14 INFO About to run command: /usr/bin/env python Rotem_model/main.py --batch_size=90 --dropout=0.3732525867895369 --learning_rate=0.0005063879870806048 --lstm_hidden_size=70 --lstm_num_layers=5 --model=CNN_LSTMModel --n_head=8 --norm=std --num_epochs=44 --sequence_length=70 --weight_decay=0.001400425813819314 --window_size=19
+2024-02-01 17:57:19 INFO Running runs: ['gl6gpsuf']
+2024-02-01 17:57:45 INFO Cleaning up finished run: gl6gpsuf
+2024-02-01 17:57:45 INFO Agent received command: run
+2024-02-01 17:57:45 INFO Agent starting run with config:
+	batch_size: 8
+	dropout: 0.34560761115465455
+	learning_rate: 0.0006911395824801467
+	lstm_hidden_size: 165
+	lstm_num_layers: 5
+	model: CNN_LSTMModel
+	n_head: 7
+	norm: std
+	num_epochs: 21
+	sequence_length: 66
+	weight_decay: 0.004498339326982485
+	window_size: 49
+2024-02-01 17:57:45 INFO About to run command: /usr/bin/env python Rotem_model/main.py --batch_size=8 --dropout=0.34560761115465455 --learning_rate=0.0006911395824801467 --lstm_hidden_size=165 --lstm_num_layers=5 --model=CNN_LSTMModel --n_head=7 --norm=std --num_epochs=21 --sequence_length=66 --weight_decay=0.004498339326982485 --window_size=49
+2024-02-01 17:57:50 INFO Running runs: ['ymekwior']
+2024-02-01 18:28:36 INFO Running runs: []
+2024-02-01 18:28:36 INFO Agent received command: run
+2024-02-01 18:28:36 INFO Agent starting run with config:
+	batch_size: 63
+	dropout: 0.2059798952416181
+	learning_rate: 0.0006878151450134194
+	lstm_hidden_size: 112
+	lstm_num_layers: 8
+	model: CNN_LSTMModel
+	n_head: 25
+	norm: std
+	num_epochs: 28
+	sequence_length: 26
+	weight_decay: 0.009289004721500472
+	window_size: 13
+2024-02-01 18:28:36 INFO About to run command: /usr/bin/env python Rotem_model/main.py --batch_size=63 --dropout=0.2059798952416181 --learning_rate=0.0006878151450134194 --lstm_hidden_size=112 --lstm_num_layers=8 --model=CNN_LSTMModel --n_head=25 --norm=std --num_epochs=28 --sequence_length=26 --weight_decay=0.009289004721500472 --window_size=13
+2024-02-01 18:28:41 INFO Running runs: ['i5bn78f9']
+2024-02-01 18:52:52 INFO Running runs: []
+2024-02-01 18:52:53 INFO Agent received command: run
+2024-02-01 18:52:53 INFO Agent starting run with config:
+	batch_size: 24
+	dropout: 0.3584387361920357
+	learning_rate: 5.530179828508584e-05
+	lstm_hidden_size: 155
+	lstm_num_layers: 4
+	model: CNN_LSTMModel
+	n_head: 24
+	norm: minmax
+	num_epochs: 3
+	sequence_length: 29
+	weight_decay: 0.009375324611894637
+	window_size: 36
+2024-02-01 18:52:53 INFO About to run command: /usr/bin/env python Rotem_model/main.py --batch_size=24 --dropout=0.3584387361920357 --learning_rate=5.530179828508584e-05 --lstm_hidden_size=155 --lstm_num_layers=4 --model=CNN_LSTMModel --n_head=24 --norm=minmax --num_epochs=3 --sequence_length=29 --weight_decay=0.009375324611894637 --window_size=36
+2024-02-01 18:52:58 INFO Running runs: ['k7udjgav']
+2024-02-01 19:10:57 INFO Cleaning up finished run: k7udjgav
+2024-02-01 19:10:58 INFO Agent received command: run
+2024-02-01 19:10:58 INFO Agent starting run with config:
+	batch_size: 51
+	dropout: 0.2298898009524988
+	learning_rate: 0.00022076878621027048
+	lstm_hidden_size: 186
+	lstm_num_layers: 6
+	model: CNN_LSTMModel
+	n_head: 27
+	norm: minmax
+	num_epochs: 40
+	sequence_length: 40
+	weight_decay: 0.004539684628838639
+	window_size: 36
+2024-02-01 19:10:58 INFO About to run command: /usr/bin/env python Rotem_model/main.py --batch_size=51 --dropout=0.2298898009524988 --learning_rate=0.00022076878621027048 --lstm_hidden_size=186 --lstm_num_layers=6 --model=CNN_LSTMModel --n_head=27 --norm=minmax --num_epochs=40 --sequence_length=40 --weight_decay=0.004539684628838639 --window_size=36
+2024-02-01 19:11:03 INFO Running runs: ['d8u1ncua']
+2024-02-01 19:34:11 INFO Running runs: []
+2024-02-01 19:34:12 INFO Agent received command: run
+2024-02-01 19:34:12 INFO Agent starting run with config:
+	batch_size: 7
+	dropout: 0.26019797053715077
+	learning_rate: 0.00038384636515862206
+	lstm_hidden_size: 255
+	lstm_num_layers: 10
+	model: TransformerModel
+	n_head: 7
+	norm: minmax
+	num_epochs: 84
+	sequence_length: 60
+	weight_decay: 0.002494057069786319
+	window_size: 50
+2024-02-01 19:34:12 INFO About to run command: /usr/bin/env python Rotem_model/main.py --batch_size=7 --dropout=0.26019797053715077 --learning_rate=0.00038384636515862206 --lstm_hidden_size=255 --lstm_num_layers=10 --model=TransformerModel --n_head=7 --norm=minmax --num_epochs=84 --sequence_length=60 --weight_decay=0.002494057069786319 --window_size=50
+2024-02-01 19:34:17 INFO Running runs: ['s4y2vke3']

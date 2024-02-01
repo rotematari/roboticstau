@@ -15,10 +15,12 @@ from sklearn.preprocessing import MinMaxScaler
 import wandb
 import time
 from torch.optim.lr_scheduler import LambdaLR
+import random
 
 # TODO: add time for iteration for the eval model 
-def train(config, train_loader, val_loader,model,device='cpu',wandb_run=None):
-    criterion = MSELoss()
+def train(config, train_loader, val_loader,model,data_processor, device='cpu',wandb_run=None):
+    if config.loss_func == 'MSELoss':
+        criterion = MSELoss()
     
     if model.name == "TransformerModel" or model.name == "TemporalConvNet":
         # Learning rate warm-up
@@ -70,89 +72,154 @@ def train(config, train_loader, val_loader,model,device='cpu',wandb_run=None):
 
             # Update the epoch loss and accuracy
             train_loss += loss.item()
-           
+
 
         train_loss /= len(train_loader)
         train_losses.append(train_loss)
-        val_loss = 0
+        # val_loss = 0
+        # total_time = 0
+        # sum_location_eror = 0
+        # max_euc_end_effector_eror = 0
+        # # Evaluate on the validation set
+        # with torch.no_grad():
+        #     model.eval()
+            
+        #     for i,(inputs, targets) in enumerate(val_loader):
+                
+        #         start_time = time.time()
+        #         inputs = inputs.to(device=device)
+        #         targets = targets.to(device=device)
+
+        #         targets = targets[:,-1:,:].squeeze()
+        #         outputs = model(inputs)
+        #         if config.sequence:
+        #             if outputs.dim() == 3:
+        #                 outputs = outputs[:,-1:,:].squeeze()
+        #                 v_loss = criterion(outputs, targets)
+        #                 if config.norm_labels:
+        #                     unnorm_outputs = data_processor.label_scaler.inverse_transform(outputs.cpu().detach().numpy())
+        #                     unnorm_targets = data_processor.label_scaler.inverse_transform(targets.cpu().detach().numpy())
+        #                 location_eror = np.sqrt(((unnorm_outputs - unnorm_targets)**2).sum(axis=0)/inputs.size(0))
+        #             else:
+        #                 v_loss = criterion(outputs, targets)
+        #                 if config.norm_labels:
+        #                     unnorm_outputs = data_processor.label_scaler.inverse_transform(outputs.cpu().detach().numpy())
+        #                     unnorm_targets = data_processor.label_scaler.inverse_transform(targets.cpu().detach().numpy())
+        #                 location_eror = np.sqrt(((unnorm_outputs - unnorm_targets)**2).sum(axis=0)/inputs.size(0))
+        #         else:
+        #             v_loss = criterion(outputs, targets)
+                
+        #         end_time = time.time()
+        #         total_time += (end_time - start_time)
+                
+        #         val_loss += v_loss.item()
+        #         sum_location_eror += location_eror
+        #         current_euc_end_effector_eror = euclidian_end_effector_eror(location_eror)
+        #         if current_euc_end_effector_eror > max_euc_end_effector_eror:
+        #             max_euc_end_effector_eror = current_euc_end_effector_eror
+
+
+
+        
+        # val_loss /= len(val_loader)
+        # avg_location_eror = sum_location_eror/len(val_loader)
+        # avg_iter_time = total_time/len(val_loader)
+        # avg_euc_end_effector_eror = euclidian_end_effector_eror(avg_location_eror)
+
+        val_loss,avg_iter_time, avg_location_eror,avg_euc_end_effector_eror,max_euc_end_effector_eror = test_model(
+            model=model,
+            config=config,
+            data_loader=val_loader,
+            data_processor=data_processor,
+            device=device,
+            # criterion=criterion,
+        )
+        
+        # Save the validation loss 
+        val_losses.append(val_loss)
+        
+        # Print the epoch loss and accuracy values
+        print(f'Epoch: {epoch} Train Loss: {train_loss}  Val Loss: {val_loss} \n Avarege Euclidian End Effector Eror: {avg_euc_end_effector_eror} Max Euclidian End Effector Eror:{max_euc_end_effector_eror} time for one iteration {1000*avg_iter_time:.4f} ms \n ----------')
+        if config.wandb_on:
+            # log metrics to wandb
+            wandb.log({"Train_Loss": train_loss, "Val_loss": val_loss, "Val_Max_Euclidian_End_Effector_Eror" : max_euc_end_effector_eror , "Val_Avarege_Euclidian_End_Effector_Eror": avg_euc_end_effector_eror})
+
+        if(best_val_loss < val_loss):
+            time_stamp = time.strftime("%d_%m_%H_%M", time.gmtime())
+            best_val_loss = val_loss
+            filename = model.name + '_epoch_' +str(epoch+1)+'_date_'+time_stamp + '.pt'
+            best_model_checkpoint_path = join(config.model_path,filename)
+            best_model_checkpoint = {
+                'epoch': epoch+1,
+                'model_state_dict': model.state_dict(),
+                'optimizer_state_dict': optimizer.state_dict(),
+                'loss': val_loss,
+                # 'config': vars(config).items() ,
+                }
+    
+    # plot_results(config=config)
+    torch.save(best_model_checkpoint,best_model_checkpoint_path)
+    print(f"model {filename} saved ")
+    
+    return best_model_checkpoint_path ,best_model_checkpoint
+
+
+def test_model(model, config ,
+                # criterion ,
+                data_loader, 
+                data_processor ,
+                device='cpu'):
+        if config.loss_func == 'MSELoss':
+            criterion = MSELoss()
+        total_loss = 0
         total_time = 0
+        sum_location_eror = 0
+        max_euc_end_effector_eror = 0
         # Evaluate on the validation set
         with torch.no_grad():
             model.eval()
             
-            for i,(inputs, targets) in enumerate(val_loader):
+            for i,(inputs, targets) in enumerate(data_loader):
                 
                 start_time = time.time()
                 inputs = inputs.to(device=device)
                 targets = targets.to(device=device)
 
+                targets = targets[:,-1:,:].squeeze()
                 outputs = model(inputs)
                 if config.sequence:
                     if outputs.dim() == 3:
-                        v_loss = criterion(outputs[:,-1:,:].squeeze(), targets[:,-1:,:].squeeze())
+                        outputs = outputs[:,-1:,:].squeeze()
+                        loss = criterion(outputs, targets)
+                        if config.norm_labels:
+                            unnorm_outputs = data_processor.label_scaler.inverse_transform(outputs.cpu().detach().numpy())
+                            unnorm_targets = data_processor.label_scaler.inverse_transform(targets.cpu().detach().numpy())
+                        location_eror = np.sqrt(((unnorm_outputs - unnorm_targets)**2).sum(axis=0)/inputs.size(0))
                     else:
-                        v_loss = criterion(outputs, targets[:,-1,:])
+                        loss = criterion(outputs, targets)
+                        if config.norm_labels:
+                            unnorm_outputs = data_processor.label_scaler.inverse_transform(outputs.cpu().detach().numpy())
+                            unnorm_targets = data_processor.label_scaler.inverse_transform(targets.cpu().detach().numpy())
+                        location_eror = np.sqrt(((unnorm_outputs - unnorm_targets)**2).sum(axis=0)/inputs.size(0))
                 else:
-                    v_loss = criterion(outputs, targets)
-
-                val_loss += v_loss.item()
+                    loss = criterion(outputs, targets)
+                
                 end_time = time.time()
                 total_time += (end_time - start_time)
+                
+                total_loss += loss.item()
+                sum_location_eror += location_eror
+                current_euc_end_effector_eror = euclidian_end_effector_eror(location_eror)
+                if current_euc_end_effector_eror > max_euc_end_effector_eror:
+                    max_euc_end_effector_eror = current_euc_end_effector_eror
 
-            
-            val_loss /= len(val_loader)
-            avg_iter_time = total_time/len(val_loader)
-            
-        # Save the validation loss 
-        val_losses.append(val_loss)
-        
-        # Print the epoch loss and accuracy values
-        print(f'Epoch: {epoch} Train Loss: {train_loss}  Val Loss: {val_loss} time for one iteration {1000*avg_iter_time:.4f} ms')
-        if wandb_run is not None:
-            # log metrics to wandb
-            wandb_run.log({"Train Loss": train_loss, "Val_loss": val_loss})
+            avg_loss = total_loss/len(data_loader)
+            avg_location_eror = sum_location_eror/len(data_loader)
+            avg_iter_time = total_time/len(data_loader)
+            avg_euc_end_effector_eror = euclidian_end_effector_eror(avg_location_eror)
 
-        if(best_val_loss < val_loss):
-            time_stamp = time.strftime("%d_%m", time.gmtime())
-            best_val_loss = val_loss
-            filename = model.name + '_epoch_' +str(epoch+1)+'_date_'+time_stamp + '.pt'
-            checkpoint_path = join(config.model_path,filename)
-            torch.save({
-                'epoch': epoch+1,
-                'model_state_dict': model.state_dict(),
-                'optimizer_state_dict': optimizer.state_dict(),
-                'loss': val_loss,
-                'config': config,
-                }, checkpoint_path)
-            
+        return avg_loss,avg_iter_time, avg_location_eror,avg_euc_end_effector_eror,max_euc_end_effector_eror
     
-    print(f"model {filename} saved ")
-    
-    return train_losses, val_losses
-
-
-def test(model, config, test_loader,device='cpu',wandb_on=0):
-    # Define the loss function
-    criterion = model.mseloss
-
-    # Initialize the test loss and accuracy
-    test_loss = 0
-    model.eval()
-
-    # Evaluate on the test set
-    with torch.no_grad():
-        for inputs, targets in test_loader:
-
-            inputs = inputs.to(device=device)
-            targets = targets.to(device=device)
-
-            outputs = model(inputs)
-            loss = criterion(outputs, targets[:,-1:].squeeze())
-            test_loss += loss.item()
-        test_loss /= len(test_loader)
-        
-
-    return test_loss
 
 def plot_losses(train_losses, val_losses=[],train=True):
     
@@ -173,27 +240,57 @@ def plot_losses(train_losses, val_losses=[],train=True):
         # Show the plot
         plt.show()
 
-def plot_results(config,preds,targets,wandb_run=None):
+def plot_results(config,data_loader,model,device,data_processor ):
+
+    with torch.no_grad():
+        model.eval()
+        for i,(inputs, targets) in enumerate(data_loader):
+            inputs = inputs.to(device=device)
+            targets = targets.to(device=device)
+
+            targets = targets[:,-1:,:].squeeze()
+            outputs = model(inputs)
+            if config.sequence:
+                if outputs.dim() == 3:
+                    outputs = outputs[:,-1:,:].squeeze()
+                    if config.norm_labels:
+                        unnorm_outputs = data_processor.label_scaler.inverse_transform(outputs.cpu().detach().numpy())
+                        unnorm_targets = data_processor.label_scaler.inverse_transform(targets.cpu().detach().numpy())
+                else:
+                    if config.norm_labels:
+                        unnorm_outputs = data_processor.label_scaler.inverse_transform(outputs.cpu().detach().numpy())
+                        unnorm_targets = data_processor.label_scaler.inverse_transform(targets.cpu().detach().numpy())
+            if i == 0:
+                predsToPlot = unnorm_outputs
+                targetsToPlot = unnorm_targets
+            #     predsToPlot = predsToPlot.reshape(1,predsToPlot.shape[0],predsToPlot.shape[1])
+            #     targetsToPlot = targetsToPlot.reshape(1,targetsToPlot.shape[0],targetsToPlot.shape[1]
+            predsToPlot = np.concatenate((predsToPlot,unnorm_outputs))
+            targetsToPlot = np.concatenate((targetsToPlot,unnorm_targets))  
 
     # Create a figure and a grid of subplots with 1 row and 2 columns
     fig, axes = plt.subplots(2, 2, figsize=(10, 4),sharex=True,sharey=True)  # Adjust figsize as needed
-
+    rand_plot = random.randint(0,18)
+    plot_length = 3000
+    start_plot = rand_plot*plot_length
+    end_plot = rand_plot*plot_length +plot_length
     # Plot data on the first subplot
-    axes[0,0].plot(preds[:,:9])
+    axes[0,0].plot(predsToPlot[start_plot:end_plot,:12])
     axes[0,0].set_title('Plot of preds location')
     axes[0,0].grid()
 
-
-    axes[0,1].plot(preds[:,9:])
-    axes[0,1].set_title('Plot of preds V ')
-    axes[0,1].grid()
+    if config.with_velocity:
+        axes[0,1].plot(predsToPlot[start_plot:end_plot,12:])
+        axes[0,1].set_title('Plot of preds V ')
+        axes[0,1].grid()
 
     # Plot data on the second subplot
-    axes[1,0].plot(targets[:,:9])
+    axes[1,0].plot(targetsToPlot[start_plot:end_plot,:12])
     axes[1,0].set_title('Plot of targets location')
     axes[1,0].grid()
+
     if config.with_velocity:
-        axes[1,1].plot(targets[:,9:])
+        axes[1,1].plot(targetsToPlot[start_plot:end_plot,12:])
         axes[1,1].set_title('Plot of targets V')
         axes[1,1].grid()
         
@@ -202,7 +299,7 @@ def plot_results(config,preds,targets,wandb_run=None):
     plt.tight_layout()
 
 
-    if wandb_run is not None:
+    if config.wandb_on:
         # Log the figure to wandb
         wandb.log({"preds and targets": plt})
     else:
@@ -210,7 +307,6 @@ def plot_results(config,preds,targets,wandb_run=None):
         plt.show()
 
 def model_eval_metric(config,model,test_loader,
-                    #   label_max_val,label_min_val ,
                     data_processor,
                     device='cpu',wandb_run=None):
     # show distance between ground truth and prediction by 3d points [0,M2,M3,M4] 
@@ -226,6 +322,8 @@ def model_eval_metric(config,model,test_loader,
 
         inputs = inputs.to(device=device)
         targets = targets.to(device=device)
+
+
         if config.sequence:
             outputs = model(inputs)
             if outputs.dim() == 3:
@@ -233,28 +331,13 @@ def model_eval_metric(config,model,test_loader,
             size = outputs.size(0)
             
             if config.norm_labels:
-                outputs = data_processor.label_scaler.inverse_transform(outputs)
-                targets = data_processor.label_scaler.inverse_transform(targets)
-                # outputs = min_max_unnormalize(outputs.detach().cpu().numpy(),np.tile(label_min_val,(size,1)),np.tile(label_max_val,(size,1)))
-                # targets = min_max_unnormalize(targets.detach().cpu().numpy(),np.tile(label_min_val,(targets.size(0),targets.size(1),1)),np.tile(label_max_val,(targets.size(0),targets.size(1),1)))
-            
-            if config.plot_pred:
-                plot_results(config,outputs[100:2000].cpu().detach().numpy(),targets[100:2000,-1,:].cpu().detach().numpy(),wandb_run=wandb_run)
-
-            dist = np.sqrt(((outputs.cpu().detach().numpy() - targets[:,-1:,:].view(-1,config.num_labels).cpu().detach().numpy())**2).sum(axis=0)/size)
-        else:
-            outputs = model(inputs[0:2000])
-            size = outputs.size(0)
-            if config.norm_labels:
-                outputs = data_processor.label_scaler.inverse_transform(outputs)
-                targets = data_processor.label_scaler.inverse_transform(targets)
-                # outputs = min_max_unnormalize(outputs.detach().cpu().numpy(),np.tile(label_min_val,(size,1)),np.tile(label_max_val,(size,1)))
-                # targets = min_max_unnormalize(targets.detach().cpu().numpy(),np.tile(label_min_val,(targets.size(0),1)),np.tile(label_max_val,(targets.size(0),1)))
+                outputs = data_processor.label_scaler.inverse_transform(outputs.cpu().detach().numpy())
+                targets = data_processor.label_scaler.inverse_transform(targets[:,-1:,:].squeeze(1).cpu().detach().numpy())
 
             if config.plot_pred:
-                plot_results(config,outputs[0:2000].cpu().detach().numpy(),targets[0:2000,:].view(-1,config.num_labels).cpu().detach().numpy(),wandb_run=wandb_run)
+                plot_results(config,outputs,targets,wandb_run=wandb_run)
 
-            dist = np.sqrt(((outputs.cpu().detach().numpy() - targets[:size].cpu().detach().numpy())**2).sum(axis=0)/size)
+            dist = np.sqrt(((outputs - targets)**2).sum(axis=0)/size)
 
     return dist
 
@@ -276,8 +359,8 @@ def min_max_normalize(data,bottom=-1, top=1):
 def plot_data(config,data):
     fig, (ax1, ax2) = plt.subplots(1, 2,figsize=(40,5))
 
-    ax1.plot(data.drop(['sesion_time_stamp'],axis=1)[config.positoin_label_inedx])
-    ax2.plot(data.drop(['sesion_time_stamp'],axis=1)[config.fmg_index])
+    ax1.plot(data.drop(['session_time_stamp'],axis=1)[config.positoin_label_inedx])
+    ax2.plot(data.drop(['session_time_stamp'],axis=1)[config.fmg_index])
     ax1.legend()
 
     plt.show() 
@@ -303,8 +386,9 @@ def data_loader(config):
         full_df = full_df.replace(-np.inf, np.nan)
         full_df = full_df.replace(np.inf, np.nan)
         # full_df = full_df.iloc[1:,:-1].dropna(axis=0)
+    
 
-    return full_df
+    return full_df[config.fmg_index + config.label_index + config.session_time_stamp]
 
 def find_bias(df):
     """
@@ -312,10 +396,10 @@ def find_bias(df):
     """
     bias_df = pd.DataFrame()
 
-    for time_stamp in df['sesion_time_stamp'].unique():
+    for time_stamp in df['session_time_stamp'].unique():
 
-        temp_df = pd.DataFrame(df[df['sesion_time_stamp'] == time_stamp].drop('sesion_time_stamp',axis=1),dtype=float).mean().to_frame().T
-        temp_df['sesion_time_stamp'] = time_stamp
+        temp_df = pd.DataFrame(df[df['session_time_stamp'] == time_stamp].drop('session_time_stamp',axis=1),dtype=float).mean().to_frame().T
+        temp_df['session_time_stamp'] = time_stamp
         bias_df = pd.concat([bias_df,temp_df],axis= 0,ignore_index=False)
 
     return bias_df
@@ -326,36 +410,36 @@ def find_std(df):
     """
     std_df = pd.DataFrame()
 
-    for time_stamp in df['sesion_time_stamp'].unique():
+    for time_stamp in df['session_time_stamp'].unique():
 
-        temp_df = df[df['sesion_time_stamp'] == time_stamp].drop('sesion_time_stamp',axis=1).std().T.copy()
-        temp_df['sesion_time_stamp'] = time_stamp
+        temp_df = df[df['session_time_stamp'] == time_stamp].drop('session_time_stamp',axis=1).std().T.copy()
+        temp_df['session_time_stamp'] = time_stamp
         std_df = pd.concat([std_df,temp_df],axis=1,ignore_index=False)
 
     return std_df.T
 
 def subtract_bias(df):
-    # Compute the bias for each unique value of the sesion_time_stamp column
+    # Compute the bias for each unique value of the session_time_stamp column
     bias_df = find_bias(df)
     
     # Initialize an empty DataFrame to store the result
     new_df = pd.DataFrame()
     
-    # Iterate over each unique value of the sesion_time_stamp column
-    for time_stamp in df['sesion_time_stamp'].unique():
+    # Iterate over each unique value of the session_time_stamp column
+    for time_stamp in df['session_time_stamp'].unique():
         # Select the rows of df and bias_df corresponding to the current time stamp
-        df_rows = df[df['sesion_time_stamp'] == time_stamp].copy()
-        bias_rows = bias_df[bias_df['sesion_time_stamp'] == time_stamp].copy()
+        df_rows = df[df['session_time_stamp'] == time_stamp].copy()
+        bias_rows = bias_df[bias_df['session_time_stamp'] == time_stamp].copy()
         
-        df_rows= df_rows.drop('sesion_time_stamp', axis=1).astype(float).copy()
-        bias_rows = bias_rows.drop('sesion_time_stamp', axis=1).astype(float).copy()
+        df_rows= df_rows.drop('session_time_stamp', axis=1).astype(float).copy()
+        bias_rows = bias_rows.drop('session_time_stamp', axis=1).astype(float).copy()
         
         # Subtract the bias from the data in df
         temp_df = df_rows-bias_rows.to_numpy() 
         
 
-        # # Add back the sesion_time_stamp column
-        # temp_df['sesion_time_stamp'] = time_stamp
+        # # Add back the session_time_stamp column
+        # temp_df['session_time_stamp'] = time_stamp
         
         # Append the result to new_df
         new_df = pd.concat([new_df, temp_df], axis=0, ignore_index=False)
@@ -421,7 +505,7 @@ def is_not_numeric(x):
 
 def print_not_numeric_vals(df):
 
-    mask = df.drop(['sesion_time_stamp'],axis=1).applymap(is_not_numeric)
+    mask = df.drop(['session_time_stamp'],axis=1).applymap(is_not_numeric)
     non_numeric_values = df[mask].stack().dropna()
     print(non_numeric_values)
 
@@ -438,3 +522,8 @@ def create_sliding_sequences(input_tensor, sequence_length):
         sequences.append(sequence)
 
     return torch.stack(sequences)
+
+
+def euclidian_end_effector_eror(eval_metric):
+
+    return np.sqrt((eval_metric[-3:]**2).sum()) 

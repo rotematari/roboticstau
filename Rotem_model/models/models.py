@@ -34,7 +34,7 @@ class CNNLSTMModel(nn.Module):
                             )
         fully_connected = []
         current_size = lstm_hidden_size*2
-        while current_size//3 > output_size:
+        while current_size//3 > output_size*2:
             hidden_size = current_size//3
             fully_connected.append(nn.Linear(current_size, hidden_size))
             fully_connected.append(nn.ReLU())
@@ -76,6 +76,8 @@ class TransformerModel(nn.Module):
     def __init__(self, config):
         super(TransformerModel, self).__init__()
         self.name = "TransformerModel"
+        self.config = config
+
         input_size, hidden_size, num_layers, output_size, dropout = (
             config.input_size,
             config.lstm_hidden_size,
@@ -83,16 +85,32 @@ class TransformerModel(nn.Module):
             config.num_labels,
             config.dropout,
         )
+        if hidden_size//self.config.n_head != 0:
+            hidden_size = int(hidden_size/self.config.n_head)*self.config.n_head
 
         self.embedding = nn.Linear(input_size, hidden_size)
+
         self.transformer_encoder = nn.TransformerEncoder(
-            nn.TransformerEncoderLayer(d_model=hidden_size, nhead=8),
+            nn.TransformerEncoderLayer(d_model=hidden_size, nhead=self.config.n_head),
             num_layers=num_layers
         )
+
+        fully_connected = []
+        current_size = hidden_size
+        while current_size//3 > output_size*2 :
+            hidden_size = current_size//3
+            fully_connected.append(nn.Linear(current_size, hidden_size))
+            fully_connected.append(nn.ReLU())
+            fully_connected.append(nn.Dropout(dropout))
+
+            current_size = hidden_size
         
-        self.fc1 = nn.Linear(hidden_size,int(hidden_size/2))
-        self.fc2 = nn.Linear(int(hidden_size/2), output_size)
-        self.relu = nn.ReLU()
+        fully_connected.append(nn.Linear(current_size, output_size))
+        self.fully_connected = nn.Sequential(*fully_connected)
+
+        # self.fc1 = nn.Linear(hidden_size,int(hidden_size/2))
+        # self.fc2 = nn.Linear(int(hidden_size/2), output_size)
+        # self.relu = nn.ReLU()
 
     def forward(self, x):
         x = self.embedding(x)
@@ -101,8 +119,9 @@ class TransformerModel(nn.Module):
         x = x.permute(1, 0, 2)  # Change the sequence length to be the first dimension
         x = self.transformer_encoder(x)
         x = x.permute(1, 0, 2)  # Change it back to the original shape
-        x = self.relu(self.fc1(x[:, -1, :]))
-        x = self.fc2(x)
+        x = self.fully_connected(x[:, -1, :])
+        # x = self.relu(self.fc1(x[:, -1, :]))
+        # x = self.fc2(x)
         # print(x)
         return x
     

@@ -25,11 +25,11 @@ class DataProcessor:
         self.label_size = config.num_labels
 
         if config.with_velocity:
-            self.label_index = config.position_label_index + config.velocity_label_index
+            self.label_index = config.label_index + config.velocity_label_index
             self.label_size = config.num_labels
         else:
-            self.label_index = config.position_label_index
-            self.label_size = len(config.position_label_index)
+            self.label_index = config.label_index
+            self.label_size = len(self.label_index)
 
         if config.norm == 'minmax':
             self.feature_scaler = MinMaxScaler(feature_range=(-1,1))
@@ -43,15 +43,16 @@ class DataProcessor:
         self.data = data_loader(config)
 
     def preprocess_data(self):
-        # drop overshot values
-        self.data = mask(self.data, self.config)
+
+        # # drop overshot values
+        # self.data = mask(self.data, self.config)
 
         # find zero axis
-        self.data[self.config.position_label_index] = get_label_axis(self.data[self.config.first_position_label_index], self.config)
+        # self.data[self.config.label_index] = get_label_axis(self.data[self.config.label_index], self.config)
 
         if self.config.with_velocity:
             # adds velocities to the labels
-            self.data[self.label_index] = calc_velocity(self.config, self.data[self.config.first_position_label_index])
+            self.data[self.label_index] = calc_velocity(self.config, self.data[self.config.label_index])
 
         # subtracts the bias on the FMG sensors data
         self.data[self.config.fmg_index] = subtract_bias(self.data[self.config.fmg_index + self.config.session_time_stamp])
@@ -60,7 +61,7 @@ class DataProcessor:
         # normalize
         self.feature_scaler.fit(self.data[self.config.fmg_index])
         self.data[self.config.fmg_index] = self.feature_scaler.transform(self.data[self.config.fmg_index])
-        #TODO: change to sikitlearn methode
+        
         if self.config.norm_labels:
             self.label_scaler.fit(self.data[self.label_index])
             # self.data[self.label_index], self.label_max_val, self.label_min_val = min_max_normalize(self.data[self.label_index])
@@ -70,11 +71,11 @@ class DataProcessor:
         # self.data[self.config.fmg_index], self.fmg_max_val, self.fmg_min_val = min_max_normalize(self.data[self.config.fmg_index])
 
         # average rolling window
-        self.data[self.config.fmg_index] = self.data[self.config.fmg_index].rolling(window=self.config.window_size, axis=0).mean()
-        self.data[self.label_index] = self.data[self.label_index].rolling(window=self.config.window_size, axis=0).mean()
+        self.data[self.config.fmg_index] = self.data[self.config.fmg_index].rolling(window=self.config.window_size).mean()
+        self.data[self.label_index] = self.data[self.label_index].rolling(window=self.config.window_size).mean()
 
         self.data = self.data.drop_duplicates().dropna().reset_index(drop=True)
-
+        
     def get_data_loaders(self):
         if self.data is None:
             print("Data not loaded. Please load the data first.")
@@ -92,10 +93,10 @@ class DataProcessor:
             labels = torch.tensor(label_df.to_numpy(), dtype=torch.float32)
 
         # Split the data into training and test sets
-        train_fmg, test_fmg, train_label, test_label = train_test_split(features, labels, test_size=self.config.test_size, random_state=None, shuffle=False)
+        train_fmg, test_fmg, train_label, test_label = train_test_split(features, labels, test_size=self.config.test_size, random_state=self.config.random_state, shuffle=False)
 
         # Split the training data into training and validation sets
-        train_fmg, val_fmg, train_label, val_label = train_test_split(train_fmg, train_label, test_size=self.config.val_size / (1 - self.config.test_size), random_state=self.config.random_state, shuffle=self.config.shuffle_train)
+        train_fmg, val_fmg, train_label, val_label = train_test_split(train_fmg, train_label, test_size=self.config.val_size / (1 - self.config.test_size), random_state=self.config.random_state, shuffle=False)
 
         train_dataset = TensorDataset(train_fmg[:train_label.shape[0], :], train_label)
         val_dataset = TensorDataset(val_fmg[:val_label.shape[0], :], val_label)
@@ -107,9 +108,9 @@ class DataProcessor:
 
         return train_loader, val_loader, test_loader
 
-    def plot(self, from_indx=0, to_indx=1500):
+    def plot(self, from_indx=2000, to_indx=1000):
         fmg_df = self.data[self.config.fmg_index]
-        label_position = self.data[self.config.position_label_index]
+        label_position = self.data[self.config.label_index]
 
         if self.config.with_velocity:
             label_velocity = self.data[self.config.velocity_label_index]

@@ -2,6 +2,8 @@
 //===================================
 int S[4] = {14, 15, 16, 17};
 int A[4] = {A4, A5, A6, A7}; // If only two channels are used
+int sensor_list[32];
+int loc = 0;
 
 bool MUXtable[16][4] = {
   {0, 0, 0, 0}, {1, 0, 0, 0}, {0, 1, 0, 0}, {1, 1, 0, 0},
@@ -29,13 +31,13 @@ void loop() {
     selection(i);
     //delayMicroseconds(100); // Adjust as necessary
     for (int j = 0; j < 3; j++) {
-      if (analogRead(A[j])>300)
+      if (analogRead(A[j])>100)
       {
-        Serial.println(j*(16)+i);
-        }
+
+        Serial.println(j*(16)+i); 
+      }
     }
   }
-
 }
 
 
